@@ -9,7 +9,7 @@ use Postmark\PostmarkClient;
 class PostmarkService implements Interfaces\EmailServiceInterface
 {
 
-    public function sendEmail($to, $from, $subject, $message)
+    public function sendEmail($to, $from, $subject, $message, $attachment = [])
     {
         $token = config('services.postmark.token');
 
@@ -37,7 +37,7 @@ class PostmarkService implements Interfaces\EmailServiceInterface
             NULL, // CC
             NULL, // BCC
             NULL, // Header array
-            NULL, // Attachment array
+            $attachment, // Attachment array
             $trackLinks,
             NULL, // Metadata array
             $messageStream

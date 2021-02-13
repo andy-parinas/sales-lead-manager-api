@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Session\Middleware\StartSession;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class Kernel extends HttpKernel
@@ -20,8 +21,9 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class
     ];
+
 
     /**
      * The application's route middleware groups.
@@ -43,8 +45,14 @@ class Kernel extends HttpKernel
             EnsureFrontendRequestsAreStateful::class,
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            StartSession::class
         ],
     ];
+
+    /**
+     * DevNotes: I recently added the StartSession in the Middleware group of API
+     * It was working before I made a composer update which updated the packages
+     */
 
     /**
      * The application's route middleware.

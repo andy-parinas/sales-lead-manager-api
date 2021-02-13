@@ -20,9 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Building Authorities Letter">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sales-lead-manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sales-lead-manager.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/SalesStaffCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/SalesStaffCollection.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/SalesStaffRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/SalesStaffRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/Interfaces/EmailServiceInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Interfaces/EmailServiceInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/PostmarkService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/PostmarkService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_03_12_045709_create_appointments_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_03_12_045709_create_appointments_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,6 +164,13 @@
       <path value="$PROJECT_DIR$/vendor/mailjet/mailjet-apiv3-php" />
       <path value="$PROJECT_DIR$/vendor/wildbit/postmark-php" />
       <path value="$PROJECT_DIR$/vendor/wildbit/swiftmailer-postmark" />
+      <path value="$PROJECT_DIR$/vendor/league/mime-type-detection" />
+      <path value="$PROJECT_DIR$/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/symfony/http-client-contracts" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/symfony/string" />
     </include_path>
   </component>
   <component name="ProjectId" id="1Ys8VbQ1Vqdyr6HJdNV34kQpWP9" />
@@ -359,6 +371,8 @@
       <workItem from="1611834937034" duration="797000" />
       <workItem from="1612259625522" duration="6622000" />
       <workItem from="1612348912623" duration="1468000" />
+      <workItem from="1613038689538" duration="4590000" />
+      <workItem from="1613170189181" duration="3780000" />
     </task>
     <task id="LOCAL-00115" summary="Adjusted the Seeder.&#10;Issue on the test server">
       <created>1595328757294</created>

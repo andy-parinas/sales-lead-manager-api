@@ -15,7 +15,7 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('appointment_date');
+            $table->dateTime('appointment_date')->nullable;
             $table->text('appointment_notes')->nullable();
             $table->unsignedFloat('quoted_price', 11, 2)->default(0.0);
             $table->string('outcome');

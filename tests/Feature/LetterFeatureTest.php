@@ -212,7 +212,7 @@ class LetterFeatureTest extends TestCase
             ['*']
         );
 
-        $this->post('api/customer-review/'. $customerReview->id . '/letters/maintenance/' . $salesContact->id)
+        $this->post('api/customer-reviews/'. $customerReview->id . '/letters/maintenance/' . $salesContact->id)
             ->assertStatus(Response::HTTP_OK);
 
         $customerReview->refresh();

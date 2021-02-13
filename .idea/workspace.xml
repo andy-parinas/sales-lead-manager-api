@@ -20,13 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Building Authorities Letter">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/MaintenanceLetterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php-test-framework.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php-test-framework.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Services/Interfaces/EmailServiceInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Interfaces/EmailServiceInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Services/PostmarkService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/PostmarkService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/CustomerReviewFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/CustomerReviewFactory.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/Feature/LetterFeatureTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/LetterFeatureTest.php" afterDir="false" />
     </list>
@@ -375,14 +369,7 @@
       <workItem from="1612259625522" duration="6622000" />
       <workItem from="1612348912623" duration="1468000" />
       <workItem from="1613038689538" duration="4590000" />
-      <workItem from="1613170189181" duration="9080000" />
-    </task>
-    <task id="LOCAL-00116" summary="Adjusted the Seeder.&#10;Issue on the test server">
-      <created>1595328767735</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1595328767735</updated>
+      <workItem from="1613170189181" duration="12747000" />
     </task>
     <task id="LOCAL-00117" summary="Adjusted the Seeder.&#10;Issue on the test server">
       <created>1595328800172</created>
@@ -720,7 +707,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613177504561</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="Sending maitenance letter with attachment">
+      <created>1613185567690</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1613185567690</updated>
+    </task>
+    <option name="localTasksCounter" value="166" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -742,7 +736,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Update Creating SalesStaff" />
     <MESSAGE value="Update Sales Staff Reporting" />
     <MESSAGE value="Update Sales Staff Product Reporting" />
     <MESSAGE value="Added Franchise Type in Report selection" />
@@ -767,6 +760,7 @@
     <MESSAGE value="Customer Review maintenance letter sent" />
     <MESSAGE value="Limit Sales Contact display to Users Franchise Postcode" />
     <MESSAGE value="WIP: Email attachment&#10;Updates:  Kernet API middleware, Appointment table - set appointment date column to nullable" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP: Email attachment&#10;Updates:  Kernet API middleware, Appointment table - set appointment date column to nullable" />
+    <MESSAGE value="Sending maitenance letter with attachment" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sending maitenance letter with attachment" />
   </component>
 </project>

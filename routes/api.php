@@ -173,3 +173,4 @@ Route::post('authorities/{lead}/letters/no-council', 'Letter\NoCouncilLetterCont
 Route::post('authorities/{lead}/letters/out-of-council', 'Letter\OutOfCouncilLetterController@send');
 Route::post('job-types/{lead}/email/{sales_staff}', 'JobType\JobTypeEmailController@send');
 Route::post('job-types/{lead}/sms/{sales_staff}', 'JobType\JobTypeSmsController@send');
+Route::post('customer-review/{customer_review}/letters/maintenance/{sales_contact}', 'Letter\MaintenanceLetterController@send');

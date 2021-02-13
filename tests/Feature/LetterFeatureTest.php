@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Contract;
+use App\CustomerReview;
 use App\Lead;
 use App\SalesContact;
 use App\User;
@@ -183,6 +184,41 @@ class LetterFeatureTest extends TestCase
 
         $this->post('api/letters/out-of-council/' . $salesContact->id)
             ->assertStatus(Response::HTTP_OK);
+
+    }
+
+    public function testCanSendMaintenanceLetter()
+    {
+        $this->withoutExceptionHandling();
+
+        $salesContact = factory(SalesContact::class)->create([
+            'title' => 'Mr',
+            'first_name' => 'Andy',
+            'last_name' => 'Parinas',
+            'email' => 'andyp@crystaltec.com.au'
+        ]);
+
+        $lead = factory(Lead::class)->create(['sales_contact_id' => $salesContact->id]);
+
+        $customerReview = factory(CustomerReview::class)->create(['lead_id' => $lead->id]);
+
+        $user = factory(User::class)->create([
+            'user_type' => User::HEAD_OFFICE,
+            'email' => 'ACT@spanline.com.au'
+        ]);
+
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+
+        $this->post('api/customer-review/'. $customerReview->id . '/letters/maintenance/' . $salesContact->id)
+            ->assertStatus(Response::HTTP_OK);
+
+        $customerReview->refresh();
+
+        $this->assertNotNull($customerReview->maintenance_letter_sent);
+
 
     }
 }

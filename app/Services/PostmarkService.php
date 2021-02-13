@@ -4,14 +4,26 @@
 namespace App\Services;
 
 
+use Postmark\Models\PostmarkAttachment;
 use Postmark\PostmarkClient;
 
 class PostmarkService implements Interfaces\EmailServiceInterface
 {
 
-    public function sendEmail($to, $from, $subject, $message, $attachment = [])
+    public function sendEmail($to, $from, $subject, $message, $attachmentFile = null)
     {
         $token = config('services.postmark.token');
+
+        $attachment = null;
+
+        if($attachmentFile){
+
+            $attachment = [PostmarkAttachment::fromFile($attachmentFile,
+                'warranty_care_maintenance_letter.pdf',
+                'application/pdf',
+                'cid:warranty_care_maintenance_letter.pdf' )];
+
+        }
 
         $client = new PostmarkClient($token);
         $fromEmail = $from;

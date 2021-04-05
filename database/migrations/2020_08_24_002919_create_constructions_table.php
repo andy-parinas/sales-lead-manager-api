@@ -32,6 +32,8 @@ class CreateConstructionsTable extends Migration
             $table->date('final_inspection_date')->nullable();
             $table->unsignedBigInteger('lead_id');
             $table->timestamps();
+
+            $table->foreign('lead_id')->references('id')->on('leads')->cascadeOnDelete();
         });
     }
 

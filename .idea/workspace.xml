@@ -21,7 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Building Authorities Letter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/CustomerReviewReportRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/CustomerReviewReportRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_24_002919_create_constructions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_24_002919_create_constructions_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_09_11_111656_create_verifications_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_09_11_111656_create_verifications_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_09_15_044037_create_customer_reviews_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_09_15_044037_create_customer_reviews_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -369,14 +371,11 @@
       <workItem from="1612348912623" duration="1468000" />
       <workItem from="1613038689538" duration="4590000" />
       <workItem from="1613170189181" duration="17116000" />
-      <workItem from="1613723836940" duration="2788000" />
-    </task>
-    <task id="LOCAL-00118" summary="Refactor searchPostcodeByFranchise to use QueryBuilder">
-      <created>1595838888733</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1595838888734</updated>
+      <workItem from="1613723836940" duration="4336000" />
+      <workItem from="1614157536963" duration="635000" />
+      <workItem from="1614847059120" duration="95000" />
+      <workItem from="1614857552617" duration="654000" />
+      <workItem from="1617582580755" duration="2970000" />
     </task>
     <task id="LOCAL-00119" summary="Working Query on Available postcodes for Franchise">
       <created>1595851107711</created>
@@ -714,7 +713,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613205267222</updated>
     </task>
-    <option name="localTasksCounter" value="167" />
+    <task id="LOCAL-00167" summary="Customer review report">
+      <created>1613909106016</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1613909106017</updated>
+    </task>
+    <option name="localTasksCounter" value="168" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -736,7 +742,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Update Sales Staff Product Reporting" />
     <MESSAGE value="Added Franchise Type in Report selection" />
     <MESSAGE value="Added Sorting on Reports" />
     <MESSAGE value="Adjusted DatabaseSeeder" />
@@ -761,6 +766,7 @@
     <MESSAGE value="WIP: Email attachment&#10;Updates:  Kernet API middleware, Appointment table - set appointment date column to nullable" />
     <MESSAGE value="Sending maitenance letter with attachment" />
     <MESSAGE value="Updated Sending maintenance letter with attachment" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Sending maintenance letter with attachment" />
+    <MESSAGE value="Customer review report" />
+    <option name="LAST_COMMIT_MESSAGE" value="Customer review report" />
   </component>
 </project>

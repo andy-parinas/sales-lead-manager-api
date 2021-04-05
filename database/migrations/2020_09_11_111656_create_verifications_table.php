@@ -32,7 +32,7 @@ class CreateVerificationsTable extends Migration
 
             $table->foreign('roof_sheet_id')->references('id')->on('roof_sheets');
             $table->foreign('roof_colour_id')->references('id')->on('roof_colours');
-            $table->foreign('lead_id')->references('id')->on('leads');
+            $table->foreign('lead_id')->references('id')->on('leads')->cascadeOnDelete();
 
         });
     }

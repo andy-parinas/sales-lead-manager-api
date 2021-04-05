@@ -8,6 +8,7 @@ use App\SalesContact;
 use App\SalesStaff;
 use App\Services\Interfaces\SmsServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 
 class JobTypeSmsController extends Controller
@@ -28,14 +29,24 @@ class JobTypeSmsController extends Controller
 
         try {
 
+
+
             $lead = Lead::findOrFail($leadId);
             $salesContact = $lead->salesContact;
             $salesStaff = SalesStaff::findOrFail($salesStaffId);
 
-            $message = "LN:{$lead->lead_number} {$salesContact->first_name} {$salesContact->last_name} ";
-            $message = $message . "{$salesContact->street1} {$salesContact->postcode->locality}, {$salesContact->postcode->state} ";
-            $message = $message . "PH-{$salesContact->contact_number} {$salesContact->email} REQ-{$lead->jobType->product->name}";
-            $message = $message . "SRC-{$lead->leadSource->name}";
+            $leadDate = Carbon::parse($lead->lead_date);
+
+            $message = "A new Sales Lead has been assigned to you\n";
+            $message = $message. "LN:{$lead->lead_number}\n";
+            $message = $message. "{$salesContact->first_name} {$salesContact->last_name} \n ";
+            $message = $message . "Contact Number: {$salesContact->contact_number} \n";
+            $message = $message . "Email: {$salesContact->email}\n";
+            $message = $message . "Lead Date: {$leadDate->toDateString()} \n";
+            $message = $message . "Product: {$lead->jobType->product->name} \n";
+            $message = $message . "Description: {$lead->jobType->description} \n";
+            $message = $message . "Lead Received Via: {$lead->received_via} \n";
+            $message = $message . "Lead Source: {$lead->leadSource->name} \n";
 
             $jobType = $lead->jobType;
 

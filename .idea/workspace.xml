@@ -21,9 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Building Authorities Letter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_24_002919_create_constructions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_24_002919_create_constructions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_09_11_111656_create_verifications_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_09_11_111656_create_verifications_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_09_15_044037_create_customer_reviews_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_09_15_044037_create_customer_reviews_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeEmailController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeEmailController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeSmsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeSmsController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -375,14 +374,7 @@
       <workItem from="1614157536963" duration="635000" />
       <workItem from="1614847059120" duration="95000" />
       <workItem from="1614857552617" duration="654000" />
-      <workItem from="1617582580755" duration="2970000" />
-    </task>
-    <task id="LOCAL-00119" summary="Working Query on Available postcodes for Franchise">
-      <created>1595851107711</created>
-      <option name="number" value="00119" />
-      <option name="presentableId" value="LOCAL-00119" />
-      <option name="project" value="LOCAL" />
-      <updated>1595851107712</updated>
+      <workItem from="1617582580755" duration="5404000" />
     </task>
     <task id="LOCAL-00120" summary="Completed: Adding Postcodes to franchise.&#10;Refactor: Added primary key combination on franchise_postcodes">
       <created>1595913630339</created>
@@ -720,7 +712,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613909106017</updated>
     </task>
-    <option name="localTasksCounter" value="168" />
+    <task id="LOCAL-00168" summary="added cascadeOnDelete for Lead related tables">
+      <created>1617622909616</created>
+      <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
+      <option name="project" value="LOCAL" />
+      <updated>1617622909616</updated>
+    </task>
+    <option name="localTasksCounter" value="169" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -742,7 +741,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added Franchise Type in Report selection" />
     <MESSAGE value="Added Sorting on Reports" />
     <MESSAGE value="Adjusted DatabaseSeeder" />
     <MESSAGE value="Added Letter Controllers" />
@@ -767,6 +765,7 @@
     <MESSAGE value="Sending maitenance letter with attachment" />
     <MESSAGE value="Updated Sending maintenance letter with attachment" />
     <MESSAGE value="Customer review report" />
-    <option name="LAST_COMMIT_MESSAGE" value="Customer review report" />
+    <MESSAGE value="added cascadeOnDelete for Lead related tables" />
+    <option name="LAST_COMMIT_MESSAGE" value="added cascadeOnDelete for Lead related tables" />
   </component>
 </project>

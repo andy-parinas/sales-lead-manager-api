@@ -20,9 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Building Authorities Letter">
-      <change afterPath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -376,14 +375,7 @@
       <workItem from="1614857552617" duration="654000" />
       <workItem from="1617582580755" duration="6068000" />
       <workItem from="1617698931162" duration="3070000" />
-      <workItem from="1618117237978" duration="11154000" />
-    </task>
-    <task id="LOCAL-00121" summary="Completed: Removing Postcodes from Franchise">
-      <created>1595920022524</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1595920022524</updated>
+      <workItem from="1618117237978" duration="13395000" />
     </task>
     <task id="LOCAL-00122" summary="Fixed: Query on Available Franchise Postcode">
       <created>1595925163825</created>
@@ -721,7 +713,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617625436292</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <task id="LOCAL-00170" summary="Added UserActualSeeder.php">
+      <created>1618132964398</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1618132964399</updated>
+    </task>
+    <option name="localTasksCounter" value="171" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -743,7 +742,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Adjusted DatabaseSeeder" />
     <MESSAGE value="Added Letter Controllers" />
     <MESSAGE value="Additional Letter Controllers" />
     <MESSAGE value="Lead Intro Letters" />
@@ -768,6 +766,7 @@
     <MESSAGE value="Customer review report" />
     <MESSAGE value="added cascadeOnDelete for Lead related tables" />
     <MESSAGE value="Adjusted SMS and Email message" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adjusted SMS and Email message" />
+    <MESSAGE value="Added UserActualSeeder.php" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added UserActualSeeder.php" />
   </component>
 </project>

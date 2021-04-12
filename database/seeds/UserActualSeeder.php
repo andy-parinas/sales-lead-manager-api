@@ -167,13 +167,24 @@ class UserActualSeeder extends Seeder
             {
                 dump('Key Exist');
 
-                $franchise = Franchise::where('franchise_number', $user['franchise'])->first();
+                $mainFranchise =  $subFranchise = Franchise::where('franchise_number', $user['franchise'])
+                    ->where('parent_id', null)->first();
 
-                if($franchise !== null)
+                if ($mainFranchise !== null && $newUser->user_type == User::FRANCHISE_ADMIN)
                 {
-                    $newUser->franchises()->attach($franchise->id);
+                    dump('Setting Main Franchise to Franchise Admin');
+                    $newUser->franchises()->attach($mainFranchise->id);
+                }
 
-                    dump('Franchise set');
+                $subFranchise = Franchise::where('franchise_number', $user['franchise'])
+                    ->where('parent_id', '<>', null)->first();
+
+
+                if($subFranchise !== null)
+                {
+                    $newUser->franchises()->attach($subFranchise->id);
+
+                    dump('Sub Franchise set');
                 }
             }
 

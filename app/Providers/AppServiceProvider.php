@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Reports\Interfaces\SalesStaffProductReport;
 use App\Reports\Interfaces\SalesStaffSummaryReport;
+use App\Reports\SalesStaffProductReportImp;
 use App\Reports\SalesStaffSummaryReportImp;
 use App\Repositories\DocumentRepository;
 use App\Repositories\Interfaces\DocumentRepositoryInterface;
@@ -43,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SmsServiceInterface::class, MessageMediaService::class);
         $this->app->bind(EmailServiceInterface::class, PostmarkService::class);
         $this->app->bind(SalesStaffSummaryReport::class, SalesStaffSummaryReportImp::class);
+        $this->app->bind(SalesStaffProductReport::class, SalesStaffProductReportImp::class);
     }
 }

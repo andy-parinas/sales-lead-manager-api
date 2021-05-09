@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Reports\Interfaces\SalesStaffProductReport;
 use App\Reports\Interfaces\SalesStaffSummaryReport;
 use App\Repositories\Interfaces\ReportRepositoryInterface;
 use App\Traits\ReportComputer;
@@ -17,14 +18,14 @@ class SalesSummaryReportController extends ApiController
     use ReportComputer;
 
     protected $reportRepository;
-    protected $salesStaffSummaryReport;
+    protected $salesStaffProductReport;
 
     public function __construct(ReportRepositoryInterface $reportRepository,
-                                SalesStaffSummaryReport $salesStaffSummaryReport)
+                                SalesStaffProductReport $salesStaffProductReport)
     {
         $this->middleware('auth:sanctum');
         $this->reportRepository = $reportRepository;
-        $this->salesStaffSummaryReport = $salesStaffSummaryReport;
+        $this->salesStaffProductReport = $salesStaffProductReport;
     }
 
     public function index(Request $request)
@@ -37,11 +38,12 @@ class SalesSummaryReportController extends ApiController
 
             if($user->user_type == User::HEAD_OFFICE){
                 #$results = $this->reportRepository->generateSalesStaffProductSummary($request->all());
-                $results = $this->salesStaffSummaryReport->generate($request->all());
+                $results = $this->salesStaffProductReport->generate($request->all());
             }else {
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
 
-                $results = $this->reportRepository->generateSalesStaffProductSummaryByFranchises($franchiseIds, $request->all());
+                #$results = $this->salesStaffProductReport->gen($franchiseIds, $request->all());
+                $results = $this->salesStaffProductReport->generateByFranchise($franchiseIds, $request->all());
             }
 
 

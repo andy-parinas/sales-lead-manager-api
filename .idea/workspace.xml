@@ -20,8 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Building Authorities Letter">
+      <change afterPath="$PROJECT_DIR$/app/Reports/Interfaces/SalesStaffSummaryReport.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Reports/SalesStaffSummaryReportImp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LeadSource/LeadSourceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LeadSource/LeadSourceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Product/ProductController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Product/ProductController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesStaffSummaryReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesStaffSummaryReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesSummaryReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesSummaryReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/ReportRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/ReportRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -375,14 +382,16 @@
       <workItem from="1614857552617" duration="654000" />
       <workItem from="1617582580755" duration="6068000" />
       <workItem from="1617698931162" duration="3070000" />
-      <workItem from="1618117237978" duration="13395000" />
-    </task>
-    <task id="LOCAL-00122" summary="Fixed: Query on Available Franchise Postcode">
-      <created>1595925163825</created>
-      <option name="number" value="00122" />
-      <option name="presentableId" value="LOCAL-00122" />
-      <option name="project" value="LOCAL" />
-      <updated>1595925163825</updated>
+      <workItem from="1618117237978" duration="15660000" />
+      <workItem from="1618312419493" duration="448000" />
+      <workItem from="1618831949774" duration="319000" />
+      <workItem from="1619219899781" duration="1413000" />
+      <workItem from="1619394346775" duration="619000" />
+      <workItem from="1620115520121" duration="2382000" />
+      <workItem from="1620290263578" duration="135000" />
+      <workItem from="1620292662877" duration="8092000" />
+      <workItem from="1620440256912" duration="11732000" />
+      <workItem from="1620523296397" duration="1767000" />
     </task>
     <task id="LOCAL-00123" summary="Refactor franchise_postcode table cascadeOnDelete">
       <created>1596446216247</created>
@@ -720,7 +729,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618132964399</updated>
     </task>
-    <option name="localTasksCounter" value="171" />
+    <task id="LOCAL-00171" summary="Corrected UserActualSeeder.php">
+      <created>1618217974957</created>
+      <option name="number" value="00171" />
+      <option name="presentableId" value="LOCAL-00171" />
+      <option name="project" value="LOCAL" />
+      <updated>1618217974957</updated>
+    </task>
+    <option name="localTasksCounter" value="172" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -742,7 +758,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added Letter Controllers" />
     <MESSAGE value="Additional Letter Controllers" />
     <MESSAGE value="Lead Intro Letters" />
     <MESSAGE value="Contract Welcome Letter" />
@@ -767,6 +782,7 @@
     <MESSAGE value="added cascadeOnDelete for Lead related tables" />
     <MESSAGE value="Adjusted SMS and Email message" />
     <MESSAGE value="Added UserActualSeeder.php" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added UserActualSeeder.php" />
+    <MESSAGE value="Corrected UserActualSeeder.php" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrected UserActualSeeder.php" />
   </component>
 </project>

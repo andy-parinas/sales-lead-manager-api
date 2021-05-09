@@ -30,8 +30,8 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
 
 
         $mainQuery = DB::table('sales_staff')
-            ->select("franchises.franchise_number as franchiseNumber")
             ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as salesStaff")
+            ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
             ->selectRaw("count( IF (leadsJoin.contractPrice > 0 and leadsJoin.outcome = 'success' , 1, null) ) as numberOfSales")
             ->selectRaw("count(leadsJoin.leadId) as numberOfLeads")
             ->selectRaw("(count( IF (leadsJoin.contractPrice > 0 and leadsJoin.outcome = 'success' , 1, null) ) / count(leadsJoin.leadId)) * 100 as conversionRate")
@@ -82,8 +82,7 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
 
             $mainQuery = $mainQuery->groupBy([
                 'sales_staff.last_name',
-                'sales_staff.first_name',
-                'franchises.franchise_number'
+                'sales_staff.first_name'
             ]);
 
             if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
@@ -110,8 +109,9 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
             )
             ->leftJoin('job_types', 'job_types.lead_id', '=', 'leads.id')
             ->leftJoin('appointments', 'appointments.lead_id', '=', 'leads.id')
-            ->leftJoin('contracts', 'contracts.lead_id', '=', 'leads.id');
-
+            ->leftJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
+            ->join("franchises", "franchises.id", '=', "leads.franchise_id")
+            ->whereIn('franchises.id', $franchiseIds);
 
         $mainQuery = DB::table('sales_staff')
             ->select('franchises.franchise_number as franchiseNumber')
@@ -125,8 +125,8 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
             ->join("franchises", "franchises.id", '=', "franchise_sales_staff.franchise_id")
             ->leftJoinSub($leadsQuery, 'leadsJoin', function ($join){
                 $join->on('sales_staff.id', '=', 'leadsJoin.salesStaffId');
-            })
-            ->whereIn('franchises.id', $franchiseIds);
+            })->whereIn('franchises.id', $franchiseIds);
+
 
 
         if(key_exists("status", $queryParams) && $queryParams['status'] !== ""){

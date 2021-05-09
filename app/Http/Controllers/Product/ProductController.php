@@ -26,7 +26,8 @@ class ProductController extends ApiController
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::orderBy('name', 'asc')
+            ->get();
 
         return $this->showApiCollection(new ProductCollection($products));
     }

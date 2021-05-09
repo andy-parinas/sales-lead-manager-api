@@ -24,7 +24,8 @@ class LeadSourceController extends ApiController
      */
     public function index()
     {
-        $sources = LeadSource::all();
+        $sources = LeadSource::orderBy('name', 'asc')
+            ->get();
 
         return $this->showAll($sources);
     }

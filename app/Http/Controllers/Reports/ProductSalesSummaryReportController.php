@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Reports\Interfaces\ProductSalesSummaryReport;
 use App\Repositories\Interfaces\ReportRepositoryInterface;
 use App\Traits\ReportComputer;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProductSalesSummaryReportController extends ApiController
 {
@@ -14,24 +18,56 @@ class ProductSalesSummaryReportController extends ApiController
     use ReportComputer;
 
     protected $reportRepository;
+    protected $productSalesSummaryReport;
 
-    public function __construct(ReportRepositoryInterface $reportRepository)
+    public function __construct(ReportRepositoryInterface $reportRepository,
+                                ProductSalesSummaryReport $productSalesSummaryReport)
     {
         $this->middleware('auth:sanctum');
         $this->reportRepository = $reportRepository;
+        $this->productSalesSummaryReport = $productSalesSummaryReport;
     }
 
 
     public function index(Request $request)
     {
-        $results = $this->reportRepository->generateProductSalesSummary($request->all());
 
-        $total = $this->computeTotal($results);
+        $user = Auth::user();
 
-        return $this->showOne([
-            'results' => $results,
-            'total' => $total
-        ]);
+
+        if($request->has('start_date') && $request->has('end_date')) {
+
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+
+                $results = $this->productSalesSummaryReport->generate($request->all());
+
+            }else {
+
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+
+                Log::info($franchiseIds);
+
+                $results = $this->productSalesSummaryReport->generateByFranchise($franchiseIds, $request->all());
+            }
+
+            if($results->count() > 0){
+                $total = $this->computeTotal($results);
+
+                return $this->showOne([
+                    'results' => $results,
+                    'total' => $total
+                ]);
+
+            }
+
+            return $this->showOne([
+                'results' => $results
+            ]);
+        }
+
+
 
     }
 

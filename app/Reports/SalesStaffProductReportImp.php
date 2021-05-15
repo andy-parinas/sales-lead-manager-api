@@ -105,7 +105,7 @@ class SalesStaffProductReportImp implements Interfaces\SalesStaffProductReport
             ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->join("franchises", "leads.franchise_id", "=", "franchises.id")
             ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id")
-            ->whereIn('franchises.id', $franchiseIds);;
+            ->whereIn('franchises.id', $franchiseIds);
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 

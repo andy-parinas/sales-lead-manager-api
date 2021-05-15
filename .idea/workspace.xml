@@ -19,12 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Implemented SalesStaffSummaryReport">
-      <change afterPath="$PROJECT_DIR$/app/Reports/Interfaces/SalesStaffProductReport.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" afterDir="false" />
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Implemented SalesStaffProductReport">
+      <change afterPath="$PROJECT_DIR$/app/Reports/Interfaces/ProductSalesSummaryReport.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Reports/ProductSalesSummaryReportImp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesSummaryReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesSummaryReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/ProductSalesSummaryReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/ProductSalesSummaryReportController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -387,14 +388,9 @@
       <workItem from="1620290263578" duration="135000" />
       <workItem from="1620292662877" duration="8092000" />
       <workItem from="1620440256912" duration="11732000" />
-      <workItem from="1620523296397" duration="8290000" />
-    </task>
-    <task id="LOCAL-00124" summary="refactor report query to use DB:query instead of Raw sql">
-      <created>1596530020191</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1596530020191</updated>
+      <workItem from="1620523296397" duration="9439000" />
+      <workItem from="1620896021260" duration="4799000" />
+      <workItem from="1621121085998" duration="602000" />
     </task>
     <task id="LOCAL-00125" summary="Created ProductSalesSummary Report">
       <created>1597047568294</created>
@@ -732,7 +728,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620525670494</updated>
     </task>
-    <option name="localTasksCounter" value="173" />
+    <task id="LOCAL-00173" summary="Implemented SalesStaffProductReport">
+      <created>1620534311638</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1620534311638</updated>
+    </task>
+    <option name="localTasksCounter" value="174" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -754,7 +757,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Lead Intro Letters" />
     <MESSAGE value="Contract Welcome Letter" />
     <MESSAGE value="Started working on Authorities Letter" />
     <MESSAGE value="Building Authorities Letter" />
@@ -779,6 +781,7 @@
     <MESSAGE value="Added UserActualSeeder.php" />
     <MESSAGE value="Corrected UserActualSeeder.php" />
     <MESSAGE value="Implemented SalesStaffSummaryReport" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented SalesStaffSummaryReport" />
+    <MESSAGE value="Implemented SalesStaffProductReport" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented SalesStaffProductReport" />
   </component>
 </project>

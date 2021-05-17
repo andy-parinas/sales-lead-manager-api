@@ -14,6 +14,7 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
                     ->join('postcodes','postcodes.id', '=', 'sales_contacts.postcode_id')
                     ->select(
                         "sales_contacts.id",
+                        'title',
                         'first_name',
                         'last_name',
                         'contact_number',
@@ -81,6 +82,7 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
         $query =  DB::table('sales_contacts')
             ->join('postcodes','postcodes.id', '=', 'sales_contacts.postcode_id')
             ->select("sales_contacts.id",
+                'title',
                 'first_name',
                 'last_name',
                 'contact_number',
@@ -126,6 +128,7 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
         $query =  DB::table('sales_contacts')
             ->select(
                 "sales_contacts.id",
+                'title',
                 'first_name',
                 'last_name',
                 'contact_number',

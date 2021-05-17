@@ -18,6 +18,7 @@ class SalesContactCollection extends ResourceCollection
             'data' => $this->collection->transform(function($contact){
                 return [
                     'id' => $contact->id,
+                    'title' => $contact->title,
                     'firstName' => $contact->first_name,
                     'lastName' => $contact->last_name,
                     'email' => $contact->email,

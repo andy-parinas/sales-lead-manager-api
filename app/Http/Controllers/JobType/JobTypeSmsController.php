@@ -39,7 +39,7 @@ class JobTypeSmsController extends Controller
 
             $message = "A new Sales Lead has been assigned to you\n";
             $message = $message. "LN:{$lead->lead_number}\n";
-            $message = $message. "{$salesContact->first_name} {$salesContact->last_name} \n ";
+            $message = $message. "Name: {$salesContact->first_name} {$salesContact->last_name} \n";
             $message = $message . "Contact Number: {$salesContact->contact_number} \n";
             $message = $message . "Email: {$salesContact->email}\n";
             $message = $message . "Lead Date: {$leadDate->toDateString()} \n";

@@ -19,10 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Implemented ProductSalesSummaryReport.php">
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Fixed sales contact editing displaying title">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/SalesContactCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/SalesContactCollection.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/SalesContactRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/SalesContactRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeSmsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeSmsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Reports/SalesStaffSummaryReportImp.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Reports/SalesStaffSummaryReportImp.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -388,14 +389,8 @@
       <workItem from="1620523296397" duration="9439000" />
       <workItem from="1620896021260" duration="4799000" />
       <workItem from="1621121085998" duration="1988000" />
-      <workItem from="1621240229063" duration="2161000" />
-    </task>
-    <task id="LOCAL-00126" summary="Working ProductSalesSummary Report">
-      <created>1597057852818</created>
-      <option name="number" value="00126" />
-      <option name="presentableId" value="LOCAL-00126" />
-      <option name="project" value="LOCAL" />
-      <updated>1597057852818</updated>
+      <workItem from="1621240229063" duration="5292000" />
+      <workItem from="1621731191291" duration="3466000" />
     </task>
     <task id="LOCAL-00127" summary="Added Product Selection in Product Sales Summary">
       <created>1597060023653</created>
@@ -733,7 +728,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621122003008</updated>
     </task>
-    <option name="localTasksCounter" value="175" />
+    <task id="LOCAL-00175" summary="Fixed sales contact editing displaying title">
+      <created>1621244525105</created>
+      <option name="number" value="00175" />
+      <option name="presentableId" value="LOCAL-00175" />
+      <option name="project" value="LOCAL" />
+      <updated>1621244525106</updated>
+    </task>
+    <option name="localTasksCounter" value="176" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -755,7 +757,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Started working on Authorities Letter" />
     <MESSAGE value="Building Authorities Letter" />
     <MESSAGE value="Changed the Subject Line of letters" />
     <MESSAGE value="Changed Email Letters to send based on users email" />
@@ -780,6 +781,7 @@
     <MESSAGE value="Implemented SalesStaffSummaryReport" />
     <MESSAGE value="Implemented SalesStaffProductReport" />
     <MESSAGE value="Implemented ProductSalesSummaryReport.php" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented ProductSalesSummaryReport.php" />
+    <MESSAGE value="Fixed sales contact editing displaying title" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed sales contact editing displaying title" />
   </component>
 </project>

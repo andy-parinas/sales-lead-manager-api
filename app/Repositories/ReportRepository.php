@@ -573,9 +573,15 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
             'sales_staff.last_name'
         ]);
 
+
+
         if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
 
             $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        }else {
+            $mainQuery = $mainQuery->orderBy('franchises.franchise_number', 'asc')
+                ->orderBy('sales_staff.first_name', 'asc')
+                ->orderBy('appointments.outcome', 'asc');
         }
 
         return $mainQuery->get();
@@ -640,6 +646,10 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
         if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
 
             $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        }else {
+            $mainQuery = $mainQuery->orderBy('franchises.franchise_number', 'asc')
+                ->orderBy('sales_staff.first_name', 'asc')
+                ->orderBy('appointments.outcome', 'asc');
         }
 
         return $mainQuery->get();
@@ -804,8 +814,8 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
 
             $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
         }else {
-            $mainQuery = $mainQuery->orderBy("leads.outcome", 'desc')
-                ->orderBy("numberOfLeads", 'desc');
+            $mainQuery = $mainQuery->orderBy("lead_sources.name", 'asc')
+                ->orderBy("leads.outcome", 'asc');
 
         }
 

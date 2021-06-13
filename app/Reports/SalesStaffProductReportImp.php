@@ -16,7 +16,7 @@ class SalesStaffProductReportImp implements Interfaces\SalesStaffProductReport
             ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as salesStaff")
             ->selectRaw("products.name as productName")
             ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
-            ->selectRaw("avg(contracts.contract_price) as averageSalesPrice")
+            ->selectRaw("avg(contracts.total_contract) as averageSalesPrice")
             ->selectRaw("count(leads.id) as numberOfLeads")
             ->selectRaw("count( IF (contracts.contract_price > 0 and appointments.outcome = 'success' , 1, null)) as numberOfSales")
             ->selectRaw("count( IF (contracts.contract_price > 0 and appointments.outcome = 'success' , 1, null)) / count(leads.id) * 100 as conversionRate")

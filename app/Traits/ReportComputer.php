@@ -29,9 +29,11 @@ trait ReportComputer
         return [
             'totalNumberOfSales' => $totalNumberOfSales,
             'totalNumberOfLeads' => $totalNumberOfLeads,
-            'averageConversionRate' => $totalConversionRate / $resultLength,
+//            'averageConversionRate' => $totalConversionRate / $resultLength,
+            'averageConversionRate' => $totalNumberOfSales / $totalNumberOfLeads,
             'grandTotalContracts' => $grandTotalContracts,
-            'grandAveragePrice' => $grandTotalAveragePrice / $resultLength,
+//            'grandAveragePrice' => $grandTotalAveragePrice / $resultLength,
+            'grandAveragePrice' => $grandTotalContracts / $totalNumberOfSales,
             'averageNumberOfLeads' => $totalNumberOfLeads / $resultLength,
             'averageNumberOfSales' => $totalNumberOfSales / $resultLength,
             'averageTotalContract' => $grandTotalContracts / $resultLength,

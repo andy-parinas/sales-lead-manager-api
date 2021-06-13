@@ -19,11 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Fixed sales contact editing displaying title">
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Fixed Report Issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeSmsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobType/JobTypeSmsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Reports/SalesStaffProductReportImp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Reports/SalesStaffSummaryReportImp.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Reports/SalesStaffSummaryReportImp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/ReportRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/ReportRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Traits/ReportComputer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Traits/ReportComputer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_03_10_034504_create_leads_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_03_10_034504_create_leads_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -390,14 +392,11 @@
       <workItem from="1620896021260" duration="4799000" />
       <workItem from="1621121085998" duration="1988000" />
       <workItem from="1621240229063" duration="5292000" />
-      <workItem from="1621731191291" duration="3466000" />
-    </task>
-    <task id="LOCAL-00127" summary="Added Product Selection in Product Sales Summary">
-      <created>1597060023653</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1597060023653</updated>
+      <workItem from="1621731191291" duration="5634000" />
+      <workItem from="1621846883944" duration="5871000" />
+      <workItem from="1622889893143" duration="53000" />
+      <workItem from="1622890603949" duration="2878000" />
+      <workItem from="1623579355688" duration="3918000" />
     </task>
     <task id="LOCAL-00128" summary="Added quoted price in the leads table">
       <created>1603767317125</created>
@@ -735,7 +734,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621244525106</updated>
     </task>
-    <option name="localTasksCounter" value="176" />
+    <task id="LOCAL-00176" summary="Fixed Report Issue">
+      <created>1621742469599</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1621742469600</updated>
+    </task>
+    <option name="localTasksCounter" value="177" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -757,7 +763,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Building Authorities Letter" />
     <MESSAGE value="Changed the Subject Line of letters" />
     <MESSAGE value="Changed Email Letters to send based on users email" />
     <MESSAGE value="Use users email address in sending" />
@@ -782,6 +787,7 @@
     <MESSAGE value="Implemented SalesStaffProductReport" />
     <MESSAGE value="Implemented ProductSalesSummaryReport.php" />
     <MESSAGE value="Fixed sales contact editing displaying title" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed sales contact editing displaying title" />
+    <MESSAGE value="Fixed Report Issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Report Issue" />
   </component>
 </project>

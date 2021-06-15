@@ -47,7 +47,7 @@ class LeadDocumentController extends ApiController
      */
     public function store(Request $request, Lead $lead)
     {
-        Gate::authorize('non-staff-users');
+        //Gate::authorize('non-staff-users');
 
         $data = $this->validate($request, [
             'file' => 'required|file',

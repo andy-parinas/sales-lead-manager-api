@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Reports\Interfaces\ProductSalesSummaryReport;
+use App\Reports\Interfaces\SalesContractReport;
 use App\Reports\Interfaces\SalesStaffProductReport;
 use App\Reports\Interfaces\SalesStaffSummaryReport;
 use App\Reports\ProductSalesSummaryReportImp;
+use App\Reports\SalesContractReportImp;
 use App\Reports\SalesStaffProductReportImp;
 use App\Reports\SalesStaffSummaryReportImp;
 use App\Repositories\DocumentRepository;
@@ -49,5 +51,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SalesStaffSummaryReport::class, SalesStaffSummaryReportImp::class);
         $this->app->bind(SalesStaffProductReport::class, SalesStaffProductReportImp::class);
         $this->app->bind(ProductSalesSummaryReport::class, ProductSalesSummaryReportImp::class);
+        $this->app->bind(SalesContractReport::class, SalesContractReportImp::class);
     }
 }

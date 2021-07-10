@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Reports\Interfaces\SalesContractReport;
 use Illuminate\Http\Request;
 
-class SalesContractReportController extends Controller
+class SalesContractReportController extends ApiController
 {
 
     private $salesContractReport;
@@ -23,7 +24,9 @@ class SalesContractReportController extends Controller
         $results = $this->salesContractReport->generate($request->all());
 
 
-        return $this->formatReport($results);
+        return $this->showOne([
+            'results' => $this->formatReport($results)
+        ]);
 
 
     }
@@ -46,7 +49,10 @@ class SalesContractReportController extends Controller
 
             }else {
                 //Push the Old Set to the report
-                array_push($set, ['setTotal' => $setTotal]);
+                array_push($set, [
+                    'name' => 'Total',
+                    'total_contract' => $setTotal
+                ]);
                 $setId = $result->id;
                 array_push($report, $set);
 

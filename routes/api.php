@@ -1,7 +1,10 @@
 <?php
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -175,3 +178,21 @@ Route::post('authorities/{lead}/letters/out-of-council', 'Letter\OutOfCouncilLet
 Route::post('job-types/{lead}/email/{sales_staff}', 'JobType\JobTypeEmailController@send');
 Route::post('job-types/{lead}/sms/{sales_staff}', 'JobType\JobTypeSmsController@send');
 Route::post('customer-reviews/{customer_review}/letters/maintenance/{sales_contact}', 'Letter\MaintenanceLetterController@send');
+
+
+Route::post('sanctum/token', function (Request $request) {
+    $request->validate([
+        'username' => 'required',
+        'password' => 'required'
+    ]);
+
+    $user = User::where('username', $request->username)->first();
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'username' => ['The provided credentials are incorrect.'],
+        ]);
+    }
+
+    return $user->createToken('desktop')->plainTextToken;
+});

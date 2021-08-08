@@ -19,11 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Sales Contract Report">
-      <change afterPath="$PROJECT_DIR$/app/Reports/Interfaces/LeadAndContractReport.php" afterDir="false" />
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Updated SalesContract report for other users">
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/LeadAndContractReportController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Reports/LeadAndContractReportImp.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesContractReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/SalesContractReportController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Reports/SalesContractReportImp.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Reports/SalesContractReportImp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -406,14 +406,11 @@
       <workItem from="1625227257634" duration="4014000" />
       <workItem from="1625310187946" duration="4506000" />
       <workItem from="1625570465207" duration="87000" />
-      <workItem from="1625829808070" duration="21843000" />
-    </task>
-    <task id="LOCAL-00133" summary="Added Roof Sheet Profile">
-      <created>1604380446165</created>
-      <option name="number" value="00133" />
-      <option name="presentableId" value="LOCAL-00133" />
-      <option name="project" value="LOCAL" />
-      <updated>1604380446165</updated>
+      <workItem from="1625829808070" duration="23091000" />
+      <workItem from="1627793173777" duration="86000" />
+      <workItem from="1627793488635" duration="27064000" />
+      <workItem from="1628305650616" duration="2822000" />
+      <workItem from="1628396548557" duration="7228000" />
     </task>
     <task id="LOCAL-00134" summary="Added Document Description">
       <created>1604390025032</created>
@@ -751,7 +748,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625920382431</updated>
     </task>
-    <option name="localTasksCounter" value="182" />
+    <task id="LOCAL-00182" summary="Updated SalesContract report for other users">
+      <created>1626088140111</created>
+      <option name="number" value="00182" />
+      <option name="presentableId" value="LOCAL-00182" />
+      <option name="project" value="LOCAL" />
+      <updated>1626088140111</updated>
+    </task>
+    <option name="localTasksCounter" value="183" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -773,7 +777,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Add all option for sales_staff status in reports" />
     <MESSAGE value="Changed to Manual sending of email to DesignAdvisor" />
     <MESSAGE value="Started working on Customer Review Report" />
     <MESSAGE value="Ongoing Customer Review reports" />
@@ -798,6 +801,7 @@
     <MESSAGE value="Fixed product sales report" />
     <MESSAGE value="Added Sales Contract Report" />
     <MESSAGE value="Sales Contract Report" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sales Contract Report" />
+    <MESSAGE value="Updated SalesContract report for other users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated SalesContract report for other users" />
   </component>
 </project>

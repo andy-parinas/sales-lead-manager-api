@@ -19,12 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Updated SalesContract report for other users">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/LeadAndContractReportController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Reports/LeadAndContractReportImp.php" afterDir="false" />
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Lead and Contract Report">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/LeadAndContractReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/LeadAndContractReportController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -410,14 +407,8 @@
       <workItem from="1627793173777" duration="86000" />
       <workItem from="1627793488635" duration="27064000" />
       <workItem from="1628305650616" duration="2822000" />
-      <workItem from="1628396548557" duration="7228000" />
-    </task>
-    <task id="LOCAL-00134" summary="Added Document Description">
-      <created>1604390025032</created>
-      <option name="number" value="00134" />
-      <option name="presentableId" value="LOCAL-00134" />
-      <option name="project" value="LOCAL" />
-      <updated>1604390025032</updated>
+      <workItem from="1628396548557" duration="7982000" />
+      <workItem from="1630109948703" duration="4279000" />
     </task>
     <task id="LOCAL-00135" summary="Added Contract Alert">
       <created>1604399920339</created>
@@ -755,7 +746,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626088140111</updated>
     </task>
-    <option name="localTasksCounter" value="183" />
+    <task id="LOCAL-00183" summary="Lead and Contract Report">
+      <created>1628416107303</created>
+      <option name="number" value="00183" />
+      <option name="presentableId" value="LOCAL-00183" />
+      <option name="project" value="LOCAL" />
+      <updated>1628416107304</updated>
+    </task>
+    <option name="localTasksCounter" value="184" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -777,7 +775,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Changed to Manual sending of email to DesignAdvisor" />
     <MESSAGE value="Started working on Customer Review Report" />
     <MESSAGE value="Ongoing Customer Review reports" />
     <MESSAGE value="Completed Customer Review Report" />
@@ -802,6 +799,7 @@
     <MESSAGE value="Added Sales Contract Report" />
     <MESSAGE value="Sales Contract Report" />
     <MESSAGE value="Updated SalesContract report for other users" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated SalesContract report for other users" />
+    <MESSAGE value="Lead and Contract Report" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lead and Contract Report" />
   </component>
 </project>

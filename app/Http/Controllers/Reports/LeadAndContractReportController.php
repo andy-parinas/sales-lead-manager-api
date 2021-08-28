@@ -15,7 +15,7 @@ class LeadAndContractReportController extends ApiController
 
     public function __construct(LeadAndContractReport $leadAndContractReport)
     {
-        $this->middleware('auth:sanctum');
+//        $this->middleware('auth:sanctum');
         $this->leadAndContractReport = $leadAndContractReport;
     }
 
@@ -41,6 +41,7 @@ class LeadAndContractReportController extends ApiController
                 $results =  $this->leadAndContractReport->generateByFranchise($franchiseIds, $request->all());
 
             }
+
 
             return $this->showOne($this->formatReport($results));
 
@@ -102,6 +103,7 @@ class LeadAndContractReportController extends ApiController
                 $set = [];
                 $setData = [];
                 $leadsSeen = 1;
+                $salesTotal = 0;
 
                 if ($result->total_contract != null || $result->total_contract > 0) {
                     $salesTotal = $salesTotal + $result->total_contract;

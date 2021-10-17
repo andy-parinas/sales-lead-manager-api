@@ -48,7 +48,7 @@ class WelcomeLetterController extends Controller
             "<p>Dear {$salesContact->title}. {$salesContact->last_name},  </p>" .
             "<p>On behalf of our Spanline Home Additions staff, we are honoured that you
                 have chosen us to provide you with a unique Spanline Home Addition and
-                particularly the \"living pleasure\" that the finished project will bring.<p>" .
+                particularly the lifestyle improvements that the finished project will bring.<p>" .
             "<p>Spanline is about more than just a building project. It is about serving, satisfying and fulfilling
                 the expectations of our customers. This we look forward to most of all. During the project we will have the
                 opportunity to show you just how seriously we take our Code of Customer Service Excellence.</p>".

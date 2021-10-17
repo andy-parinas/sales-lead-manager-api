@@ -16,6 +16,7 @@ class SalesContact extends JsonResource
     {
         return [
             'id' => $this->id,
+            'title' => $this->title,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'email' => $this->email,

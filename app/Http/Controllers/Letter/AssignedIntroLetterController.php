@@ -42,11 +42,11 @@ class AssignedIntroLetterController extends Controller
             "<div>{$salesContact->street1}, {$salesContact->street2}</div>" .
             "<div>{$salesContact->postcode->locality}, {$salesContact->postcode->state}, {$salesContact->postcode->pcode}</div> <br/> <br/>" .
             "<p>Dear {$salesContact->title}. {$salesContact->last_name},  </p>" .
-            "<p>Thank you for considering Spanline Home Additions {$lead->franchise->name} for your proposed home addition requirement<p>" .
-            "<p>We often find people are unsure as to what to expect from a Home Addition Design Consultation,
+            "<p>Thank you for considering Spanline Home Additions {$lead->franchise->name} for your new home addition project.<p>" .
+            "<p>We often find people are unsure what to expect from a Design Consultation,
                 so as the first step in delivering our Customer Service Standards, this letter outlines the consultation process and
-                full extent of our service commitment to you..</p>".
-            "<p>You will soon, or may already have been contacted by our Design Advisor, {$designAdvisor->fullName}.
+                full extent of our service commitment to you.</p>".
+            "<p>You will soon, or may have been contacted by our Design Advisor, {$designAdvisor->fullName}.
                 As a fully accredited design specialist, {$designAdvisor->first_name} is qualified to
                 provide extensive advice and assistance to you. They will arrive promptly at your agreed appointment time and will identify
                 themselves by producing their personal Spanline photo ID card.
@@ -56,7 +56,7 @@ class AssignedIntroLetterController extends Controller
                 design ideas for your consideration.</p>" .
             "<p>At Spanline, we value honesty and integrity, so {$designAdvisor->first_name}
                 will explain to you exactly what the Spanline product is, how it performs and what
-                you can expect from your new Spanline Home. Addition. Importantly, Spanline's exclusive National Customer
+                you can expect from your new Spanline Home Addition. Importantly, Spanline's exclusive National Customer
                 Service Code of Excellence will also be explained. This code will mean a lot to you should you
                 decide to have your home addition project undertaken by Spanline.
                 When delivering your Spanline solution, {$designAdvisor->first_name}

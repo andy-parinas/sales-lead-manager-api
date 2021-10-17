@@ -19,9 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Lead and Contract Report">
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="corrected sales Total Computation">
+      <change beforePath="$PROJECT_DIR$/.idea/sales-lead-manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sales-lead-manager.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/LeadAndContractReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/LeadAndContractReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/AssignedIntroLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/AssignedIntroLetterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/UnassignedIntroLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/UnassignedIntroLetterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/WelcomeLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/WelcomeLetterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SalesContact/SalesContactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SalesContact/SalesContactController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/SalesContact.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/SalesContact.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +198,7 @@
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -206,7 +211,7 @@
       <recent name="G:\Projects\sales-lead-manager\sqls" />
     </key>
   </component>
-  <component name="RunManager" selected="PHPUnit.LetterFeatureTest.testCanSendMaintenanceLetter">
+  <component name="RunManager" selected="PHPUnit.phpunit.xml">
     <configuration name="LetterFeatureTest.testCanSendMaintenanceLetter" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
       <CommandLine>
         <PhpTestInterpreterSettings>
@@ -241,15 +246,6 @@
       <TestRunner scope="XML" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="PHPUnit.LetterFeatureTest.testCanSendMaintenanceLetter" />
-        <item itemvalue="PHPUnit.SalesContactFeatureTest.testCanListPaginatedSalesContactByFranchiseAdminUsers" />
-        <item itemvalue="PHPUnit.SalesContactFeatureTest.testCanSortSalesContactByFields" />
-        <item itemvalue="PHPUnit.SalesContactFeatureTest.testCanListPaginatedSalesContactByStaffUsers" />
-        <item itemvalue="PHPUnit.SalesContactFeatureTest.testCanListPaginatedSalesContactByAuthenticatedUSers" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -408,14 +404,12 @@
       <workItem from="1627793488635" duration="27064000" />
       <workItem from="1628305650616" duration="2822000" />
       <workItem from="1628396548557" duration="7982000" />
-      <workItem from="1630109948703" duration="4279000" />
-    </task>
-    <task id="LOCAL-00135" summary="Added Contract Alert">
-      <created>1604399920339</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1604399920340</updated>
+      <workItem from="1630109948703" duration="5117000" />
+      <workItem from="1630820414233" duration="9000" />
+      <workItem from="1630821485750" duration="80000" />
+      <workItem from="1630821587951" duration="964000" />
+      <workItem from="1634029771272" duration="1075000" />
+      <workItem from="1634449066831" duration="4889000" />
     </task>
     <task id="LOCAL-00136" summary="Refactor Sales_Staff to have many-to-many relationship with franchise">
       <created>1604902861584</created>
@@ -753,7 +747,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628416107304</updated>
     </task>
-    <option name="localTasksCounter" value="184" />
+    <task id="LOCAL-00184" summary="corrected sales Total Computation">
+      <created>1630120820214</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1630120820215</updated>
+    </task>
+    <option name="localTasksCounter" value="185" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -775,7 +776,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Started working on Customer Review Report" />
     <MESSAGE value="Ongoing Customer Review reports" />
     <MESSAGE value="Completed Customer Review Report" />
     <MESSAGE value="Customer Review maintenance letter sent" />
@@ -800,6 +800,7 @@
     <MESSAGE value="Sales Contract Report" />
     <MESSAGE value="Updated SalesContract report for other users" />
     <MESSAGE value="Lead and Contract Report" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lead and Contract Report" />
+    <MESSAGE value="corrected sales Total Computation" />
+    <option name="LAST_COMMIT_MESSAGE" value="corrected sales Total Computation" />
   </component>
 </project>

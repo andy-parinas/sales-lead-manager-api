@@ -19,14 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="corrected sales Total Computation">
-      <change beforePath="$PROJECT_DIR$/.idea/sales-lead-manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sales-lead-manager.iml" afterDir="false" />
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Corrected Letter content">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/AssignedIntroLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/AssignedIntroLetterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/UnassignedIntroLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/UnassignedIntroLetterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/WelcomeLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/WelcomeLetterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SalesContact/SalesContactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SalesContact/SalesContactController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/SalesContact.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/SalesContact.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/Franchise.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/Franchise.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -409,14 +405,8 @@
       <workItem from="1630821485750" duration="80000" />
       <workItem from="1630821587951" duration="964000" />
       <workItem from="1634029771272" duration="1075000" />
-      <workItem from="1634449066831" duration="4889000" />
-    </task>
-    <task id="LOCAL-00136" summary="Refactor Sales_Staff to have many-to-many relationship with franchise">
-      <created>1604902861584</created>
-      <option name="number" value="00136" />
-      <option name="presentableId" value="LOCAL-00136" />
-      <option name="project" value="LOCAL" />
-      <updated>1604902861586</updated>
+      <workItem from="1634449066831" duration="6079000" />
+      <workItem from="1635155988153" duration="6299000" />
     </task>
     <task id="LOCAL-00137" summary="Adjusted functionality List sales staff">
       <created>1604981652535</created>
@@ -754,7 +744,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630120820215</updated>
     </task>
-    <option name="localTasksCounter" value="185" />
+    <task id="LOCAL-00185" summary="Corrected Letter content">
+      <created>1634458066995</created>
+      <option name="number" value="00185" />
+      <option name="presentableId" value="LOCAL-00185" />
+      <option name="project" value="LOCAL" />
+      <updated>1634458066996</updated>
+    </task>
+    <option name="localTasksCounter" value="186" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -776,7 +773,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Ongoing Customer Review reports" />
     <MESSAGE value="Completed Customer Review Report" />
     <MESSAGE value="Customer Review maintenance letter sent" />
     <MESSAGE value="Limit Sales Contact display to Users Franchise Postcode" />
@@ -801,6 +797,7 @@
     <MESSAGE value="Updated SalesContract report for other users" />
     <MESSAGE value="Lead and Contract Report" />
     <MESSAGE value="corrected sales Total Computation" />
-    <option name="LAST_COMMIT_MESSAGE" value="corrected sales Total Computation" />
+    <MESSAGE value="Corrected Letter content" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrected Letter content" />
   </component>
 </project>

@@ -39,6 +39,8 @@ class ProductSalesSummaryReportController extends ApiController
 
             $results = [];
 
+
+
             if($user->user_type == User::HEAD_OFFICE){
 
                 $results = $this->productSalesSummaryReport->generate($request->all());
@@ -47,13 +49,14 @@ class ProductSalesSummaryReportController extends ApiController
 
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
 
-                Log::info($franchiseIds);
 
                 $results = $this->productSalesSummaryReport->generateByFranchise($franchiseIds, $request->all());
+
             }
 
             if($results->count() > 0){
                 $total = $this->computeTotal($results);
+
 
                 return $this->showOne([
                     'results' => $results,

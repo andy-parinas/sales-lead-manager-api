@@ -24,19 +24,20 @@ trait ReportComputer
             $grandTotalAveragePrice = $grandTotalAveragePrice + $result->averageSalesPrice;
         }
 
+
         $resultLength = count($results);
 
         return [
             'totalNumberOfSales' => $totalNumberOfSales,
             'totalNumberOfLeads' => $totalNumberOfLeads,
 //            'averageConversionRate' => $totalConversionRate / $resultLength,
-            'averageConversionRate' => $totalNumberOfSales / $totalNumberOfLeads,
+            'averageConversionRate' => $totalNumberOfLeads == 0? 0: $totalNumberOfSales / $totalNumberOfLeads,
             'grandTotalContracts' => $grandTotalContracts,
 //            'grandAveragePrice' => $grandTotalAveragePrice / $resultLength,
-            'grandAveragePrice' => $grandTotalContracts / $totalNumberOfSales,
-            'averageNumberOfLeads' => $totalNumberOfLeads / $resultLength,
-            'averageNumberOfSales' => $totalNumberOfSales / $resultLength,
-            'averageTotalContract' => $grandTotalContracts / $resultLength,
+            'grandAveragePrice' => $totalNumberOfSales == 0? 0: $grandTotalContracts / $totalNumberOfSales,
+            'averageNumberOfLeads' => $resultLength == 0? 0 : $totalNumberOfLeads / $resultLength,
+            'averageNumberOfSales' => $resultLength == 0? 0 : $totalNumberOfSales / $resultLength,
+            'averageTotalContract' => $resultLength == 0? 0 : $grandTotalContracts / $resultLength,
         ];
     }
 

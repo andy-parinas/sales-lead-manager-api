@@ -41,12 +41,12 @@ class UnassignedIntroLetterController extends Controller
             "<div>{$salesContact->street1}, {$salesContact->street2}</div>" .
             "<div>{$salesContact->postcode->locality}, {$salesContact->postcode->state}, {$salesContact->postcode->pcode}</div> <br/> <br/>" .
             "<p>Dear {$salesContact->title}. {$salesContact->last_name},  </p>" .
-            "<p>Thank you for considering Spanline Home Additions {$lead->franchise->name} for your new home addition project<p>" .
+            "<p>Thank you for considering Spanline Home Additions {$lead->franchise->name} for your new home addition project.<p>" .
             "<p>We often find people are unsure what to expect from a Design Consultation,
                 so as the first step in delivering our Customer Service Standards, this letter outlines to you the
                 consultation process and full extent of our service commitment to you.</p>".
             "<p>You will soon be contacted by one of our fully accredited specialist Design Advisors who
-                will be able to provide extensive advise and assitance to you.</p>" .
+                will be able to provide extensive advice and assistance to you.</p>" .
             "<p>You are assured that our Design Advisor will arrive promptly at your agreed appointment time and will
                 identify themselves by producing their personal Spanline photo ID card. These cards are only
                 issued to accredited Spanline Design Advisors. You are assured that your Design Advisor will

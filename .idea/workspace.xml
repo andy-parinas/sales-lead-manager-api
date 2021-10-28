@@ -19,9 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Fix Report computation issue">
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Fix Franchise Repository issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/FranchiseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/FranchiseRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Letter/UnassignedIntroLetterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Letter/UnassignedIntroLetterController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -406,14 +406,7 @@
       <workItem from="1634029771272" duration="1075000" />
       <workItem from="1634449066831" duration="6079000" />
       <workItem from="1635155988153" duration="12237000" />
-      <workItem from="1635413661020" duration="1340000" />
-    </task>
-    <task id="LOCAL-00139" summary="Update Sales Staff Reporting">
-      <created>1605158909953</created>
-      <option name="number" value="00139" />
-      <option name="presentableId" value="LOCAL-00139" />
-      <option name="project" value="LOCAL" />
-      <updated>1605158909953</updated>
+      <workItem from="1635413661020" duration="3329000" />
     </task>
     <task id="LOCAL-00140" summary="Update Sales Staff Reporting">
       <created>1605510147366</created>
@@ -751,7 +744,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635239514375</updated>
     </task>
-    <option name="localTasksCounter" value="188" />
+    <task id="LOCAL-00188" summary="Fix Franchise Repository issue">
+      <created>1635417133115</created>
+      <option name="number" value="00188" />
+      <option name="presentableId" value="LOCAL-00188" />
+      <option name="project" value="LOCAL" />
+      <updated>1635417133116</updated>
+    </task>
+    <option name="localTasksCounter" value="189" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -773,7 +773,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Limit Sales Contact display to Users Franchise Postcode" />
     <MESSAGE value="WIP: Email attachment&#10;Updates:  Kernet API middleware, Appointment table - set appointment date column to nullable" />
     <MESSAGE value="Sending maitenance letter with attachment" />
     <MESSAGE value="Updated Sending maintenance letter with attachment" />
@@ -798,6 +797,7 @@
     <MESSAGE value="Corrected Letter content" />
     <MESSAGE value="Fixed Franchise for non Admin" />
     <MESSAGE value="Fix Report computation issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix Report computation issue" />
+    <MESSAGE value="Fix Franchise Repository issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix Franchise Repository issue" />
   </component>
 </project>

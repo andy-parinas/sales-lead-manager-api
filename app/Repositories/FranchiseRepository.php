@@ -122,7 +122,7 @@ class FranchiseRepository implements FranchiseRepositoryInterface
 
 
             return DB::table('franchises')
-                ->select('id', 'name',
+                ->select('id', 'name', 'type',
                     'franchise_number', 'description', 'parent_id')
                 ->selectRaw('(CASE WHEN parent_id IS NULL THEN "Main Franchise" ELSE "Sub Franchise" END) as type')
                 ->selectRaw('(CASE WHEN parent_id IS NULL THEN NULL ELSE ? END) as parent', [$franchise->franchise_number])
@@ -137,7 +137,7 @@ class FranchiseRepository implements FranchiseRepositoryInterface
 
 
             return DB::table('franchises')
-                ->select('id', 'name',
+                ->select('id', 'name', 'type',
                     'franchise_number', 'description', 'parent_id')
                 ->selectRaw('(CASE WHEN parent_id IS NULL THEN "Main Franchise" ELSE "Sub Franchise" END) as type')
                 ->selectRaw('(CASE WHEN parent_id IS NULL THEN NULL ELSE ? END) as parent', [$parent->franchise_number])
@@ -155,7 +155,7 @@ class FranchiseRepository implements FranchiseRepositoryInterface
     {
 
         return DB::table('franchises')
-                ->select('id', 'name',
+                ->select('id', 'name', 'type',
                         'franchise_number', 'description')
                 ->where('parent_id', null)
                 ->orderBy('franchise_number', 'asc')
@@ -173,6 +173,7 @@ class FranchiseRepository implements FranchiseRepositoryInterface
                 'children.franchise_number',
                 'children.description',
                 'children.name',
+                'children.type',
                 'parent.franchise_number as parent_franchise',
                 'parent.id as parent_id'
             );
@@ -222,6 +223,7 @@ class FranchiseRepository implements FranchiseRepositoryInterface
             ->select('children.id',
                 'children.franchise_number',
                 'children.name',
+                'children.type',
                 'parent.franchise_number as parent_franchise',
                 'parent.id as parent_id'
             );

@@ -60,8 +60,13 @@ class SalesStaffActualSeeder extends Seeder
                     print "Franchise Assigned {$salesFranchise} \n";
 
                 }else {
-                    $salesStaff->franchises()->attach($franchise->id);
-                    print "Sales Staff Exist {$salesName} - Franchise Assigned {$salesFranchise} \n";
+
+                    $salesStaffFranchisesArray = $salesStaff->franchises->pluck('id')->toArray();
+
+                    if(!in_array($franchise->id, $salesStaffFranchisesArray)){
+                        $salesStaff->franchises()->attach($franchise->id);
+                        print "Sales Staff Exist {$salesName} - Franchise Assigned {$salesFranchise} \n";
+                    }
                 }
 
 

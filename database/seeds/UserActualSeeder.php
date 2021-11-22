@@ -146,6 +146,10 @@ class UserActualSeeder extends Seeder
                 'user_type' => User::STAFF_USER, 'email' => 'newcastle@spanline.com.au',
                 'name' => 'Staff 2263', 'password' => 'password2263'],
 
+            ['username' => 'staffuser-2450SH','franchise' => '2450SH',
+                'user_type' => User::STAFF_USER, 'email' => 'northcoast@spanline.com.au',
+                'name' => 'Staff 2450SH', 'password' => 'password2450SH'],
+
             ['username' => 'headoffice1',
                 'user_type' => User::HEAD_OFFICE, 'email' => 'services@spanline.com.au',
                 'name' => 'Head Office', 'password' => 'passwordheadoffice'],

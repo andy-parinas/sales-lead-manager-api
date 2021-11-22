@@ -30,7 +30,7 @@ class TradeStaffActualSeeder extends Seeder
     public function run()
     {
 
-        $tradeStaffFile = storage_path() . '/app/database/trade_staff_01.csv';
+        $tradeStaffFile = storage_path() . '/app/database/trade_staff.csv';
 
 
         $file = fopen($tradeStaffFile, 'r');

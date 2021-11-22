@@ -29,7 +29,7 @@ class ContractActualSeeder extends Seeder
      */
     public function run()
     {
-        $contractFile = storage_path() . '/app/database/contracts_01.csv';
+        $contractFile = storage_path() . '/app/database/contracts.csv';
 
 
         $file = fopen($contractFile, 'r');

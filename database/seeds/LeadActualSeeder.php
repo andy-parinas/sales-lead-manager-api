@@ -27,6 +27,7 @@ class LeadActualSeeder extends Seeder
     protected $infoLogger;
     protected $postCodeLogger;
     protected $franchiseLogger;
+    protected $salesStaffLogger;
 
     public function __construct()
     {
@@ -49,13 +50,20 @@ class LeadActualSeeder extends Seeder
         $this->franchiseLogger->pushHandler(new StreamHandler(storage_path() .'/logs/franchise.log', Logger::DEBUG));
         $this->franchiseLogger->pushHandler(new FirePHPHandler());
 
+        // Create the logger
+        $this->salesStaffLogger = new Logger('salesStaff_logger');
+        // Now add some handlers
+        $this->salesStaffLogger->pushHandler(new StreamHandler(storage_path() .'/logs/salesStaff.log', Logger::DEBUG));
+        $this->salesStaffLogger->pushHandler(new FirePHPHandler());
+
+
     }
 
 
     public function run()
     {
 
-        $leadFile = storage_path() . '/app/database/leads_01.csv';
+        $leadFile = storage_path() . '/app/database/leads.csv';
 
         $file = fopen($leadFile, 'r');
         $count = 1;
@@ -138,36 +146,49 @@ class LeadActualSeeder extends Seeder
                     'postcode_status' => Lead::INSIDE_OF_FRANCHISE
                 ];
 
-//                try {
-//                    Lead::create($leadData);
-//                    print "####### Lead Created ######## \n";
-//                }catch (Exception $exception){
-//                    Log::error("Unable to create Lead {$data[1]}");
-//                }
+                $lead = null;
+                try {
+                    $lead = Lead::create($leadData);
+                    print "####### Lead Created ######## \n";
+                }catch (Exception $exception){
+                    Log::error("Unable to create Lead {$data[1]} possible duplicate lead number");
+                }
 
-                $lead = Lead::create($leadData);
-                print "####### Lead Created ######## \n";
+//                $lead = Lead::create($leadData);
+//                print "####### Lead Created ######## \n";
 
 
                 /**
                  * JobType Seeder
                  */
+                $legacyName = trim($data[19]);
+//                $nameArray = explode(" ", trim($data[19]));
+//                $designAdvisorFirstName = $nameArray[0];
+//                $designAdvisorLastName = " ";
 
-                $nameArray = explode(" ", trim($data[19]));
-                $designAdvisorFirstName = $nameArray[0];
-                $designAdvisorLastName = " ";
+                $matchArray = [];
+                preg_match('/([a-zA-Z]+)[\s]*([a-zA-Z]*)/', $legacyName , $matchArray);
 
-                if(count($nameArray) >= 3){
-                    $designAdvisorFirstName = $nameArray[0] . " " . $nameArray[1];
-                    $designAdvisorLastName = $nameArray[2];
-                }
+                $designAdvisorFirstName = sizeof($matchArray) > 2? $matchArray[1] : "";
+                $designAdvisorLastName = sizeof($matchArray) >= 3? $matchArray[2] : "";
 
-                if(count($nameArray) == 2){
-                    $designAdvisorLastName = $nameArray[1];
-                }
+
+
+//                if(count($nameArray) >= 3){
+//                    $designAdvisorFirstName = $nameArray[0] . " " . $nameArray[1];
+//                    $designAdvisorLastName = $nameArray[2];
+//                }
+//
+//                if(count($nameArray) == 2){
+//                    $designAdvisorLastName = $nameArray[1];
+//                }
 
                 $designAdvisor = SalesStaff::where('first_name', $designAdvisorFirstName)
                                     ->where('last_name', $designAdvisorLastName)->first();
+
+                if (!$designAdvisor){
+                    $designAdvisor = SalesStaff::where('legacy_name', $legacyName)->first();
+                }
 
                 if($designAdvisor){
 
@@ -178,20 +199,30 @@ class LeadActualSeeder extends Seeder
                         $product = Product::create(['name' => trim($data[20])]);
                     }
 
-                    $jobTypeData = [
-                        'taken_by' => trim($data[15]),
-                        'date_allocated' => trim($data[17]),
-                        'sales_staff_id' => $designAdvisor->id,
-                        'lead_id' => $lead->id,
-                        'description' => trim($data[21]),
-                        'product_id' => $product->id
-                    ];
+                    if($lead != null){
+                        $jobTypeData = [
+                            'taken_by' => trim($data[15]),
+                            'date_allocated' => trim($data[17]),
+                            'sales_staff_id' => $designAdvisor->id,
+                            'lead_id' => $lead->id,
+                            'description' => trim($data[21]),
+                            'product_id' => $product->id
+                        ];
 
-                    JobType::create($jobTypeData);
-                    print "Lead Job Type Create \n";
+                        try {
+                            JobType::create($jobTypeData);
+                            print "Lead Job Type Create \n";
+                        }catch (Exception $e){
+                            Log::error("Problem creating JobType. Possible data issue");
+                        }
+
+
+                    }
+
 
                 }else {
-                    Log::alert("Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} at Count: {$count}");
+                    $this->salesStaffLogger->alert("{$designAdvisorFirstName} {$designAdvisorLastName}");
+//                    Log::alert("Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} at Count: {$count}");
                     print "Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} \n";
                 }
 
@@ -210,23 +241,34 @@ class LeadActualSeeder extends Seeder
                     $actualAppointmentDate = $appointmentDate;
                 }
 
-                $outcome = trim($data[28]) != "" ? strtolower(trim($data[28])) : "pending";
+                $outcome = "pending";
 
-                $appointmentData = [
-                    'appointment_date' => $actualAppointmentDate,
-                    'lead_id' => $lead->id,
-                    'outcome' => $outcome,
-                    'comments' => trim($data[26]),
-                    'quoted_price' => floatval(trim($data[27]))
-                ];
+                if (isset($data[28])){
+                    $outcome = trim($data[28]) != "" ? strtolower(trim($data[28])) : "pending";
+                }
 
-                Appointment::create($appointmentData);
-                print "Lead Appointment Created \n";
+                if($lead != null){
+                    $appointmentData = [
+                        'appointment_date' => $actualAppointmentDate,
+                        'lead_id' => $lead->id,
+                        'outcome' => $outcome,
+                        'comments' => trim($data[26]),
+                        'quoted_price' => floatval(trim(array_key_exists(27, $data)? $data[27]: 0 ))
+                    ];
+
+                    try {
+                        Appointment::create($appointmentData);
+                        print "Lead Appointment Created \n";
+                    }catch (Exception $e){
+                        Log::error("Problem creating appointment. Possible data issue");
+                    }
+
+                }
 
             }else {
 
                 print "\n#### Franchise Does Not Exist {$data[0]} ########### \n";
-                $this->franchiseLogger->alert("Franchise Does Not Exist {$data[0]} at Count: {$count} ");
+                $this->franchiseLogger->alert("{$data[0]}");
             }
 
             print "############# Item number {$count} ############## \n";

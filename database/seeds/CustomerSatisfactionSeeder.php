@@ -13,7 +13,7 @@ class CustomerSatisfactionSeeder extends Seeder
      */
     public function run()
     {
-        $satisfactionFile = storage_path() . '/app/database/customer_satisfaction_01.csv';
+        $satisfactionFile = storage_path() . '/app/database/customer_satisfaction.csv';
 
 
         $file = fopen($satisfactionFile, 'r');

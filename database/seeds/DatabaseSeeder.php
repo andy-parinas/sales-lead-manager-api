@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             FranchiseSeeder::class,
             PostcodeSeeder::class,
+            FranchisePostcodeSeeder::class,
             UserActualSeeder::class,
 //            SalesStaffActualSeeder::class,
             SalesStaffSeeder::class,

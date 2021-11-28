@@ -39,39 +39,39 @@ class PostcodeSeeder extends Seeder
 
         }
 
-        $postcodeFranchiseFile = storage_path() . '/app/database/postcode-to-franchise.json';
+        // $postcodeFranchiseFile = storage_path() . '/app/database/postcode-to-franchise.json';
 
-        $strJsonFileContents = file_get_contents($postcodeFranchiseFile);
-        $postcodeArray = json_decode($strJsonFileContents, false);
+        // $strJsonFileContents = file_get_contents($postcodeFranchiseFile);
+        // $postcodeArray = json_decode($strJsonFileContents, false);
 
-        foreach ($postcodeArray as $postcode){
+        // foreach ($postcodeArray as $postcode){
 
-            $post = Postcode::where('pcode', $postcode->Postcode)
-                ->where('locality', $postcode->Locality)
-                ->first();
+        //     $post = Postcode::where('pcode', $postcode->Postcode)
+        //         ->where('locality', $postcode->Locality)
+        //         ->first();
 
-            $subFranchise = Franchise::where('franchise_number', $postcode->sub_franchise_code)
-                ->where('parent_id', '<>', null)
-                ->first();
+        //     $subFranchise = Franchise::where('franchise_number', $postcode->sub_franchise_code)
+        //         ->where('parent_id', '<>', null)
+        //         ->first();
 
-            $mainFranchise = Franchise::where('franchise_number', $postcode->main_franchise_code)
-                ->where('parent_id', null)
-                ->first();
+        //     $mainFranchise = Franchise::where('franchise_number', $postcode->main_franchise_code)
+        //         ->where('parent_id', null)
+        //         ->first();
 
 
-            if($post != null && $subFranchise != null && $mainFranchise != null){
-                print "Postcode: " . $post->pcode . " PostcodeId: " . $post->id .
-                    " | Sub-Franchise: " . $subFranchise->franchise_number . " Sub-FranchiseId: ". $subFranchise->id . "\n";
+        //     if($post != null && $subFranchise != null && $mainFranchise != null){
+        //         print "Postcode: " . $post->pcode . " PostcodeId: " . $post->id .
+        //             " | Sub-Franchise: " . $subFranchise->franchise_number . " Sub-FranchiseId: ". $subFranchise->id . "\n";
 
-                print "Postcode: " . $post->pcode . " PostcodeId: " . $post->id .
-                    " | Main-Franchise: " . $mainFranchise->franchise_number . " Main-FranchiseId: ". $mainFranchise->id . "\n";
+        //         print "Postcode: " . $post->pcode . " PostcodeId: " . $post->id .
+        //             " | Main-Franchise: " . $mainFranchise->franchise_number . " Main-FranchiseId: ". $mainFranchise->id . "\n";
 
-                $subFranchise->postcodes()->attach($post->id);
-                $mainFranchise->postcodes()->attach($post->id);
+        //         $subFranchise->postcodes()->attach($post->id);
+        //         $mainFranchise->postcodes()->attach($post->id);
 
-            }
+        //     }
 
-        }
+        // }
 
     }
 }

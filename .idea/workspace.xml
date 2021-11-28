@@ -19,17 +19,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Corrected Typos">
+    <list default="true" id="5a7deac6-9171-4175-86f7-e0b0f838cba8" name="Default Changelist" comment="Updated Seeders">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/ContractActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/ContractActualSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/ContractVariationActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/ContractVariationActualSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/CustomerSatisfactionSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/CustomerSatisfactionSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/LeadActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/LeadActualSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/SalesStaffActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/SalesStaffActualSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/SalesStaffSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/SalesStaffSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/TradeStaffActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/TradeStaffActualSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UserActualSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -420,14 +411,7 @@
       <workItem from="1635929556103" duration="2505000" />
       <workItem from="1636259780390" duration="8266000" />
       <workItem from="1636867611601" duration="7180000" />
-      <workItem from="1637465966385" duration="15384000" />
-    </task>
-    <task id="LOCAL-00141" summary="Update Sales Staff Product Reporting">
-      <created>1605515665111</created>
-      <option name="number" value="00141" />
-      <option name="presentableId" value="LOCAL-00141" />
-      <option name="project" value="LOCAL" />
-      <updated>1605515665112</updated>
+      <workItem from="1637465966385" duration="16555000" />
     </task>
     <task id="LOCAL-00142" summary="Added Franchise Type in Report selection">
       <created>1605520168782</created>
@@ -765,7 +749,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635418944214</updated>
     </task>
-    <option name="localTasksCounter" value="190" />
+    <task id="LOCAL-00190" summary="Updated Seeders">
+      <created>1637575567106</created>
+      <option name="number" value="00190" />
+      <option name="presentableId" value="LOCAL-00190" />
+      <option name="project" value="LOCAL" />
+      <updated>1637575567107</updated>
+    </task>
+    <option name="localTasksCounter" value="191" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -787,7 +778,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Sending maitenance letter with attachment" />
     <MESSAGE value="Updated Sending maintenance letter with attachment" />
     <MESSAGE value="Customer review report" />
     <MESSAGE value="added cascadeOnDelete for Lead related tables" />
@@ -812,6 +802,7 @@
     <MESSAGE value="Fix Report computation issue" />
     <MESSAGE value="Fix Franchise Repository issue" />
     <MESSAGE value="Corrected Typos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrected Typos" />
+    <MESSAGE value="Updated Seeders" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Seeders" />
   </component>
 </project>

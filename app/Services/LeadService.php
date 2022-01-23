@@ -9,7 +9,7 @@ class LeadService implements LeadServiceInterface
 
     public function generateLeadNumber()
     {
-        $number = time();
+        $number = strtoupper(uniqid());
 
         return "LN-{$number}";
     }

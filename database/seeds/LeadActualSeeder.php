@@ -143,9 +143,9 @@ class LeadActualSeeder extends Seeder
                 // Need to check if LeadNumber exist. Normally when the program executes
                 // in subseconds, it most like create a duplicate
                 // Create a new LeadNUmber
-                while(Lead::where('lead_number', $leadNumber)->first()){
-                    $leadNumber = $leadService->generateLeadNumber();
-                }
+                // while(Lead::where('lead_number', $leadNumber)->first()){
+                //     $leadNumber = $leadService->generateLeadNumber();
+                // }
 
                 $leadData = [
                     'reference_number' => trim($data[1]),

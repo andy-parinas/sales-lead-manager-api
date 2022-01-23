@@ -11,6 +11,7 @@ use App\JobType;
 use App\Lead;
 use App\Repositories\Interfaces\LeadRepositoryInterface;
 use App\SalesContact;
+use App\Services\Interfaces\LeadServiceInterface;
 use App\Services\Interfaces\PostcodeServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -24,11 +25,14 @@ class FranchiseLeadController extends ApiController
 
     private $postcodeService;
     private $leadRepository;
+    private $leadService;
 
-    public function __construct(PostcodeServiceInterface $postcodeService, LeadRepositoryInterface $leadRepository) {
+    public function __construct(PostcodeServiceInterface $postcodeService, 
+        LeadRepositoryInterface $leadRepository, LeadServiceInterface $leadService) {
         $this->middleware('auth:sanctum');
         $this->postcodeService = $postcodeService;
         $this->leadRepository = $leadRepository;
+        $this->leadService= $leadService;
     }
 
 
@@ -69,7 +73,7 @@ class FranchiseLeadController extends ApiController
 
 
         $data = $this->validate($request, [
-            'lead.lead_number' => 'required',
+            // 'lead.lead_number' => 'required',
             'lead.sales_contact_id' => 'required|integer',
             'lead.lead_source_id' => 'required|integer',
             'lead.lead_date' => 'required',
@@ -88,6 +92,7 @@ class FranchiseLeadController extends ApiController
             'appointment.customer_touch_point' => '',
         ]);
 
+        $data['lead']['lead_number'] = $this->leadService->generateLeadNumber();
         /**
          * Check if the SalesContact postcode is within the franchise postcode assignment.
          * If not, Need to tag the Lead as Outside-of-franchise

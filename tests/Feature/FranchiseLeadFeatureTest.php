@@ -188,7 +188,7 @@ class FranchiseLeadFeatureTest extends TestCase
         $leadSource = factory(LeadSource::class)->create();
 
         $leadData = [
-            'lead_number' => '1234567890',
+            // 'lead_number' => '1234567890',
             'sales_contact_id' => $salesContact->id,
             'lead_source_id' => $leadSource->id,
             'lead_date' => '2020-03-30'

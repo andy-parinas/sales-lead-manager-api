@@ -41,7 +41,7 @@ class ContractVariationActualSeeder extends Seeder
             $amount = floatval(trim($data[6]));
 
             $franchiseNumber = trim($data[0]);
-            $leadNumber = trim($data[1]);
+            $leadReferenceNumber = trim($data[1]);
 
             $franchise = Franchise::where('franchise_number', $franchiseNumber)
                 ->where('parent_id', '<>', null)
@@ -49,7 +49,7 @@ class ContractVariationActualSeeder extends Seeder
 
             if($franchise != null){
 
-                $lead = Lead::where('lead_number', $leadNumber)
+                $lead = Lead::where('reference_number', $leadReferenceNumber)
                     ->where('franchise_id', $franchise->id)
                     ->first();
 
@@ -85,7 +85,7 @@ class ContractVariationActualSeeder extends Seeder
                     }
 
                 }else {
-                    $this->variationLog->alert("No Lead Found {$leadNumber} Count: {$count} ");
+                    $this->variationLog->alert("No Lead Found {$leadReferenceNumber} Count: {$count} ");
                 }
 
             }else {

@@ -21,7 +21,7 @@ class CustomerSatisfactionSeeder extends Seeder
         while (($data = fgetcsv($file)) !== FALSE) {
 
             $franchiseNumber = trim($data[0]);
-            $leadNumber = trim($data[1]);
+            $leadReferenceNumber = trim($data[1]);
             $dateProjectCompleted = trim($data[2]);
             $dateWarrantyReceive = trim($data[3]);
             $homeAdditionType = trim($data[4]);
@@ -38,7 +38,7 @@ class CustomerSatisfactionSeeder extends Seeder
 
             if($franchise != null){
 
-                $lead = Lead::where('lead_number', $leadNumber)
+                $lead = Lead::where('reference_number', $leadReferenceNumber)
                     ->where('franchise_id', $franchise->id)
                     ->first();
 
@@ -62,7 +62,7 @@ class CustomerSatisfactionSeeder extends Seeder
 
                 }else {
 
-                    print "No Lead Found Lead: {$leadNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
+                    print "No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
 
                 }
 

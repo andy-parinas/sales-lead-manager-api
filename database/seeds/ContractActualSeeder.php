@@ -37,7 +37,7 @@ class ContractActualSeeder extends Seeder
         while (($data = fgetcsv($file)) !== FALSE) {
 
             $franchiseNumber = trim($data[0]);
-            $leadNumber = trim($data[1]);
+            $leadReferenceNumber = trim($data[1]);
             $contractDate = trim($data[2]);
             $contractNumber = trim($data[3]);
             $contractPrice = floatval(trim($data[4]));
@@ -63,7 +63,7 @@ class ContractActualSeeder extends Seeder
 
             if($franchise != null){
 
-                $lead = Lead::where('lead_number', $leadNumber)
+                $lead = Lead::where('reference_number', $leadReferenceNumber)
                             ->where('franchise_id', $franchise->id)
                             ->first();
 
@@ -76,8 +76,8 @@ class ContractActualSeeder extends Seeder
 
                 }else{
 
-                    print "No Lead Found Lead: {$leadNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
-                    $this->contractLog->alert("No Lead Found Lead: {$leadNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count}");
+                    print "No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
+                    $this->contractLog->alert("No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count}");
 
                 }
 

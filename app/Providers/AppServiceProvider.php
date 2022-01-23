@@ -19,8 +19,10 @@ use App\Services\FranchiseService;
 use App\Services\Interfaces\ContractFinanceServiceInterface;
 use App\Services\Interfaces\EmailServiceInterface;
 use App\Services\Interfaces\FranchiseServiceInterface;
+use App\Services\Interfaces\LeadServiceInterface;
 use App\Services\Interfaces\PostcodeServiceInterface;
 use App\Services\Interfaces\SmsServiceInterface;
+use App\Services\LeadService;
 use App\Services\MessageMediaService;
 use App\Services\PostcodeService;
 use App\Services\PostmarkService;
@@ -55,5 +57,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductSalesSummaryReport::class, ProductSalesSummaryReportImp::class);
         $this->app->bind(SalesContractReport::class, SalesContractReportImp::class);
         $this->app->bind(LeadAndContractReport::class, LeadAndContractReportImp::class);
+        $this->app->bind(LeadServiceInterface::class, LeadService::class);
     }
 }

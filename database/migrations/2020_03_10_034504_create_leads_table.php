@@ -16,6 +16,7 @@ class CreateLeadsTable extends Migration
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
             $table->string('lead_number')->unique();
+            $table->string('reference_number')->nullable();
             $table->unsignedBigInteger('franchise_id');
             $table->unsignedBigInteger('sales_contact_id');
             $table->unsignedBigInteger('lead_source_id');

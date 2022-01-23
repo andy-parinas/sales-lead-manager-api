@@ -9,6 +9,7 @@ use App\Postcode;
 use App\Product;
 use App\SalesContact;
 use App\SalesStaff;
+use App\Services\Interfaces\LeadServiceInterface;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
 use Monolog\Handler\FirePHPHandler;
@@ -60,7 +61,7 @@ class LeadActualSeeder extends Seeder
     }
 
 
-    public function run()
+    public function run(LeadServiceInterface $leadService)
     {
 
         $leadFile = storage_path() . '/app/database/leads.csv';
@@ -136,9 +137,19 @@ class LeadActualSeeder extends Seeder
             }
 
             if($franchise != null && $leadSource != null && $salesContact != null){
+                
+                $leadNumber = $leadService->generateLeadNumber();
+
+                // Need to check if LeadNumber exist. Normally when the program executes
+                // in subseconds, it most like create a duplicate
+                // Create a new LeadNUmber
+                while(Lead::where('lead_number', $leadNumber)->first()){
+                    $leadNumber = $leadService->generateLeadNumber();
+                }
 
                 $leadData = [
-                    'lead_number' => trim($data[1]),
+                    'reference_number' => trim($data[1]),
+                    'lead_number' => $leadNumber,
                     'franchise_id' => $franchise->id,
                     'sales_contact_id' => $salesContact->id,
                     'lead_source_id' => $leadSource->id,

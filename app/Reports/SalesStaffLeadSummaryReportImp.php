@@ -4,11 +4,11 @@
 namespace App\Reports;
 
 
-use App\Reports\Interfaces\SalesStaffSummaryReport;
+use App\Reports\Interfaces\SalesStaffLeadSummaryReport;
 use App\SalesStaff;
 use Illuminate\Support\Facades\DB;
 
-class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
+class SalesStaffLeadSummaryReportImp implements SalesStaffLeadSummaryReport
 {
 
     public function generate($queryParams)
@@ -26,7 +26,7 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
             ->join("appointments", "appointments.lead_id", "=", "leads.id")
             ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->join("franchises", "leads.franchise_id", "=", "franchises.id")
-            ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id");
+            ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id");
 
 
         if(key_exists("status", $queryParams) && $queryParams['status'] !== ""){
@@ -46,7 +46,7 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 
             $mainQuery = $mainQuery
-                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
+                ->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
         }
 
         if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
@@ -117,7 +117,7 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 
             $mainQuery = $mainQuery
-                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
+                ->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
         }
 
         if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){

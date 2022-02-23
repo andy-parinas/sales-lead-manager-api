@@ -40,7 +40,7 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
             ->joinSub($salesContactQuery, 'sales_contacts', function ($join){
                 $join->on('sales_contacts.id', '=', 'leads.sales_contact_id');
             })
-            ->leftJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
+            ->rightJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
             ->where('appointments.outcome', 'success');
 
 
@@ -88,7 +88,7 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
             ->joinSub($salesContactQuery, 'sales_contacts', function ($join){
                 $join->on('sales_contacts.id', '=', 'leads.sales_contact_id');
             })
-            ->leftJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
+            ->rightJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
             ->where('appointments.outcome', 'success')
             ->whereIn('leads.franchise_id', $franchiseIds);
 

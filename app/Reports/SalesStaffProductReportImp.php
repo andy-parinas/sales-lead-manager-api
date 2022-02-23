@@ -26,12 +26,12 @@ class SalesStaffProductReportImp implements Interfaces\SalesStaffProductReport
             ->join("appointments", "appointments.lead_id", "=", "leads.id")
             ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->join("franchises", "leads.franchise_id", "=", "franchises.id")
-            ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id");
+            ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id");
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 
             $mainQuery = $mainQuery
-                ->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
+                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
         }
 
         if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
@@ -104,13 +104,13 @@ class SalesStaffProductReportImp implements Interfaces\SalesStaffProductReport
             ->join("appointments", "appointments.lead_id", "=", "leads.id")
             ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->join("franchises", "leads.franchise_id", "=", "franchises.id")
-            ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id")
+            ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id")
             ->whereIn('franchises.id', $franchiseIds);
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 
             $mainQuery = $mainQuery
-                ->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
+                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
         }
 
         if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){

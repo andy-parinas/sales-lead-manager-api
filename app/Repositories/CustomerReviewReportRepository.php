@@ -59,7 +59,7 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 
             $mainQuery = $mainQuery
-                ->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
+                ->whereBetween('customer_reviews.date_project_completed', [$queryParams['start_date'], $queryParams['end_date']]);
         }
 
 
@@ -158,7 +158,7 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
 
             $mainQuery = $mainQuery
-                ->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
+                ->whereBetween('customer_reviews.date_project_completed', [$queryParams['start_date'], $queryParams['end_date']]);
         }
 
 

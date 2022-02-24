@@ -2,6 +2,18 @@
 
 namespace App\Providers;
 
+use App\Reports\Interfaces\LeadAndContractReport;
+use App\Reports\Interfaces\ProductSalesSummaryReport;
+use App\Reports\Interfaces\SalesContractReport;
+use App\Reports\Interfaces\SalesStaffLeadSummaryReport;
+use App\Reports\Interfaces\SalesStaffProductReport;
+use App\Reports\Interfaces\SalesStaffSummaryReport;
+use App\Reports\LeadAndContractReportImp;
+use App\Reports\ProductSalesSummaryReportImp;
+use App\Reports\SalesContractReportImp;
+use App\Reports\SalesStaffLeadSummaryReportImp;
+use App\Reports\SalesStaffProductReportImp;
+use App\Reports\SalesStaffSummaryReportImp;
 use App\Repositories\CustomerReviewReportRepository;
 use App\Repositories\DocumentRepository;
 use App\Repositories\FranchiseRepository;
@@ -54,5 +66,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TradeStaffRepositoryInterface::class, TradeStaffRepository::class);
         $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
         $this->app->bind(CustomerReviewReportInterface::class, CustomerReviewReportRepository::class);
+        $this->app->bind(SalesStaffLeadSummaryReport::class, SalesStaffLeadSummaryReportImp::class);
+        $this->app->bind(SalesStaffSummaryReport::class, SalesStaffSummaryReportImp::class);
+        $this->app->bind(SalesStaffProductReport::class, SalesStaffProductReportImp::class);
+        $this->app->bind(SalesContractReport::class, SalesContractReportImp::class);
+        $this->app->bind(ProductSalesSummaryReport::class, ProductSalesSummaryReportImp::class);
+        $this->app->bind(LeadAndContractReport::class, LeadAndContractReportImp::class);
+        
+   
+   
     }
 }

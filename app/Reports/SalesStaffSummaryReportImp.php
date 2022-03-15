@@ -37,9 +37,6 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
                 $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
             }
 
-        }else {
-
-            $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
         }
 
 
@@ -96,7 +93,7 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
             ->join("appointments", "appointments.lead_id", "=", "leads.id")
             ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->join("franchises", "leads.franchise_id", "=", "franchises.id")
-            ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id")
+            ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id")
             ->whereIn('franchises.id', $franchiseIds);
 
 
@@ -108,10 +105,11 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
                 $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
             }
 
-        }else {
-
-            $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
         }
+        // else {
+
+        //     $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
+        // }
 
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){

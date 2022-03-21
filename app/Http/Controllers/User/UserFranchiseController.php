@@ -259,7 +259,6 @@ class UserFranchiseController extends ApiController
 
         $user->franchises()->attach($franchise->id);
 
-
         return $this->showOne(new  FranchiseResource($franchise));
 
     }

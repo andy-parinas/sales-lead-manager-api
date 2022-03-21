@@ -50,8 +50,8 @@ class User extends Authenticatable
 
     public function franchises()
     {
-        return $this->belongsToMany(Franchise::class)
-            ->where('franchises.parent_id', '<>', null);
+        return $this->belongsToMany(Franchise::class);
+            // ->where('franchises.parent_id', '<>', null);
     }
 
     public function isHeadOffice()

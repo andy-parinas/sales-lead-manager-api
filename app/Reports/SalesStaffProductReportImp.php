@@ -81,6 +81,8 @@ class SalesStaffProductReportImp implements Interfaces\SalesStaffProductReport
         if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
 
             $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        }else {
+            $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc');
         }
 
 
@@ -160,6 +162,8 @@ class SalesStaffProductReportImp implements Interfaces\SalesStaffProductReport
         if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
 
             $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        }else {
+            $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc');
         }
 
 

@@ -12,7 +12,6 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
 
     public function getAll(array $params)
     {
-
         $query = DB::table('sales_staff')
             ->select('sales_staff.id', 'first_name', 'last_name', 'email', 'contact_number', 'status', 'franchises.franchise_number')
             ->leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
@@ -25,18 +24,25 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
 
         }
 
-        return $query ->orderBy($params['column'], $params['direction'])
-            ->paginate($params['size']);
 
-//        if(key_exists('search', $params) && key_exists('on', $params))
-//        {
-//            return SalesStaff::with('franchises')->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
-//                ->orderBy($params['column'], $params['direction'])
-//                ->paginate($params['size']);
-//        }
-//
-//        return SalesStaff::with('franchises')->orderBy($params['column'], $params['direction'])
-//            ->paginate($params['size']);
+        if($params['column'] == 'franchises')
+        {
+            $query = $query->orderBy('franchises.franchise_number', $params['direction'])
+                ->paginate($params['size']);
+
+        }elseif($params['column'] == 'created_at')
+        {
+            $query = $query->orderBy('sales_staff.created_at', $params['direction'])
+                ->paginate($params['size']);
+
+        }else {
+            $query = $query->orderBy($params['column'], $params['direction'])
+            ->paginate($params['size']);
+        }
+
+
+        return $query;
+
     }
 
 
@@ -65,7 +71,6 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
     public function getAllByFranchise(array $franchiseIds, array $params)
     {
 
-
         $query = DB::table('sales_staff')
             ->select('sales_staff.id', 'first_name', 'last_name', 'email', 'contact_number', 'status', 'franchises.franchise_number')
             ->leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
@@ -78,26 +83,26 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
             $query = $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
 
         }
+        if($params['column'] == 'franchises')
+        {
+            $query = $query->orderBy('franchises.franchise_number', $params['direction'])
+                ->paginate($params['size']);
 
-        return $query ->orderBy($params['column'], $params['direction'])
+        }elseif($params['column'] == 'created_at')
+        {
+            $query = $query->orderBy('sales_staff.created_at', $params['direction'])
+                ->paginate($params['size']);
+
+        }else {
+            $query = $query->orderBy($params['column'], $params['direction'])
             ->paginate($params['size']);
+        }
+
+        return $query;
 
 
 
-//        if(key_exists('search', $params) && key_exists('on', $params))
-//        {
-//            return SalesStaff::with('franchises')->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
-//                ->where('status', SalesStaff::ACTIVE)
-//                ->whereIn('franchises.id', $franchiseIds)
-//                ->orderBy($params['column'], $params['direction'])
-//                ->paginate($params['size']);
-//        }
-//
-//        return SalesStaff::with('franchises')
-//            ->where('status', SalesStaff::ACTIVE)
-//            ->whereIn('franchises.id', $franchiseIds)
-//            ->orderBy($params['column'], $params['direction'])
-//            ->paginate($params['size']);
+
     }
 
     public function searchAllByFranchise(array $franchiseIds, $search)

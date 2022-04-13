@@ -198,3 +198,6 @@ Route::post('sanctum/token', function (Request $request) {
 
     return $user->createToken('desktop')->plainTextToken;
 });
+
+//Manuals
+Route::resource('manuals', 'ManualController', ['only' => ['index']]);

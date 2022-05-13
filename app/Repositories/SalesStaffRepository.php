@@ -13,7 +13,15 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
     public function getAll(array $params)
     {
         $query = DB::table('sales_staff')
-            ->select('sales_staff.id', 'first_name', 'last_name', 'email', 'contact_number', 'status', 'franchises.franchise_number')
+            ->select(
+                'sales_staff.id', 
+                'first_name', 
+                'last_name', 
+                'email', 
+                'contact_number', 
+                'status')
+            ->selectRaw("JSON_ARRAYAGG(franchises.id) as franchise_ids")
+            ->selectRaw("GROUP_CONCAT(franchises.franchise_number) as franchise_number")
             ->leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
             ->leftJoin('franchises', 'franchises.id', '=','franchise_sales_staff.franchise_id' );
 
@@ -27,21 +35,58 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
 
         if($params['column'] == 'franchises')
         {
-            $query = $query->orderBy('franchises.franchise_number', $params['direction'])
-                ->paginate($params['size']);
+            $query = $query->orderBy('franchises.franchise_number', $params['direction']);
+            //     ->paginate($params['size']);
 
         }elseif($params['column'] == 'created_at')
         {
-            $query = $query->orderBy('sales_staff.created_at', $params['direction'])
-                ->paginate($params['size']);
+            $query = $query->orderBy('sales_staff.created_at', $params['direction']);
+            //     ->paginate($params['size']);
 
         }else {
-            $query = $query->orderBy($params['column'], $params['direction'])
-            ->paginate($params['size']);
+            $query = $query->orderBy($params['column'], $params['direction']);
+            // ->paginate($params['size']);
         }
 
 
-        return $query;
+        $size= 10;
+        $offset= 0;
+
+        if(key_exists('size', $params) && key_exists('page', $params))
+        {
+
+            $offset = ((int)$params['page'] - 1) * (int)$params['size'];
+            $size = $params['size'];
+
+          
+        }
+
+        $query->limit($size)
+        ->offset($offset);
+
+        $query->groupBy([
+            'sales_staff.id', 
+            'first_name', 
+            'sales_staff.last_name', 
+            'sales_staff.email', 
+            'sales_staff.contact_number', 
+            'sales_staff.status',
+            'sales_staff.created_at'
+        ]);
+
+        
+
+        $items = $query->get();
+        $count = SalesStaff::count();
+        
+
+    
+
+        // return $query->get();
+        return [
+            'data' => $items,
+            'count' => $count
+        ];
 
     }
 
@@ -71,11 +116,26 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
     public function getAllByFranchise(array $franchiseIds, array $params)
     {
 
+        // $query = DB::table('sales_staff')
+        //     ->select('sales_staff.id', 'first_name', 'last_name', 'email', 'contact_number', 'status', 'franchises.franchise_number')
+        //     ->leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
+        //     ->leftJoin('franchises', 'franchises.id', '=','franchise_sales_staff.franchise_id' )
+        //     ->whereIn('franchises.id', $franchiseIds);
+
         $query = DB::table('sales_staff')
-            ->select('sales_staff.id', 'first_name', 'last_name', 'email', 'contact_number', 'status', 'franchises.franchise_number')
+            ->select(
+                'sales_staff.id', 
+                'first_name', 
+                'last_name', 
+                'email', 
+                'contact_number', 
+                'status')
+            ->selectRaw("JSON_ARRAYAGG(franchises.id) as franchise_ids")
+            ->selectRaw("GROUP_CONCAT(franchises.franchise_number) as franchise_number")
             ->leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
             ->leftJoin('franchises', 'franchises.id', '=','franchise_sales_staff.franchise_id' )
             ->whereIn('franchises.id', $franchiseIds);
+
 
         if(key_exists('search', $params) && key_exists('on', $params))
         {
@@ -85,20 +145,58 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
         }
         if($params['column'] == 'franchises')
         {
-            $query = $query->orderBy('franchises.franchise_number', $params['direction'])
-                ->paginate($params['size']);
+            $query = $query->orderBy('franchises.franchise_number', $params['direction']);
+                // ->paginate($params['size']);
 
         }elseif($params['column'] == 'created_at')
         {
-            $query = $query->orderBy('sales_staff.created_at', $params['direction'])
-                ->paginate($params['size']);
+            $query = $query->orderBy('sales_staff.created_at', $params['direction']);
+                // ->paginate($params['size']);
 
         }else {
-            $query = $query->orderBy($params['column'], $params['direction'])
-            ->paginate($params['size']);
+            $query = $query->orderBy($params['column'], $params['direction']);
+            // ->paginate($params['size']);
         }
 
-        return $query;
+        $size= 10;
+        $offset= 0;
+
+        if(key_exists('size', $params) && key_exists('page', $params))
+        {
+
+            $offset = ((int)$params['page'] - 1) * (int)$params['size'];
+            $size = $params['size'];
+
+          
+        }
+
+        $query->limit($size)
+        ->offset($offset);
+
+        $query->groupBy([
+            'sales_staff.id', 
+            'first_name', 
+            'sales_staff.last_name', 
+            'sales_staff.email', 
+            'sales_staff.contact_number', 
+            'sales_staff.status',
+            'sales_staff.created_at'
+        ]);
+
+        
+
+        $items = $query->get();
+        $count = SalesStaff::leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
+        ->leftJoin('franchises', 'franchises.id', '=','franchise_sales_staff.franchise_id' )
+        ->whereIn('franchises.id', $franchiseIds)
+        ->count();
+
+        // return $query;
+
+        return [
+            'data' => $items,
+            'count' => $count
+        ];
 
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SalesStaff;
 
+use App\Franchise;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SalesStaffCollection;
@@ -33,13 +34,18 @@ class SalesStaffController extends ApiController
     public function index()
     {
 
+
         $user = Auth::user();
 
         if($user->user_type == User::HEAD_OFFICE){
 
             $salesStaffs = $this->salesStaffRepository->getAll($this->getRequestParams());
+            // $data = $this->salesStaffRepository->getAll($this->getRequestParams());
 
-            return $this->showApiCollection(new SalesStaffCollection($salesStaffs));
+            $collection = new SalesStaffCollection($salesStaffs['data']);
+            $count = $salesStaffs['count'];
+
+            return $this->showApiCollection(['salesStaff' => $collection, 'count' => $count]);
 
         }else {
 
@@ -48,7 +54,12 @@ class SalesStaffController extends ApiController
 
             $salesStaffs = $this->salesStaffRepository->getAllByFranchise($userFranchiseIds, $this->getRequestParams());
 
-            return $this->showApiCollection(new SalesStaffCollection($salesStaffs));
+            // return $this->showApiCollection(new SalesStaffCollection($salesStaffs));
+
+            $collection = new SalesStaffCollection($salesStaffs['data']);
+            $count = $salesStaffs['count'];
+
+            return $this->showApiCollection(['salesStaff' => $collection, 'count' => $count]);
 
         }
 
@@ -159,5 +170,35 @@ class SalesStaffController extends ApiController
         $staff->delete();
 
         return $this->showOne($staff);
+    }
+
+    public function attachFranchise($salesStaffId, $franchiseId)
+    {
+        Gate::authorize('head-office-only');
+
+        $salesStaff = SalesStaff::findOrFail($salesStaffId);
+        // $franchise = Franchise::findOrFail($franchiseId);
+        $franchise = Franchise::where('id', $franchiseId)
+            ->where('parent_id', '<>',  null)
+            ->firstOrFail();
+
+        $salesStaff->franchises()->attach($franchise->id);
+
+
+        return $this->showOne($franchise);
+    }
+
+    public function detachFranchise($salesStaffId, $franchiseNumber)
+    {
+        Gate::authorize('head-office-only');
+
+        $salesStaff = SalesStaff::findOrFail($salesStaffId);
+        $franchise = Franchise::where('franchise_number', $franchiseNumber)
+            ->where('parent_id', '<>', null)->firstOrFail();
+
+        $salesStaff->franchises()->detach($franchise->id);
+
+
+        return $this->showOne($franchise);
     }
 }

@@ -24,15 +24,16 @@ class SalesStaffCollection extends ResourceCollection
                     'email' => $staff->email,
                     'contactNumber' => $staff->contact_number,
                     'status' => $staff->status,
-                    'franchises' =>$staff->franchise_number
+                    'franchises' =>$staff->franchise_number,
+                    'franchiseIds' => $staff->franchise_ids
                 ];
             }),
             'pagination' => [
-                'total' => $this->total(),
-                'count' => $this->count(),
-                'per_page' => $this->perPage(),
-                'current_page' => $this->currentPage(),
-                'total_pages' => $this->lastPage()
+                // 'total' => $this->total(),
+                // 'count' => $this->count(),
+                // 'per_page' => $tinitialDatahis->perPage(),
+                // 'current_page' => $this->currentPage(),
+                // 'total_pages' => $this->lastPage()
             ]
         ];
     }

@@ -25,11 +25,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            FranchiseSeeder::class,
-            PostcodeSeeder::class,
-            FranchisePostcodeSeeder::class,
-            UserActualSeeder::class,
-            SalesStaffSeeder::class,
+            // FranchiseSeeder::class,
+            // PostcodeSeeder::class,
+            // FranchisePostcodeSeeder::class,
+            // UserActualSeeder::class,
+            // SalesStaffSeeder::class,
             TradeStaffActualSeeder::class,
             LeadActualSeeder::class,
             ContractActualSeeder::class,

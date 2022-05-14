@@ -74,7 +74,6 @@ class CustomerSatisfactionSeeder extends Seeder
 
             print "\n########## Count Number {$count} ################### \n";
             $count++;
-            sleep(1);
 
         }
     }

@@ -23,7 +23,7 @@ class CreateConstructionsTable extends Migration
             $table->date('date_anticipated_delivery')->nullable();
             $table->date('date_finished_product_delivery')->nullable();
             $table->string('coil_number')->nullable();
-            $table->unsignedInteger('trade_staff_id');
+            $table->unsignedInteger('trade_staff_id')->nullable();
             $table->date('anticipated_construction_start')->nullable();
             $table->date('anticipated_construction_complete')->nullable();
             $table->date('actual_construction_start')->nullable();

@@ -77,6 +77,7 @@ class TradeStaffActualSeeder extends Seeder
                 $tradeData = [
                     'first_name' => $nameArray[0],
                     'last_name' => count($nameArray) > 1 ? $nameArray[1] : " ",
+                    'legacy_name' => $tradeName,
                     'email' => $tradeEmail != "" ? $tradeEmail : " ",
                     'contact_number' => "{$tradePhone} {$tradeFax} {$tradeMobile} ",
                     'company' => $tradeCompany,

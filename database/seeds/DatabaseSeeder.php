@@ -25,19 +25,20 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            // FranchiseSeeder::class,
-            // PostcodeSeeder::class,
-            // FranchisePostcodeSeeder::class,
-            // UserActualSeeder::class,
-            // SalesStaffSeeder::class,
-            // TradeStaffActualSeeder::class,
+            FranchiseSeeder::class,
+            PostcodeSeeder::class,
+            FranchisePostcodeSeeder::class,
+            UserActualSeeder::class,
+            SalesStaffSeeder::class,
+            TradeStaffActualSeeder::class,
             LeadActualSeeder::class,
             ContractActualSeeder::class,
             ContractVariationActualSeeder::class,
             FinanceSeeder::class,
             PaymentSeeder::class,
-            // RoofSheetSeeder::class,
-            // RoofColourSeeder::class,
+            RoofSheetSeeder::class,
+            RoofColourSeeder::class,
+            ConstructionActualSeeder::class,
             CustomerSatisfactionSeeder::class
         ]);
 

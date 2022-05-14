@@ -31,11 +31,11 @@ class Construction extends JsonResource
             'dateFinishedProductDelivery' => $this->date_finished_product_delivery,
             'coilNumber' => $this->coil_number,
             'tradeStaffId' => $this->trade_staff_id,
-            'tradeStaff' => [
+            'tradeStaff' => $this->tradeStaff != null ? [
                 'id' => $this->tradeStaff->id,
                 'name' => $this->tradeStaff->fullName,
                 'email' => $this->tradeStaff->email
-            ],
+            ] : null,
             'anticipatedConstructionStart' => $this->anticipated_construction_start,
             'anticipatedConstructionComplete' => $this->anticipated_construction_complete,
             'actualConstructionStart' => $this->actual_construction_start,

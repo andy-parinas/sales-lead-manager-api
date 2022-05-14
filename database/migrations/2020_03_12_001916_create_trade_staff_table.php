@@ -18,6 +18,7 @@ class CreateTradeStaffTable extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('legacy_name')->nullable();
             $table->string('email');
             $table->string('contact_number');
             $table->unsignedBigInteger('trade_type_id');

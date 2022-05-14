@@ -34,7 +34,7 @@ class ConstructionActualSeeder extends Seeder
     public function run()
     {
 
-        $constructionFile = storage_path() . '/app/database/construction_01.csv';
+        $constructionFile = storage_path() . '/app/database/construction.csv';
 
 
         $file = fopen($constructionFile, 'r');

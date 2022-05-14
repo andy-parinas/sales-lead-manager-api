@@ -13,6 +13,10 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+
+
+
+
     /**
      * Seed the application's database.
      *
@@ -21,18 +25,19 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            FranchiseSeeder::class,
-            PostcodeSeeder::class,
-            FranchisePostcodeSeeder::class,
-            UserActualSeeder::class,
-//            SalesStaffActualSeeder::class,
-            SalesStaffSeeder::class,
-            TradeStaffActualSeeder::class,
+            // FranchiseSeeder::class,
+            // PostcodeSeeder::class,
+            // FranchisePostcodeSeeder::class,
+            // UserActualSeeder::class,
+            // SalesStaffSeeder::class,
+            // TradeStaffActualSeeder::class,
             LeadActualSeeder::class,
             ContractActualSeeder::class,
             ContractVariationActualSeeder::class,
-            RoofSheetSeeder::class,
-            RoofColourSeeder::class,
+            FinanceSeeder::class,
+            PaymentSeeder::class,
+            // RoofSheetSeeder::class,
+            // RoofColourSeeder::class,
             CustomerSatisfactionSeeder::class
         ]);
 

@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             RoofSheetSeeder::class,
             RoofColourSeeder::class,
             ConstructionActualSeeder::class,
+            VerificationSeeder::class,
             CustomerSatisfactionSeeder::class
         ]);
 

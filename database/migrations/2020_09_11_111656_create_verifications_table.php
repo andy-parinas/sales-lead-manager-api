@@ -16,7 +16,7 @@ class CreateVerificationsTable extends Migration
         Schema::create('verifications', function (Blueprint $table) {
             $table->id();
             $table->string('design_correct');
-            $table->date('date_design_check');
+            $table->date('date_design_check')->nullable();
             $table->string('costing_correct')->nullable();
             $table->date('date_costing_check')->nullable();
             $table->integer('estimated_build_days')->nullable();

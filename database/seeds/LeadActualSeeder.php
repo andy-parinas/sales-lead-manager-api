@@ -29,6 +29,7 @@ class LeadActualSeeder extends Seeder
     protected $postCodeLogger;
     protected $franchiseLogger;
     protected $salesStaffLogger;
+    protected $contactsLogger;
 
     public function __construct()
     {
@@ -56,6 +57,13 @@ class LeadActualSeeder extends Seeder
         // Now add some handlers
         $this->salesStaffLogger->pushHandler(new StreamHandler(storage_path() .'/logs/salesStaff.log', Logger::DEBUG));
         $this->salesStaffLogger->pushHandler(new FirePHPHandler());
+
+
+        // Create the logger
+        $this->contactsLogger = new Logger('contacts_logger');
+        // Now add some handlers
+        $this->contactsLogger->pushHandler(new StreamHandler(storage_path() .'/logs/contacts.log', Logger::DEBUG));
+        $this->contactsLogger->pushHandler(new FirePHPHandler());
 
 
     }
@@ -87,18 +95,18 @@ class LeadActualSeeder extends Seeder
             $locality = trim($data[8]);
             $state = trim($data[9]);
 
-          $postcode = $this->getPostcode($pcode, $locality, $state, $count);
+            $postcode = $this->getPostcode($pcode, $locality, $state, $count);
 
-            if($postcode == null){
-                print "Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state} ";
-                Log::error("Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state}");
-            }
+            // if($postcode == null){
+            //     print "Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state} ";
+            //     Log::error("Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state}");
+            // }
 
-            $salesContact = SalesContact::where('first_name', $contactFirstName)
-                                ->where('last_name', $contactLastName)->first();
+            // $salesContact = SalesContact::where('first_name', $contactFirstName)
+            //                     ->where('last_name', $contactLastName)->first();
 
 
-            if($salesContact == null && $postcode != null){
+            if($postcode != null){
                 $salesContactData = [
                     'first_name' => $contactFirstName,
                     'last_name' => $contactLastName,
@@ -116,13 +124,14 @@ class LeadActualSeeder extends Seeder
                     $this->infoLogger->info("Created Sales Contact {$salesContact->first_name} {$salesContact->last_name} at Count: {$count} ");
                 }catch (Exception $exception){
                     print "Failed Creating Sales Contact";
-                    Log::error("Error Creating Sales Contact {$contactFirstName} {$contactLastName} at Count: {$count} ");
+                    $this->contactsLogger->error("Error Creating Sales Contact {$contactFirstName} {$contactLastName} at Count: {$count} ");
                 }
 
 
             }else {
 
-                print "Sales Contact Already Exist \n";
+                print "Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state} ";
+                $this->postCodeLogger->error("Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state}");
             }
 
             $franchise = Franchise::where('franchise_number', trim($data[0]))

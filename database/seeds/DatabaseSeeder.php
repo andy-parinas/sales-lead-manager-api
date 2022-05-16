@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             // FranchisePostcodeSeeder::class,
             // UserActualSeeder::class,
             // SalesStaffSeeder::class,
-            TradeStaffActualSeeder::class,
+            // TradeStaffActualSeeder::class,
             LeadActualSeeder::class,
             ContractActualSeeder::class,
             ContractVariationActualSeeder::class,

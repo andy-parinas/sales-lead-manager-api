@@ -154,6 +154,7 @@ class LeadRepository implements LeadRepositoryInterface
             ->select(
                 'leads.id as leadId',
                 'leads.lead_number as leadNumber',
+                'leads.reference_number as referenceNumber',
                 'franchises.franchise_number as franchiseNumber',
                 'leads.lead_date as leadDate',
                 'leads.created_at as created_at',

@@ -18,6 +18,7 @@ class Lead extends JsonResource
            'details' => [
                'id' => $this->id,
                'leadNumber' => $this->lead_number,
+               'referenceNumber' => $this->reference_number,
                'leadDate' => $this->lead_date,
                'postcodeStatus' => $this->postcode_status,
                'franchiseId' => $this->franchise->id,

@@ -78,6 +78,14 @@ class LeadActualSeeder extends Seeder
         $count = 1;
         while (($data = fgetcsv($file)) !== FALSE) {
 
+            //Reset Varaibles:
+
+            $salesContact = null;
+            $franchise = null;
+            $lead = null;
+            $designAdvisor = null;
+
+
             $contactFirstName = trim($data[3]);
             $contactLastName = trim($data[4]);
             $contactEmail = trim($data[14]) != "" ? trim($data[14]) : 'noemail@email.com';
@@ -107,6 +115,7 @@ class LeadActualSeeder extends Seeder
 
 
             if($postcode != null){
+
                 $salesContactData = [
                     'first_name' => $contactFirstName,
                     'last_name' => $contactLastName,
@@ -118,6 +127,7 @@ class LeadActualSeeder extends Seeder
                     'contact_number' => $contactNumber,
                     'email' => $contactEmail
                 ];
+
                 try {
                     $salesContact = SalesContact::create($salesContactData);
                     print "SalesContact Created \n";
@@ -132,164 +142,165 @@ class LeadActualSeeder extends Seeder
 
                 print "Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state} ";
                 $this->postCodeLogger->error("Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state}");
+                $this->contactsLogger->error("Error Creating Sales Contact Due to missing Postcode {$contactFirstName} {$contactLastName} at Count: {$count} ");
             }
 
-            $franchise = Franchise::where('franchise_number', trim($data[0]))
-                            ->where('parent_id', '<>', null)->first();
+            if($salesContact != null)
+            {
+                dump($salesContact);
 
-            $leadSourceName = trim($data[16]);
+                $franchise = Franchise::where('franchise_number', trim($data[0]))
+                    ->where('parent_id', '<>', null)->first();
 
-            $leadSource = LeadSource::where('name', 'LIKE',  '%' . $leadSourceName . '%' )->first();
+                if($franchise != null){
 
-            if($leadSource == null){
-                $leadSource = LeadSource::create(['name' => $leadSourceName]);
-            }
+                    $leadSourceName = trim($data[16]);
 
-            if($franchise != null && $leadSource != null && $salesContact != null){
-                
-                $leadNumber = $leadService->generateLeadNumber();
+                    $leadSource = LeadSource::where('name', 'LIKE',  '%' . $leadSourceName . '%' )->first();
 
-                // Need to check if LeadNumber exist. Normally when the program executes
-                // in subseconds, it most like create a duplicate
-                // Create a new LeadNUmber
-                // while(Lead::where('lead_number', $leadNumber)->first()){
-                //     $leadNumber = $leadService->generateLeadNumber();
-                // }
-
-                $leadData = [
-                    'reference_number' => trim($data[1]),
-                    'lead_number' => $leadNumber,
-                    'franchise_id' => $franchise->id,
-                    'sales_contact_id' => $salesContact->id,
-                    'lead_source_id' => $leadSource->id,
-                    'lead_date' => trim($data[2]),
-                    'postcode_status' => Lead::INSIDE_OF_FRANCHISE
-                ];
-
-                $lead = null;
-                try {
-                    $lead = Lead::create($leadData);
-                    print "####### Lead Created ######## \n";
-                }catch (Exception $exception){
-                    Log::error("Unable to create Lead {$data[1]} possible duplicate lead number");
-                }
-
-//                $lead = Lead::create($leadData);
-//                print "####### Lead Created ######## \n";
+                    if($leadSource == null){
+                        $leadSource = LeadSource::create(['name' => $leadSourceName]);
+                    }
 
 
-                /**
-                 * JobType Seeder
-                 */
-                $legacyName = trim($data[19]);
-//                $nameArray = explode(" ", trim($data[19]));
-//                $designAdvisorFirstName = $nameArray[0];
-//                $designAdvisorLastName = " ";
+                    $leadNumber = $leadService->generateLeadNumber();
 
-                $matchArray = [];
-                preg_match('/([a-zA-Z]+)[\s]*([a-zA-Z]*)/', $legacyName , $matchArray);
+                    $leadData = [
+                        'reference_number' => trim($data[1]),
+                        'lead_number' => $leadNumber,
+                        'franchise_id' => $franchise->id,
+                        'sales_contact_id' => $salesContact->id,
+                        'lead_source_id' => $leadSource->id,
+                        'lead_date' => trim($data[2]),
+                        'postcode_status' => Lead::INSIDE_OF_FRANCHISE
+                    ];
 
-                $designAdvisorFirstName = sizeof($matchArray) > 2? $matchArray[1] : "";
-                $designAdvisorLastName = sizeof($matchArray) >= 3? $matchArray[2] : "";
+                    $lead = null;
+
+                    try {
+
+                        $lead = Lead::create($leadData);
+                        print "####### Lead Created ######## \n";
+
+                    }catch (Exception $exception){
+                        Log::error("Unable to create Lead {$data[1]} possible duplicate lead number");
+                    }
+
+
+                    /**
+                     * Design Advisor / Sales Staff
+                     */
+
+                    $legacyName = trim($data[19]);
+                    $matchArray = [];
+                    preg_match('/([a-zA-Z]+)[\s]*([a-zA-Z]*)/', $legacyName , $matchArray);
+    
+                    $designAdvisorFirstName = sizeof($matchArray) > 2? $matchArray[1] : "";
+                    $designAdvisorLastName = sizeof($matchArray) >= 3? $matchArray[2] : "";
+
+                    $designAdvisor = SalesStaff::where('first_name', $designAdvisorFirstName)
+                        ->where('last_name', $designAdvisorLastName)->first();
+
+                    if (!$designAdvisor){
+                        $designAdvisor = SalesStaff::where('legacy_name', $legacyName)->first();
+                    }
 
 
 
-//                if(count($nameArray) >= 3){
-//                    $designAdvisorFirstName = $nameArray[0] . " " . $nameArray[1];
-//                    $designAdvisorLastName = $nameArray[2];
-//                }
-//
-//                if(count($nameArray) == 2){
-//                    $designAdvisorLastName = $nameArray[1];
-//                }
 
-                $designAdvisor = SalesStaff::where('first_name', $designAdvisorFirstName)
-                                    ->where('last_name', $designAdvisorLastName)->first();
+                    if($designAdvisor){
 
-                if (!$designAdvisor){
-                    $designAdvisor = SalesStaff::where('legacy_name', $legacyName)->first();
-                }
+                        print "Sales Staff Found \n";
+                        $product = Product::where('name', 'LIKE', '%' . trim($data[20]) . '%')->first();
+    
+                        if($product == null){
+                            $product = Product::create(['name' => trim($data[20])]);
+                        }
+    
+                        if($lead != null){
+                            $jobTypeData = [
+                                'taken_by' => trim($data[15]),
+                                'date_allocated' => trim($data[17]),
+                                'sales_staff_id' => $designAdvisor->id,
+                                'lead_id' => $lead->id,
+                                'description' => trim($data[21]),
+                                'product_id' => $product->id
+                            ];
+    
+                            try {
+                                JobType::create($jobTypeData);
+                                print "Lead Job Type Create \n";
+                            }catch (Exception $e){
+                                Log::error("Problem creating JobType. Possible data issue");
+                            }
+    
+    
+                        }
+    
+    
+                    }else {
+                        $this->salesStaffLogger->alert("{$designAdvisorFirstName} {$designAdvisorLastName}");
+                        print "Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} \n";
+                    }
 
-                if($designAdvisor){
 
-                    print "Sales Staff Found \n";
-                    $product = Product::where('name', 'LIKE', '%' . trim($data[20]) . '%')->first();
 
-                    if($product == null){
-                        $product = Product::create(['name' => trim($data[20])]);
+                     /**
+                     * Appointment Seeder
+                     */
+
+                    $appointmentDate = trim($data[22]);
+                    $reAppointmentDate = trim($data[24]);
+
+                    $actualAppointmentDate = date("Y-m-d");
+
+                    if($reAppointmentDate != "") {
+                        $actualAppointmentDate = $reAppointmentDate;
+                    }elseif ($appointmentDate !== ""){
+                        $actualAppointmentDate = $appointmentDate;
+                    }
+
+                    $outcome = "pending";
+
+                    if (isset($data[28])){
+                        $outcome = trim($data[28]) != "" ? strtolower(trim($data[28])) : "pending";
                     }
 
                     if($lead != null){
-                        $jobTypeData = [
-                            'taken_by' => trim($data[15]),
-                            'date_allocated' => trim($data[17]),
-                            'sales_staff_id' => $designAdvisor->id,
+                        $appointmentData = [
+                            'appointment_date' => $actualAppointmentDate,
                             'lead_id' => $lead->id,
-                            'description' => trim($data[21]),
-                            'product_id' => $product->id
+                            'outcome' => $outcome,
+                            'comments' => trim($data[26]),
+                            'quoted_price' => floatval(trim(array_key_exists(27, $data)? $data[27]: 0 ))
                         ];
 
                         try {
-                            JobType::create($jobTypeData);
-                            print "Lead Job Type Create \n";
+                            Appointment::create($appointmentData);
+                            print "Lead Appointment Created \n";
                         }catch (Exception $e){
-                            Log::error("Problem creating JobType. Possible data issue");
+                            Log::error("Problem creating appointment. Possible data issue");
                         }
 
-
                     }
 
 
-                }else {
-                    $this->salesStaffLogger->alert("{$designAdvisorFirstName} {$designAdvisorLastName}");
-//                    Log::alert("Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} at Count: {$count}");
-                    print "Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} \n";
+
+
+                }else { // FRANCHISE CHECK
+
+                    print "\n#### Franchise Does Not Exist {$data[0]} ########### \n";
+                    $this->franchiseLogger->alert("{$data[0]}");
                 }
 
-                /**
-                 * Appointment Seeder
-                 */
 
-                $appointmentDate = trim($data[22]);
-                $reAppointmentDate = trim($data[24]);
 
-                $actualAppointmentDate = date("Y-m-d");
 
-                if($reAppointmentDate != "") {
-                    $actualAppointmentDate = $reAppointmentDate;
-                }elseif ($appointmentDate !== ""){
-                    $actualAppointmentDate = $appointmentDate;
-                }
+            }else { // SALES CONTACT CHECK
+                $this->contactsLogger->error("No Contacts, NO Data was created");
 
-                $outcome = "pending";
-
-                if (isset($data[28])){
-                    $outcome = trim($data[28]) != "" ? strtolower(trim($data[28])) : "pending";
-                }
-
-                if($lead != null){
-                    $appointmentData = [
-                        'appointment_date' => $actualAppointmentDate,
-                        'lead_id' => $lead->id,
-                        'outcome' => $outcome,
-                        'comments' => trim($data[26]),
-                        'quoted_price' => floatval(trim(array_key_exists(27, $data)? $data[27]: 0 ))
-                    ];
-
-                    try {
-                        Appointment::create($appointmentData);
-                        print "Lead Appointment Created \n";
-                    }catch (Exception $e){
-                        Log::error("Problem creating appointment. Possible data issue");
-                    }
-
-                }
-
-            }else {
-
-                print "\n#### Franchise Does Not Exist {$data[0]} ########### \n";
-                $this->franchiseLogger->alert("{$data[0]}");
             }
+
 
             print "############# Item number {$count} ############## \n";
             $count++;
@@ -308,52 +319,43 @@ class LeadActualSeeder extends Seeder
         // Sometimes one of each word will have difference in character from the db record
         // Best to use Locality for Query
 
-        $localitySplit = explode(" ", $locality);
+        // $localitySplit = explode(" ", $locality);
 
         $postcode = null;
 
         if($pcode != ""){
 
             $postcode = Postcode::where('pcode',$pcode )
-                ->where('locality', 'LIKE', '%' . $locality . '%')->first();
+                ->where('locality', strtoupper($locality) )->first();
 
         }else {
-            $postcode = Postcode::where('state', 'LIKE', '%' . $state . '%')
-                ->where('locality', 'LIKE', '%' . $locality . '%')
+
+            dump("here");
+
+            $postcode = Postcode::where('state', 'LIKE', '%' . strtoupper($state) . '%')
+                ->where('locality',  strtoupper($locality))
                 ->first();
         }
-
-        if($postcode == null){
-
-            // This time exclude the Postcode and Just Search for the Locality
-            // Possibility is Wrong spelling on 2 words Suburb
-            if(count($localitySplit) > 1){
-                $postcode = Postcode::where('state', 'LIKE', '%' . $state . '%')
-                    ->where(function ($query) use ($localitySplit){
-                        $query->where('locality', 'LIKE', '%' . trim($localitySplit[0]) . '%')
-                            ->orWhere('locality', 'LIKE', '%' . trim($localitySplit[1]) . '%');
-                    })->first();
-            }
-
-        }
 //
-        if($postcode == null){
-            // If the above query still did not return and record just get the first postcode of the State
-            $postcode = Postcode::where('state', 'LIKE', '%' . $state . '%')
-                ->first();
-            $this->postCodeLogger->alert("Defaulting to State Postcode at {$lineCount}");
+        if($postcode == null && $locality != "" && $pcode != "" && $state != "" && $this->checkState($state)){
+            // If the above query still did not return and record 
+            // Create a new Postcode Entry
+            $postcode = Postcode::create([
+                'pcode' => $pcode,
+                'locality' => strtoupper($locality),
+                'state' => strtoupper($state)
+            ]);
+           
         }
-//
-//
-        if($postcode == null){
-            // If still no record default to first postcode in the database
-            $this->postCodeLogger->alert("Defaulting to First Postcode at {$lineCount}");
-            $postcode = Postcode::first();
-        }
-
 
         return $postcode;
 
+    }
+
+
+    private function checkState($state)
+    {
+        return in_array(strtoupper($state), ['ACT', 'NT', 'SA', 'WA', 'NSW', 'VIC', 'QLD', 'TAS']);
     }
 
 }

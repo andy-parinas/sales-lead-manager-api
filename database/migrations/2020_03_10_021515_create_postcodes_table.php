@@ -18,12 +18,12 @@ class CreatePostcodesTable extends Migration
             $table->integer('pcode');
             $table->string('locality');
             $table->string('state');
-            $table->string('delivery_office');
-            $table->string('presort_indicator');
-            $table->string('parcel_zone');
-            $table->string('bsp_number');
-            $table->string('bsp_name');
-            $table->string('category');
+            $table->string('delivery_office')->nullable();
+            $table->string('presort_indicator')->nullable();
+            $table->string('parcel_zone')->nullable();
+            $table->string('bsp_number')->nullable();
+            $table->string('bsp_name')->nullable();
+            $table->string('category')->nullable();
             $table->string('comments')->nullable();
             $table->timestamps();
         });

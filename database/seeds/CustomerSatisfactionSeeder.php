@@ -56,9 +56,23 @@ class CustomerSatisfactionSeeder extends Seeder
                         'comments' => $comments,
                     ];
 
-                    $lead->customerReview()->create($data);
+                    try{
+                        
+                        $lead->customerReview()->create($data);
 
-                    print "Customer Review Created For {$lead->lead_number} Count: {$count} ";
+                        print "Customer Review Created For {$lead->lead_number} Count: {$count} ";
+
+                    }catch(Exception $exception)
+                    {
+                        if($exception->getCode() == 22007){
+                            $this->logger->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to create Customer Review due to invalid date");
+                        }else {
+                            $this->logger->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to create Customer Review due to invalid data");
+                        }
+
+                    }
+
+                   
 
                 }else {
 

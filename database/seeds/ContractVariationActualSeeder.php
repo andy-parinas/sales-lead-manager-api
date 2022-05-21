@@ -66,30 +66,45 @@ class ContractVariationActualSeeder extends Seeder
                                 'amount' => $amount,
                             ];
 
-                            $variation = $contract->contractVariations()->create($data);
+                            try {
 
-                            $total_variation = $contract->total_variation + $variation->amount;
-                            $total_contract = $contract->total_contract + $variation->amount;
+                                $variation = $contract->contractVariations()->create($data);
 
-                            $contract->update([
-                                'total_variation' => $total_variation,
-                                'total_contract' => $total_contract
-                            ]);
+                                $total_variation = $contract->total_variation + $variation->amount;
+                                $total_contract = $contract->total_contract + $variation->amount;
+    
+                                $contract->update([
+                                    'total_variation' => $total_variation,
+                                    'total_contract' => $total_contract
+                                ]);
+    
+                                print "Variation Created and Contract Updated For {$contract->id} \n";
+                                $this->variationLog->info("Variation Created and Contract Updated For {$contract->id}");
 
-                            print "Variation Created and Contract Updated For {$contract->id} \n";
-                            $this->variationLog->info("Variation Created and Contract Updated For {$contract->id}");
+
+                            }catch(Exception $exception){
+
+                                if($exception->getCode() == 22007){
+                                    $this->variationLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to Create Contracts Variation passibe contract date issue {$variationDate}. No Leads Created");
+                                }else {
+                                    $this->contractLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to Create Contracts. No Contracts Created");
+                                }
+
+                            }
+
+                           
 
                     }else {
 
-                        $this->variationLog->alert("No Contract Found for  {$lead->lead_number} LeadId: {$lead->id} Count: {$count} ");
+                        $this->variationLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] No Contract Found. No Contract variation created");
                     }
 
                 }else {
-                    $this->variationLog->alert("No Lead Found {$leadReferenceNumber} Count: {$count} ");
+                    $this->variationLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}]  No Lead Found. No Contract variation created");
                 }
 
             }else {
-                $this->variationLog->alert("No Franchise Found {$franchiseNumber} Count: {$count} ");
+                $this->variationLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] No Franchise Found. No Contract variation created");
             }
 
             print "\n########## Count Number {$count} ################### \n";

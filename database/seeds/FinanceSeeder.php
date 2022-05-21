@@ -66,22 +66,31 @@ class FinanceSeeder extends Seeder
 
                     if($contract != null){
 
-                        $lead->finance()->create([
-                            'project_price' => $projecPrice,
-                            'gst' => $gst,
-                            'contract_price' => $contractPrice,
-                            'total_contract' => $contract->total_contract,
-                            'deposit' => $deposit,
-                            'balance' => $balance,
-                            'total_payment_made' => $totalPaymentMade
-                        ]);
+                        try{
 
-                        print "Finance Created Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
+                            $lead->finance()->create([
+                                'project_price' => $projecPrice,
+                                'gst' => $gst,
+                                'contract_price' => $contractPrice,
+                                'total_contract' => $contract->total_contract,
+                                'deposit' => $deposit,
+                                'balance' => $balance,
+                                'total_payment_made' => $totalPaymentMade
+                            ]);
+    
+                            print "Finance Created Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
 
+
+                        }catch(Exception $exception){
+
+                            $this->contractLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to Create Finance. No Finance Created");
+                        }
+
+        
                     }else {
 
                         print "No Contract Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
-                        $this->logger->alert("No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count}");
+                        $this->logger->alert("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}]. No Contract Found. No Finance Created");
     
                     }
 
@@ -89,14 +98,14 @@ class FinanceSeeder extends Seeder
                 }else{
 
                     print "No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
-                    $this->logger->alert("No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count}");
+                    $this->logger->alert("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] No Lead Found Lead. No Finance Created");
 
                 }
 
                 
 
             }else {
-                $this->logger->alert("No Franchise Found {$franchiseNumber} Count: {$count} ");
+                $this->logger->alert("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] No Franchise Found. No Finance Created");
             }
 
         }

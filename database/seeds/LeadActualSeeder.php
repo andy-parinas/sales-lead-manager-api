@@ -261,8 +261,8 @@ class LeadActualSeeder extends Seeder
     
     
                     }else {
-                        $this->salesStaffLogger->alert("{$designAdvisorFirstName} {$designAdvisorLastName}");
-                        print "Sales Staff Not found {$designAdvisorFirstName} {$designAdvisorLastName} \n";
+                        $this->salesStaffLogger->alert("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Job Type. Design Advisor Does not Exist {$legacyName}");
+
                     }
 
 
@@ -326,7 +326,7 @@ class LeadActualSeeder extends Seeder
 
 
             }else { // SALES CONTACT CHECK
-                $this->contactsLogger->error("No Contacts, NO Data was created");
+                $this->contactsLogger->error(" [Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to Create Contacts. No Leads Created");
 
             }
 

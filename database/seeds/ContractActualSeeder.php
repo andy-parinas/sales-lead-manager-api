@@ -69,21 +69,32 @@ class ContractActualSeeder extends Seeder
 
                 if($lead != null){
 
-                    $lead->contract()->create($data);
+                    try{
+
+                        $lead->contract()->create($data);
+
+                    }catch(Exception $exception){
+                        
+                        if($exception->getCode() == 22007){
+                            $this->contractLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to Create Contracts passibe contract date issue {$contractDate}. No Leads Created");
+                        }else {
+                            $this->contractLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to Create Contracts. No Contracts Created");
+                        }
+                        
+                    }
 
                     print "Contract Created For {$lead->lead_number} Count: {$count} ";
-                    $this->contractLog->info("Contract Created For {$lead->lead_number} Count: {$count} ");
-
+                    
                 }else{
 
                     print "No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
-                    $this->contractLog->alert("No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count}");
+                    $this->contractLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] No Lead Found. No Contracts Created");
 
                 }
 
 
             }else {
-                $this->contractLog->alert("No Franchise Found {$franchiseNumber} Count: {$count} ");
+                $this->contractLog->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] No Franchise Found. No Contracts Created");
             }
 
             print "\n########## Count Number {$count} ################### \n";

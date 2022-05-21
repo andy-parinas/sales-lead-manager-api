@@ -71,25 +71,38 @@ class VerificationSeeder extends Seeder
                     $roofColour = RoofColour::where('name', $roofColourName)->first();
                     $roofSheet = RoofSheet::where('name', $roofSheetName)->first();
 
-                    $lead->verification()->create([
+                    try {
+                        $lead->verification()->create([
 
-                        'design_correct' => $designCorrect,
-                        'date_design_check' => $dateDesignCheck,
-                        'costing_correct' => $costingCorrect,
-                        'date_costing_check' => $dateCostingCheck,
-                        'estimated_build_days' => $estimatedBuildDays,
-                        'trades_required' => $tradesRequired,
-                        'building_supervisor' => $buildingSupervisor,
-                        'roof_sheet_id' => $roofSheet != null ? $roofSheet->id : null,
-                        'roof_colour_id' => $roofColour != null ? $roofColour->id : null,
-                        'lineal_metres' => $linealMetres,
-                        'franchise_authority' => $franchiseAuthority,
-                        'authority_date' => $authorityDate,
+                            'design_correct' => $designCorrect,
+                            'date_design_check' => $dateDesignCheck,
+                            'costing_correct' => $costingCorrect,
+                            'date_costing_check' => $dateCostingCheck,
+                            'estimated_build_days' => $estimatedBuildDays,
+                            'trades_required' => $tradesRequired,
+                            'building_supervisor' => $buildingSupervisor,
+                            'roof_sheet_id' => $roofSheet != null ? $roofSheet->id : null,
+                            'roof_colour_id' => $roofColour != null ? $roofColour->id : null,
+                            'lineal_metres' => $linealMetres,
+                            'franchise_authority' => $franchiseAuthority,
+                            'authority_date' => $authorityDate,
+    
+                        ]);
+    
+                        print "Verification Created Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
+    
+                    }catch(Exception $exception)
+                    {
 
-                    ]);
 
-                    print "Verification Created Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";
+                        if($exception->getCode() == 22007){
+                            $this->logger->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to create verification due to invalid date");
+                        }else {
+                            $this->logger->error("[Reference: {$leadReferenceNumber}| Franchise: {$franchiseNumber}] Unable to create verification due to invalid data");
+                        }
+                    }
 
+                  
 
                 }else {
                     print "No Lead Found Lead: {$leadReferenceNumber}, FranchiseId: {$franchise->id}, FranchiseNumber: {$franchise->franchise_number} Count: {$count} \n";

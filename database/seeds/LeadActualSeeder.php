@@ -30,6 +30,7 @@ class LeadActualSeeder extends Seeder
     protected $franchiseLogger;
     protected $salesStaffLogger;
     protected $contactsLogger;
+    protected $leadLogger;
 
     public function __construct()
     {
@@ -65,6 +66,11 @@ class LeadActualSeeder extends Seeder
         $this->contactsLogger->pushHandler(new StreamHandler(storage_path() .'/logs/contacts.log', Logger::DEBUG));
         $this->contactsLogger->pushHandler(new FirePHPHandler());
 
+        $this->leadLogger = new Logger('leads_logger');
+        // Now add some handlers
+        $this->leadLogger->pushHandler(new StreamHandler(storage_path() .'/logs/leads.log', Logger::DEBUG));
+        $this->leadLogger->pushHandler(new FirePHPHandler());
+
 
     }
 
@@ -79,6 +85,8 @@ class LeadActualSeeder extends Seeder
         while (($data = fgetcsv($file)) !== FALSE) {
 
             //Reset Varaibles:
+            // sleep(2);
+            
 
             $salesContact = null;
             $franchise = null;
@@ -89,6 +97,7 @@ class LeadActualSeeder extends Seeder
             $contactFirstName = trim($data[3]);
             $contactLastName = trim($data[4]);
             $contactEmail = trim($data[14]) != "" ? trim($data[14]) : 'noemail@email.com';
+            $referenceNumber =  trim($data[1]);
 
             $contactNumber = "";
 
@@ -103,15 +112,7 @@ class LeadActualSeeder extends Seeder
             $locality = trim($data[8]);
             $state = trim($data[9]);
 
-            $postcode = $this->getPostcode($pcode, $locality, $state, $count);
-
-            // if($postcode == null){
-            //     print "Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state} ";
-            //     Log::error("Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state}");
-            // }
-
-            // $salesContact = SalesContact::where('first_name', $contactFirstName)
-            //                     ->where('last_name', $contactLastName)->first();
+            $postcode = $this->getPostcode($pcode, $locality, $state, $referenceNumber, $contactLastName );
 
 
             if($postcode != null){
@@ -141,13 +142,12 @@ class LeadActualSeeder extends Seeder
             }else {
 
                 print "Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state} ";
-                $this->postCodeLogger->error("Postcode is Missing Postcode: {$pcode} Locality: {$locality} State: {$state}");
-                $this->contactsLogger->error("Error Creating Sales Contact Due to missing Postcode {$contactFirstName} {$contactLastName} at Count: {$count} ");
+                $this->postCodeLogger->error("Postcode is null no lead is created. Reference: {$referenceNumber}");
             }
 
             if($salesContact != null)
             {
-                dump($salesContact);
+                
 
                 $franchise = Franchise::where('franchise_number', trim($data[0]))
                     ->where('parent_id', '<>', null)->first();
@@ -165,13 +165,15 @@ class LeadActualSeeder extends Seeder
 
                     $leadNumber = $leadService->generateLeadNumber();
 
+                    $leadDate = trim($data[2]);
+
                     $leadData = [
                         'reference_number' => trim($data[1]),
                         'lead_number' => $leadNumber,
                         'franchise_id' => $franchise->id,
                         'sales_contact_id' => $salesContact->id,
                         'lead_source_id' => $leadSource->id,
-                        'lead_date' => trim($data[2]),
+                        'lead_date' => $leadDate,
                         'postcode_status' => Lead::INSIDE_OF_FRANCHISE
                     ];
 
@@ -183,7 +185,15 @@ class LeadActualSeeder extends Seeder
                         print "####### Lead Created ######## \n";
 
                     }catch (Exception $exception){
-                        Log::error("Unable to create Lead {$data[1]} possible duplicate lead number");
+
+                        if($exception->getCode() == 22007){
+                            $this->leadLogger->error("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Lead. possible Lead Date issue {$leadDate}");
+                        }else {
+                            $errorData = json_encode($leadData);
+                            $this->leadLogger->error("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Lead. Data issue {$errorData}");
+                            Log::error($exception->getMessage());
+                        }
+                        
                     }
 
 
@@ -218,9 +228,12 @@ class LeadActualSeeder extends Seeder
                         }
     
                         if($lead != null){
+
+
+                            $dateAllocated =  trim($data[17]);
                             $jobTypeData = [
                                 'taken_by' => trim($data[15]),
-                                'date_allocated' => trim($data[17]),
+                                'date_allocated' => $dateAllocated,
                                 'sales_staff_id' => $designAdvisor->id,
                                 'lead_id' => $lead->id,
                                 'description' => trim($data[21]),
@@ -230,8 +243,17 @@ class LeadActualSeeder extends Seeder
                             try {
                                 JobType::create($jobTypeData);
                                 print "Lead Job Type Create \n";
-                            }catch (Exception $e){
-                                Log::error("Problem creating JobType. Possible data issue");
+
+                            }catch (Exception $exception){
+
+                                if($exception->getCode() == 22007){
+                                    $this->leadLogger->error("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Job Type. possible Date Allocated issue {$dateAllocated}");
+                                }else {
+                                    $errorData = json_encode($jobTypeData);
+                                    $this->leadLogger->error("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Job Type. Data issue {$errorData}");
+                                    Log::error($exception->getMessage());
+                                }
+                               
                             }
     
     
@@ -267,6 +289,7 @@ class LeadActualSeeder extends Seeder
                     }
 
                     if($lead != null){
+
                         $appointmentData = [
                             'appointment_date' => $actualAppointmentDate,
                             'lead_id' => $lead->id,
@@ -278,8 +301,14 @@ class LeadActualSeeder extends Seeder
                         try {
                             Appointment::create($appointmentData);
                             print "Lead Appointment Created \n";
-                        }catch (Exception $e){
-                            Log::error("Problem creating appointment. Possible data issue");
+                        }catch (Exception $exception){
+                            if($exception->getCode() == 22007){
+                                $this->leadLogger->error("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Appointments. possible Appointment Date issue {$actualAppointmentDate}");
+                            }else {
+                                $errorData = json_encode($appointmentData);
+                                $this->leadLogger->error("[Reference: {$referenceNumber}| Lastname: {$contactLastName}] Unable to create Appointment. Data issue {$errorData}");
+                                Log::error($exception->getMessage());
+                            }
                         }
 
                     }
@@ -312,40 +341,121 @@ class LeadActualSeeder extends Seeder
 
 
 
-    private function getPostcode($pcode, $locality, $state, $lineCount){
+    private function getPostcode($pcode, $locality, $state, $reference, $contactLastName){
 
-        // Split Locality into 2 for those having 2 words locality
-        // check for either existence of the two
-        // Sometimes one of each word will have difference in character from the db record
-        // Best to use Locality for Query
-
-        // $localitySplit = explode(" ", $locality);
 
         $postcode = null;
 
-        if($pcode != ""){
+
+        // Check if Postcode is present and locality is present
+        // Ideal Scenario ot get the accurate postcode
+        if($pcode != "" && $locality != ""){
+
+            dump("Postcode {$pcode} and Locality {$locality} Data Available");
 
             $postcode = Postcode::where('pcode',$pcode )
                 ->where('locality', strtoupper($locality) )->first();
 
-        }else {
+            
 
-            dump("here");
+            if($postcode != null) {
+                dump("Postcode {$pcode} and Locality {$locality} valid returning");
+                return $postcode;
+            }
 
-            $postcode = Postcode::where('state', 'LIKE', '%' . strtoupper($state) . '%')
-                ->where('locality',  strtoupper($locality))
-                ->first();
+        }elseif($pcode != ""){ // Assume Locality has no value
+
+            dump("Postcode {$pcode} Avaialble | Locality {$locality} Missing");
+
+
+            $postcode = Postcode::where('pcode',$pcode )->first();
+
+            if($postcode != null) {
+                dump("Postcode {$pcode} valid returning");
+                $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}]  Using Only postcode {$pcode} Data");
+                return $postcode;
+            }
+
+
+        }elseif($locality != ""){ //Assume pcode has no value
+
+            dump("Postcode {$pcode} Missing | Locality {$locality} Available");
+
+
+            if($state != "" && $this->checkState($state)){
+
+                dump("Locality {$locality} Available and State {$state} Available");
+
+
+                $postcode = Postcode::where('locality',strtoupper($locality) )
+                    ->where('state', strtoupper($state) )->first();
+
+                if($postcode != null) {
+                    dump("Locality {$locality} Available and State {$state} Valid returning");
+                    $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}]  defaulted to postcode {$postcode->pcode} using Locality: {$locality} and State: {$state} data");
+                    return $postcode;
+                }
+
+            }else {
+
+                dump("Locality {$locality} Available and State {$state} Not Valid");
+
+
+                $postcode = Postcode::where('locality', strtoupper($locality) )->first();
+
+                if($postcode != null) {
+                    dump("defaulted to postcode {$postcode->pcode} of Locality: {$locality} returning");
+                    $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}]  defaulted to postcode {$postcode->pcode} of Locality: {$locality}");
+                    return $postcode;
+                }
+            }
+
+        }elseif($state != "" && $this->checkState($state)){
+
+            dump("Only State {$state} is Valid");
+
+            $postcode = Postcode::where('state', strtoupper($state))->first();
+
+            if($postcode != null) {
+                dump(" defaulted to first postcode {$postcode->pcode} of State: {$state} returning");
+                $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}] defaulted to first postcode {$postcode->pcode} of State: {$state}");
+                return $postcode;
+            }
         }
-//
-        if($postcode == null && $locality != "" && $pcode != "" && $state != "" && $this->checkState($state)){
-            // If the above query still did not return and record 
-            // Create a new Postcode Entry
+        
+        
+        if($postcode != "" && (int)$postcode != 0 && $locality != "" && $state != "" && $this->checkState($state)) {
+
+            dump("No Valid postcode data can be found. But Can Create a postocde. Will create postcode entry");
+            dump("Postcode: {$pcode} | Locality {$locality} | State {$state}");
+
+
             $postcode = Postcode::create([
+                'state'=> strtoupper($state),
                 'pcode' => $pcode,
-                'locality' => strtoupper($locality),
-                'state' => strtoupper($state)
+                'locality' => strtoupper($locality)
             ]);
-           
+
+            if($postcode != null) {
+                $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}] Created a postcode entry {$postcode->pcode} State: {$state} Locality: {$locality}");
+                return $postcode;
+            }else {
+                $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}] Unable to create a postcode entry {$pcode} State: {$state} Locality: {$locality}");
+            }
+        }else {
+            $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}] Data not valid to create postcode {$pcode} State: {$state} Locality: {$locality}");
+        }
+
+        // IF cannot find or cannot create a postcode due to incorect or missing data
+        // Get the first postcode in the database
+        if($postcode == null){
+
+            dump("No Valid postcode data can be found. Can not Create Postcode. Defaulting to First Postcode");
+
+
+            $postcode = Postcode::first();
+            $this->postCodeLogger->info("[Reference: {$reference}| Lastname: {$contactLastName}] Missing and Incorect data. Getting the first postcode in the database. {$postcode->pcode} State: {$postcode->state} Locality: {$postcode->locality}");
+
         }
 
         return $postcode;
@@ -356,6 +466,14 @@ class LeadActualSeeder extends Seeder
     private function checkState($state)
     {
         return in_array(strtoupper($state), ['ACT', 'NT', 'SA', 'WA', 'NSW', 'VIC', 'QLD', 'TAS']);
+    }
+
+
+    private function validateDate($date, $format = 'Y-m-d h:m:s.u')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
+        return $d && $d->format($format) === $date;
     }
 
 }

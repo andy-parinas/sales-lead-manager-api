@@ -29,7 +29,7 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
                         'postcodes.state',
                         'postcodes.pcode as postcode'
                         );
-
+        
 
         if(key_exists('search', $params) && key_exists('on', $params))
         {
@@ -77,10 +77,10 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
     }
 
 
-    public function simpleSearch(Array $params)
+    public function simpleSearch(Array $params, $postcodeIds = null)
     {
+        
         $query =  DB::table('sales_contacts')
-            ->join('postcodes','postcodes.id', '=', 'sales_contacts.postcode_id')
             ->select("sales_contacts.id",
                 'title',
                 'first_name',
@@ -96,14 +96,21 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
                 'postcodes.locality as suburb',
                 'postcodes.state',
                 'postcodes.pcode as postcode'
-            );
+            )->join('postcodes','postcodes.id', '=', 'sales_contacts.postcode_id');
+
+        if($postcodeIds != null){
+            // dd($postcodeIds);
+            $query = $query->whereIn('postcodes.id', $postcodeIds);
+        }
 
         if(key_exists('search', $params))
         {
             $query =  $query
-                ->where('first_name', 'LIKE',  $params['search'] . '%')
-                ->orWhere('last_name', 'LIKE',  $params['search'] . '%')
-                ->orWhere('email', 'LIKE',  '%'. $params['search'] . '%');
+                ->where(function($query) use($params) {
+                    $query->where('first_name', 'LIKE',  $params['search'] . '%')
+                    ->orWhere('last_name', 'LIKE',  $params['search'] . '%')
+                    ->orWhere('email', 'LIKE',  '%'. $params['search'] . '%');
+                });
 
 
             if(key_exists('column', $params) && ($params['column'] == 'pcode' || $params['column'] == 'state' || $params['column'] == 'locality' ) ){

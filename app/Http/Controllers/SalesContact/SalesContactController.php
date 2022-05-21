@@ -137,7 +137,7 @@ class SalesContactController extends ApiController
             'street2' => 'string|nullable',
             'suburb' => 'string',
             'state' => 'string',
-            'postcode' => 'string|max:10',
+            'postcode_id' => 'integer',
             'customer_type' => 'in:' . SalesContact::COMMERCIAL . ',' . SalesContact::RESIDENTIAL,
             'status' => 'in:'. SalesContact::ACTIVE . ',' . SalesContact::ARCHIVED,
         ]);
@@ -180,7 +180,28 @@ class SalesContactController extends ApiController
 
     public function search(Request $request)
     {
-        $salesContacts = $this->salesContactRepository->simpleSearch($this->getRequestParams());
+        
+        $user = Auth::user();
+        $postcodeIds = null;
+
+        if($user->user_type != User::HEAD_OFFICE){
+
+            $postcodeIds = [];
+
+            $franchises = $user->franchises;
+
+            foreach ($franchises as $franchise){
+
+                $postcodes = $franchise->postcodes->pluck('id')->toArray();
+
+                $postcodeIds = array_merge($postcodeIds, $postcodes);
+
+            }
+
+
+        }
+
+        $salesContacts = $this->salesContactRepository->simpleSearch($this->getRequestParams(), $postcodeIds);
 
 
         return $this->showApiCollection(new SalesContactCollection($salesContacts));

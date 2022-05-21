@@ -36,9 +36,10 @@ class DatabaseSeeder extends Seeder
             ContractVariationActualSeeder::class,
             FinanceSeeder::class,
             PaymentSeeder::class,
-            RoofSheetSeeder::class,
-            RoofColourSeeder::class,
+            // RoofSheetSeeder::class,
+            // RoofColourSeeder::class,
             ConstructionActualSeeder::class,
+            BuildingAuthoritySeeder::class,
             VerificationSeeder::class,
             CustomerSatisfactionSeeder::class
         ]);

@@ -108,6 +108,7 @@ class LeadRepository implements LeadRepositoryInterface
             ->select(
                 'leads.id as leadId',
                 'leads.lead_number as leadNumber',
+                'leads.reference_number as referenceNumber',
                 'franchises.franchise_number as franchiseNumber',
                 'leads.lead_date as leadDate',
                 'leads.created_at as created_at',
@@ -127,19 +128,55 @@ class LeadRepository implements LeadRepositoryInterface
         if(key_exists('search', $params) && key_exists('on', $params))
         {
 
-            $query =  $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
-//                        ->orderBy($params['column'], $params['direction'])
-//                        ->paginate($params['size']);
+            if($params['on'] == 'postcode'){
+
+                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%');
+
+            }elseif($params['on'] == 'suburb'){
+
+                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%');
+                
+            }else {
+
+                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
+
+            }
+
+            if($params['column'] == 'postcode'){
+
+                $query->orderBy('postcodes.pcode', $params['direction']);
+
+            }elseif($params['column'] == 'suburb'){
+                
+                $query->orderBy('postcodes.locality', $params['direction']);
+            }else {
+
+                $query->orderBy($params['column'], $params['direction']);
+            }
+
+           
+            return $query->paginate($params['size']);
 
         }
 
-        return $query->orderBy($params['column'], $params['direction'])
-                    ->paginate($params['size']);
+        
+        if($params['column'] == 'postcode'){
+
+            $query->orderBy('postcodes.pcode', $params['direction']);
+
+        }else {
+            
+            $query->orderBy($params['column'], $params['direction']);
+        }
+
+
+        return $query->paginate($params['size']);
 
     }
 
     public function getAllLeads(Array $params)
     {
+    
         $query = DB::table('leads')
             ->join('franchises', 'franchises.id', '=', 'leads.franchise_id')
             ->join('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id')
@@ -173,13 +210,50 @@ class LeadRepository implements LeadRepositoryInterface
         if(key_exists('search', $params) && key_exists('on', $params))
         {
 
-            return  $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
-                        ->orderBy($params['column'], $params['direction'])
-                        ->paginate($params['size']);
+            if($params['on'] == 'postcode'){
+
+                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%');
+
+            }elseif($params['on'] == 'suburb'){
+                
+                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%');
+
+            }else {
+
+                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
+
+            }
+
+            if($params['column'] == 'postcode'){
+
+                $query->orderBy('postcodes.pcode', $params['direction']);
+
+            }elseif($params['column'] == 'suburb'){
+                
+                $query->orderBy('postcodes.locality', $params['direction']);
+            }else {
+
+                $query->orderBy($params['column'], $params['direction']);
+            }
+
+           
+            return $query->paginate($params['size']);
+
+           
 
         }
 
-        return $query->orderBy($params['column'], $params['direction'])
-                    ->paginate($params['size']);
+            
+        if($params['column'] == 'postcode'){
+
+            $query->orderBy('postcodes.pcode', $params['direction']);
+
+        }else {
+            
+            $query->orderBy($params['column'], $params['direction']);
+        }
+
+
+        return $query->paginate($params['size']);
     }
 }

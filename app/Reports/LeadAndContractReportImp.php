@@ -70,7 +70,9 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
 
     public function generateByFranchise($franchiseIds, $queryParams)
     {
-        $salesContactQuery = DB::table('leads')
+
+        
+        $contactQuery = DB::table('leads')
             ->select(
                 'leads.lead_number',
                 'leads.id',
@@ -87,7 +89,9 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
             ->join('products', 'job_types.product_id', '=','products.id')
             ->join('appointments', 'leads.id', '=', 'appointments.lead_id')
             ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
-            ->leftJoin('contracts', 'contracts.lead_id', '=', 'leads.id');
+            ->join('franchises', 'franchises.id', 'leads.franchise_id')
+            ->leftJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
+            ->whereIn('franchises.id', $franchiseIds);
 
 
         $mainQuery = DB::table('sales_staff')
@@ -104,10 +108,9 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
             ->join('franchise_sales_staff', 'sales_staff.id', '=', 'franchise_sales_staff.sales_staff_id')
             ->join('franchises', 'franchise_sales_staff.franchise_id', '=', 'franchises.id')
-            ->joinSub($salesContactQuery, 'leads', function ($join){
+            ->joinSub($contactQuery, 'leads', function ($join){
                 $join->on('leads.sales_staff_id', '=', 'sales_staff.id');
-            })
-            ->whereIn('franchises.id', $franchiseIds);
+            });
 
         if(isset($queryParams['start_date']) && $queryParams['start_date'] !== null
             && isset($queryParams['end_date']) && $queryParams['end_date'] !== null){

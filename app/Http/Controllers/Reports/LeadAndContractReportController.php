@@ -42,7 +42,6 @@ class LeadAndContractReportController extends ApiController
 
             }
 
-
             return $this->showOne($this->formatReport($results));
 
         }
@@ -65,11 +64,15 @@ class LeadAndContractReportController extends ApiController
 
         foreach ($results as $result)
         {
+            
+
             if($setId == 0) {
                 $setId = $result->id;
             }
 
             if($setId == $result->id){
+
+                // dump("Same Id", $result->id);
 
                 if (!array_key_exists("salesStaff", $set))
                 {
@@ -81,13 +84,14 @@ class LeadAndContractReportController extends ApiController
 
                 array_push($setData, $data);
 
+
                 $leadsSeen = $leadsSeen + 1;
                 if ($result->total_contract != null || $result->total_contract > 0) $leadsWon = $leadsWon +1;
                 if ($result->total_contract != null || $result->total_contract > 0) $salesTotal = $salesTotal + $result->total_contract;
 
 
             }else {
-
+                // WHen the SalesStaff ID changed Push it here.
                 //Push the setData
                 $set['data'] = $setData;
                 $set['summary'] = [
@@ -97,7 +101,7 @@ class LeadAndContractReportController extends ApiController
                 ];
 
                 $setId = $result->id;
-                array_push($report, $set);
+                array_push($report, $set); // Push the Set to the Report
 
                 //Reset and Feed
                 $set = [];
@@ -125,7 +129,7 @@ class LeadAndContractReportController extends ApiController
 
         }
 
-        if (count($report) == 0 && count($set) > 0)
+        if (count($report) >= 0 && count($set) > 0)
         {
             $set['data'] = $setData;
             $set['summary'] = [

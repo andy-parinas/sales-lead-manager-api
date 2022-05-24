@@ -106,8 +106,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
-            ->join('franchise_sales_staff', 'sales_staff.id', '=', 'franchise_sales_staff.sales_staff_id')
-            ->join('franchises', 'franchise_sales_staff.franchise_id', '=', 'franchises.id')
+            // ->join('franchise_sales_staff', 'sales_staff.id', '=', 'franchise_sales_staff.sales_staff_id')
+            // ->join('franchises', 'franchise_sales_staff.franchise_id', '=', 'franchises.id')
             ->joinSub($contactQuery, 'leads', function ($join){
                 $join->on('leads.sales_staff_id', '=', 'sales_staff.id');
             });

@@ -32,11 +32,13 @@ class JobTypeEmailController extends Controller
         $user = Auth::user();
 
         $leadDate = Carbon::parse($lead->lead_date);
+        $postcode = $salesContact->postcode;
 
         $message = "<h1>A new Sales Lead has been assigned to you</h1>" .
             "<p>Lead Number: <strong>{$lead->lead_number}</strong> </p>" .
             "<p>Name: <strong>{$salesContact->full_name}</strong></p>" .
             "<p>Contact Number: <strong>{$salesContact->contact_number}</strong></p>" .
+            "<p>Address: <strong>{$salesContact->street1} {$salesContact->street2}, {$postcode->locality}, {$postcode->state} {$postcode->pcode}</strong></p>" .
             "<p>Email: <strong>{$salesContact->email}</strong></p>" .
             "<p>Lead Date: <strong>{$leadDate->toDateString()}</strong></p>" .
             "<p>Product: <strong>{$lead->jobType->product->name}</strong></p>" .

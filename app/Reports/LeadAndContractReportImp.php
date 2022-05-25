@@ -22,9 +22,12 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'products.name as product_name',
                 'lead_sources.name as lead_source',
                 'sales_contacts.last_name',
+                'postcodes.pcode as postcode',
+                'postcodes.locality as suburb',
                 'contracts.total_contract',
                 'appointments.quoted_price'
             )->join('sales_contacts', 'leads.sales_contact_id', '=', 'sales_contacts.id')
+            ->join('postcodes', 'postcodes.id','sales_contacts.postcode_id')
             ->join('job_types', 'leads.id', '=', 'job_types.lead_id')
             ->join('products', 'job_types.product_id', '=','products.id')
             ->join('appointments', 'leads.id', '=', 'appointments.lead_id')
@@ -41,6 +44,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.product_name',
                 'leads.lead_source',
                 'leads.last_name',
+                'leads.postcode',
+                'leads.suburb',
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
@@ -82,9 +87,12 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'products.name as product_name',
                 'lead_sources.name as lead_source',
                 'sales_contacts.last_name',
+                'postcodes.pcode as postcode',
+                'postcodes.locality as suburb',
                 'contracts.total_contract',
                 'appointments.quoted_price'
             )->join('sales_contacts', 'leads.sales_contact_id', '=', 'sales_contacts.id')
+            ->join('postcodes', 'postcodes.id','sales_contacts.postcode_id')
             ->join('job_types', 'leads.id', '=', 'job_types.lead_id')
             ->join('products', 'job_types.product_id', '=','products.id')
             ->join('appointments', 'leads.id', '=', 'appointments.lead_id')
@@ -103,6 +111,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.product_name',
                 'leads.lead_source',
                 'leads.last_name',
+                'leads.postcode',
+                'leads.suburb',
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")

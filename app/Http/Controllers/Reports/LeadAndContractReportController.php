@@ -154,7 +154,9 @@ class LeadAndContractReportController extends ApiController
             'source' => $result->lead_source,
             'outcome' => $result->outcome,
             'quotedPrice' => $result->quoted_price,
-            'contractPrice' => $result->total_contract
+            'contractPrice' => $result->total_contract,
+            'suburb' =>  $result->suburb,
+            'postcode' => $result->postcode
         ];
     }
 }

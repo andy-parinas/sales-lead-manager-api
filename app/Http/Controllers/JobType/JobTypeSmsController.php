@@ -42,7 +42,7 @@ class JobTypeSmsController extends Controller
             $message = $message. "LN:{$lead->lead_number}\n";
             $message = $message. "Name: {$salesContact->first_name} {$salesContact->last_name} \n";
             $message = $message . "Contact Number: {$salesContact->contact_number} \n";
-            "<p>Address: <strong>{$salesContact->street1} {$salesContact->street2}, {$postcode->locality}, {$postcode->state} {$postcode->pcode}</strong></p>" .
+            $message = $message . "<p>Address: <strong>{$salesContact->street1} {$salesContact->street2}, {$postcode->locality}, {$postcode->state} {$postcode->pcode}</strong></p>" .
             $message = $message . "Email: {$salesContact->email}\n";
             $message = $message . "Lead Date: {$leadDate->toDateString()} \n";
             $message = $message . "Product: {$lead->jobType->product->name} \n";

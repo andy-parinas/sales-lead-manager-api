@@ -82,7 +82,7 @@ class SalesContractReportController extends ApiController
 
         }
 
-        if (count($report) == 0 && count($set) > 0)
+        if (count($report) >= 0 && count($set) > 0)
         {
             array_push($set, [
                 'name' => 'Total',

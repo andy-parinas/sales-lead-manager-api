@@ -82,17 +82,16 @@ class SalesStaffController extends ApiController
             'email' => 'required|email',
             'contact_number' => 'required',
             'sales_phone' => 'sometimes',
-            'franchises' => 'required|array',
             'status'  => 'required'
         ]);
 
         $staff = SalesStaff::create($data);
 
-        foreach ($data['franchises'] as $franchise){
+        // foreach ($data['franchises'] as $franchise){
 
-            $staff->franchises()->attach($franchise);
+        //     $staff->franchises()->attach($franchise);
 
-        }
+        // }
 
         return $this->showOne(new SalesStaffResource($staff));
     }

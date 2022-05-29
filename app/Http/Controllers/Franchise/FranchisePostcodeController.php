@@ -77,13 +77,26 @@ class FranchisePostcodeController extends ApiController
 
         $this->authorize('create', $franchise);
 
-
-
         $data = $this->validate($request, [
             'postcodes' => 'required|array'
         ]);
 
-        $parent->postcodes()->attach($data['postcodes']);
+        //Check if the postcode are alredy in the parent
+        $parentPostcodes = $parent->postcodes->pluck('id')->toArray();
+        $postcodesFromRequest = is_array($data['postcodes']) ? $data['postcodes'] : [];
+
+        $postcodesToAttached = [];
+
+        foreach($postcodesFromRequest as $postcode){
+            if(!in_array($postcode, $parentPostcodes)){
+                array_push($postcodesToAttached, $postcode);
+            }
+        }
+       
+        if(count($postcodesToAttached) > 0){
+            $parent->postcodes()->attach($data['postcodes']);
+        }
+
         $franchise->postcodes()->attach($data['postcodes']);
 
         return $this->showOne($data, Response::HTTP_CREATED);

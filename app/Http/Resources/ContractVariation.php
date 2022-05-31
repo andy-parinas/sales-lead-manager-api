@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class ContractVariation extends JsonResource
 {
@@ -16,7 +17,7 @@ class ContractVariation extends JsonResource
     {
         return [
             'id' => $this->id,
-            'variationDate' => $this->variation_date,
+            'variationDate' => Carbon::parse($this->variation_date)->format('d/m/Y'),
             'description' => $this->description,
             'amount' => $this->amount,
         ];

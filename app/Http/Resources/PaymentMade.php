@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class PaymentMade extends JsonResource
 {
@@ -16,7 +17,7 @@ class PaymentMade extends JsonResource
     {
         return [
              'id' => $this->id,
-             'paymentDate' => $this->payment_date,
+             'paymentDate' =>Carbon::parse( $this->payment_date)->format('d/m/Y'),
              'description' => $this->description,
              'amount' => $this->amount
         ];

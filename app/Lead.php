@@ -12,6 +12,7 @@ class Lead extends Model
 
     protected $fillable = [
         'lead_number',
+        'reference_number',
         'branch_id',
         'sales_contact_id',
         'lead_source_id',

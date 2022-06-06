@@ -77,6 +77,7 @@ class FranchiseLeadController extends ApiController
             'lead.sales_contact_id' => 'required|integer',
             'lead.lead_source_id' => 'required|integer',
             'lead.lead_date' => 'required',
+            'lead.reference_number' => '',
             'lead.received_via' => '',
             'job_type.taken_by' => 'required',
             'job_type.date_allocated' => 'required',

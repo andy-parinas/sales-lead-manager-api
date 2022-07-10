@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Postcode extends Model
 {
 
+    protected $fillable = ['pcode', 'locality', 'state'];
+
 
 
     public function franchises()

@@ -11,6 +11,7 @@ use App\Repositories\Interfaces\PostcodeRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Resources\Postcode as PostcodeResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostcodeController extends ApiController
 {
@@ -65,7 +66,16 @@ class PostcodeController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->validate($request, [
+            'pcode' => 'required',
+            'locality' => 'required',
+            'state' => 'required'
+        ]);
+
+
+        $postcode = Postcode::create($data);
+
+        return $this->showOne($postcode, Response::HTTP_CREATED);
     }
 
     /**

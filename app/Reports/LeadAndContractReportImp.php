@@ -38,8 +38,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
         $mainQuery = DB::table('sales_staff')
             ->select(
                 'sales_staff.id',
-                'leads.lead_number',
-                'leads.lead_date',
+                // 'leads.lead_number',
+                // 'leads.lead_date',
                 'leads.outcome',
                 'leads.product_name',
                 'leads.lead_source',
@@ -49,6 +49,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
+            ->selectRaw('DATE_FORMAT(leads.lead_date, "%e/%d/%y") as lead_date')
+            ->selectRaw('SUBSTRING(leads.lead_number, 4,13) as lead_number')
             ->joinSub($salesContactQuery, 'leads', function ($join){
                 $join->on('leads.sales_staff_id', '=', 'sales_staff.id');
             });
@@ -106,7 +108,7 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
             ->select(
                 'sales_staff.id',
                 'leads.lead_number',
-                'leads.lead_date',
+                // 'leads.lead_date',
                 'leads.outcome',
                 'leads.product_name',
                 'leads.lead_source',
@@ -116,6 +118,7 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
+            ->selectRaw('DATE_FORMAT(leads.lead_date, "%e/%d/%y") as lead_date')
             // ->join('franchise_sales_staff', 'sales_staff.id', '=', 'franchise_sales_staff.sales_staff_id')
             // ->join('franchises', 'franchise_sales_staff.franchise_id', '=', 'franchises.id')
             ->joinSub($contactQuery, 'leads', function ($join){

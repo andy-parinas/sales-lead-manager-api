@@ -149,6 +149,7 @@ Route::get('reports/sales-staff-summary', 'Reports\SalesStaffSummaryReportContro
 Route::get('reports/sales-staff-product-summary', 'Reports\SalesStaffProductSummaryReportController@index');
 Route::get('reports/product-sales-summary', 'Reports\ProductSalesSummaryReportController@index');
 Route::get('reports/outcome', 'Reports\OutcomeSummaryReportController');
+Route::get('reports/contract-outcome', 'Reports\ContractOutcomeSummaryReportController');
 Route::get('reports/outcome-sales-staff', 'Reports\OutcomeSalesStaffReportController');
 Route::get('reports/lead-sources', 'Reports\LeadSourceReportController');
 Route::get('reports/customer-reviews', 'Reports\CustomerReviewReportController');

@@ -29,4 +29,8 @@ interface ReportRepositoryInterface
     public function generateLeadSource($queryParams);
 
     public function generateLeadSourceByFranchise($franchiseIds, $queryParams);
+
+    public function generateContractOutcomeByFranchise($franchiseIds, $queryParams);
+
+    public function generateContractOutcome($queryParams);
 }

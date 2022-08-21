@@ -767,6 +767,117 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
     }
 
 
+    public function generateContractOutcome($queryParams){
+
+
+        $mainQuery = DB::table('leads')
+            ->select(
+                'appointments.outcome',
+                'franchises.franchise_number'
+            )
+            ->selectRaw("count(leads.id) as numberOfLeads")
+            ->join('appointments', 'appointments.lead_id', '=', 'leads.id')
+            ->join('franchises', 'franchises.id', '=', 'leads.franchise_id')
+            ->join('contracts', 'contracts.lead_id', '=', 'leads.id');
+
+
+        if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
+
+            $mainQuery = $mainQuery
+                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
+        }
+
+        if(key_exists("outcome", $queryParams) && $queryParams['outcome'] !== ""){
+
+            $mainQuery = $mainQuery->where('appointments.outcome',$queryParams['outcome'] );
+        }
+
+
+        if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
+
+            $mainQuery = $mainQuery->where('leads.franchise_id',$queryParams['franchise_id'] );
+        }
+
+
+        if(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== ""){
+
+            $mainQuery = $mainQuery->where('franchises.type', $queryParams['franchise_type'] );
+        }
+
+
+        $mainQuery = $mainQuery->groupBy([
+            'appointments.outcome',
+            'franchises.franchise_number',
+        ]);
+
+        if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
+
+            $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        }
+
+        return $mainQuery->get();
+
+
+    }
+
+    public function generateContractOutcomeByFranchise($franchiseIds, $queryParams){
+
+        $mainQuery = DB::table('leads')
+            ->select(
+                'appointments.outcome',
+                'franchises.franchise_number'
+            )
+            ->selectRaw("count(leads.id) as numberOfLeads")
+            ->join('appointments', 'appointments.lead_id', '=', 'leads.id')
+            ->join('franchises', 'franchises.id', '=', 'leads.franchise_id')
+            ->join('contracts', 'contracts.lead_id', '=', 'leads.id')
+            ->whereIn('franchises.id', $franchiseIds);;
+
+
+        if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
+
+            $mainQuery = $mainQuery
+                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
+        }
+
+        if(key_exists("outcome", $queryParams) && $queryParams['outcome'] !== ""){
+
+            $mainQuery = $mainQuery->where('appointments.outcome',$queryParams['outcome'] );
+        }
+
+
+        if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
+
+            $mainQuery = $mainQuery->where('leads.franchise_id',$queryParams['franchise_id'] );
+        }
+
+        if(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== ""){
+
+            $mainQuery = $mainQuery->where('franchises.type', $queryParams['franchise_type'] );
+        }
+
+
+        $mainQuery = $mainQuery->groupBy([
+            'appointments.outcome',
+            'franchises.franchise_number',
+        ]);
+
+
+        if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
+
+            $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        }
+
+
+        return $mainQuery->get();
+
+
+
+    }
+
+
+
+
     public function generateLeadSource($queryParams){
 
         $leadQuery = DB::table('leads')

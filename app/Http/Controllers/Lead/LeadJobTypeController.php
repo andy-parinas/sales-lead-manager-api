@@ -48,4 +48,24 @@ class LeadJobTypeController extends ApiController
         return $this->showOne(new LeadResource($lead), Response::HTTP_OK);
 
     }
+
+    public function store(Request $request, $leadId)
+    {
+        $lead = Lead::findOrFail($leadId);
+
+        
+        $data = $this->validate($request, [
+            'taken_by' => '',
+            'date_allocated' => 'date',
+            'product_id' => '',
+            'sales_staff_id' => '',
+            'description' => ''
+        ]);
+
+        $lead->jobType()->create($data);
+
+        $lead = Lead::with(['jobType', 'appointment', 'documents'])->findOrFail($leadId);
+
+        return $this->showOne(new LeadResource($lead), Response::HTTP_OK);
+    }
 }

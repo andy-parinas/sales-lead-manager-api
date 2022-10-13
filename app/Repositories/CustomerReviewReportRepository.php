@@ -15,6 +15,7 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
     {
         $subQuery = DB::table('leads')
             ->select('leads.id',
+                'leads.sales_contact_id',
                 'leads.lead_number',
                 'leads.lead_date',
                 'sales_staff.first_name',
@@ -23,13 +24,16 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'products.name as product_name',
                 'franchises.franchise_number',
                 'franchises.id as franchise_id',
-                'franchises.type as franchise_type'
-
+                'franchises.type as franchise_type',
+                'sales_contacts.postcode_id',
+                'postcodes.locality',
             )
             ->leftJoin('job_types', 'job_types.lead_id', '=',  'leads.id')
             ->leftJoin('sales_staff', 'job_types.sales_staff_id', '=',  'sales_staff.id')
             ->leftJoin('products', 'job_types.product_id', '=', 'products.id')
-            ->leftJoin('franchises', 'franchises.id', '=', 'leads.franchise_id');
+            ->leftJoin('franchises', 'franchises.id', '=', 'leads.franchise_id')
+            ->leftJoin('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id')
+            ->leftJoin('postcodes', 'postcodes.id', '=', 'sales_contacts.postcode_id');
 
 
         $mainQuery = DB::table('customer_reviews')
@@ -48,11 +52,20 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'leads.franchise_number',
                 'leads.franchise_id',
                 'leads.franchise_type',
-                'leads.sales_staff_id'
+                'leads.sales_staff_id',
+                'sales_contact.first_name',
+                'postcode.locality',
             )
             ->selectRaw("concat(leads.first_name, ' ', leads.last_name) as salesStaff")
+            ->selectRaw("concat(sales_contact.last_name, ' ', postcode.locality) as last_name_suburb")
             ->joinSub($subQuery, 'leads', function ($join){
                 $join->on('leads.id', '=', 'customer_reviews.lead_id');
+            })
+            ->joinSub($subQuery, 'sales_contact', function ($join){
+                $join->on('sales_contact.id', '=', 'leads.sales_contact_id');
+            })
+            ->joinSub($subQuery, 'postcode', function ($join){
+                $join->on('postcode.id', '=', 'sales_contact.postcode_id');
             });
 
 

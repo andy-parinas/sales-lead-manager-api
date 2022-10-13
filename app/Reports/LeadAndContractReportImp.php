@@ -49,7 +49,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
-            ->selectRaw('DATE_FORMAT(leads.lead_date, "%e/%d/%y") as lead_date')
+            //->selectRaw('DATE_FORMAT(leads.lead_date, "%e/%d/%y") as lead_date')
+            ->selectRaw('DATE_FORMAT(leads.lead_date, "%d/%m/%Y") as lead_date')
             ->selectRaw('SUBSTRING(leads.lead_number, 4,13) as lead_number')
             ->joinSub($salesContactQuery, 'leads', function ($join){
                 $join->on('leads.sales_staff_id', '=', 'sales_staff.id');
@@ -67,8 +68,8 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
         }
 
 
-        $mainQuery = $mainQuery->orderBy('sales_staff.id', 'asc')
-            ->orderBy('leads.lead_date', 'asc');
+        $mainQuery = $mainQuery->orderBy('sales_staff.id', 'desc')
+            ->orderBy('leads.lead_date', 'desc');
 
         return $mainQuery->get();
 
@@ -118,7 +119,7 @@ class LeadAndContractReportImp implements Interfaces\LeadAndContractReport
                 'leads.quoted_price',
                 'leads.total_contract'
             )->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff")
-            ->selectRaw('DATE_FORMAT(leads.lead_date, "%e/%d/%y") as lead_date')
+            ->selectRaw('DATE_FORMAT(leads.lead_date, "%d/%m/%Y") as lead_date')
             // ->join('franchise_sales_staff', 'sales_staff.id', '=', 'franchise_sales_staff.sales_staff_id')
             // ->join('franchises', 'franchise_sales_staff.franchise_id', '=', 'franchises.id')
             ->joinSub($contactQuery, 'leads', function ($join){

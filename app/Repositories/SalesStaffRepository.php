@@ -102,7 +102,7 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
                 'status',
                 'contact_number'
             )
-            ->where('status', 'active')
+            //->where('status', 'active')
             ->where(function ($query) use ($search){
                 $query->where('first_name','LIKE', '%' . $search . '%' )
                     ->orWhere('last_name','LIKE', '%' . $search . '%' )

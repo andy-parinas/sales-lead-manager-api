@@ -200,6 +200,7 @@ class LeadRepository implements LeadRepositoryInterface
                 'sales_contacts.last_name as lastName',
                 'sales_contacts.email as email',
                 'sales_contacts.contact_number as contactNumber',
+                'sales_contacts.street1 as firstaddress',
                 'postcodes.locality as suburb',
                 'postcodes.state',
                 'postcodes.pcode as postcode',

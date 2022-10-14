@@ -53,7 +53,7 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'leads.franchise_id',
                 'leads.franchise_type',
                 'leads.sales_staff_id',
-                'sales_contact.first_name',
+                'sales_contact.last_name',
                 'postcode.locality',
             )
             ->selectRaw("concat(leads.first_name, ' ', leads.last_name) as salesStaff")

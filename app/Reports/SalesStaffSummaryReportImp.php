@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
 {
 
-    public function generate($queryParams)
+    public function generate($franchiseIds, $queryParams)
     {
 
         $mainQuery= DB::table('leads')
@@ -48,7 +48,8 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
 
         if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
 
-            $mainQuery = $mainQuery->where('franchises.id', $queryParams['franchise_id'] );
+            //$mainQuery = $mainQuery->where('franchises.id', $queryParams['franchise_id'] );
+            $mainQuery = $mainQuery->whereIn('franchises.id', $franchiseIds);
         }
 
         if(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== ""){

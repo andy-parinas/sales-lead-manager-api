@@ -21,7 +21,12 @@ class FranchiseRepository implements FranchiseRepositoryInterface
 
     public function findById($franchiseId)
     {
-
+        return Franchise::find($franchiseId);
+    }
+    
+    public function getFranchiseIds($franchiseNumber) : array
+    {
+        return Franchise::where('franchise_number', $franchiseNumber)->pluck('id')->toArray();
     }
 
     public function findByUser(User $user, Array $params)

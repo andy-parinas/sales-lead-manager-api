@@ -215,7 +215,7 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
             )
             ->join("franchise_sales_staff", "sales_staff.id", '=', "franchise_sales_staff.sales_staff_id")
             ->join("franchises", "franchises.id", '=', "franchise_sales_staff.franchise_id")
-            ->where('status', 'active')
+            //->where('status', 'active')
             ->where(function ($query) use ($search){
                 $query->where('first_name','LIKE', '%' . $search . '%' )
                     ->orWhere('last_name','LIKE', '%' . $search . '%' )

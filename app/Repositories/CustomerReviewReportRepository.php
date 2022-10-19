@@ -25,15 +25,14 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'franchises.franchise_number',
                 'franchises.id as franchise_id',
                 'franchises.type as franchise_type',
-                'sales_contacts.postcode_id',
-                'postcodes.locality',
+                'sales_contacts.last_name as customer_lastname',
+                'sales_contacts.postcode_id as postcodeid',
             )
             ->leftJoin('job_types', 'job_types.lead_id', '=',  'leads.id')
             ->leftJoin('sales_staff', 'job_types.sales_staff_id', '=',  'sales_staff.id')
             ->leftJoin('products', 'job_types.product_id', '=', 'products.id')
             ->leftJoin('franchises', 'franchises.id', '=', 'leads.franchise_id')
-            ->leftJoin('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id')
-            ->leftJoin('postcodes', 'postcodes.id', '=', 'sales_contacts.postcode_id');
+            ->leftJoin('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id');
 
 
         $mainQuery = DB::table('customer_reviews')
@@ -53,20 +52,18 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'leads.franchise_id',
                 'leads.franchise_type',
                 'leads.sales_staff_id',
-                'sales_contact.last_name',
-                'postcode.locality',
+                'postcodes.locality',                
             )
             ->selectRaw("concat(leads.first_name, ' ', leads.last_name) as salesStaff")
-            ->selectRaw("concat(sales_contact.last_name, ' ', postcode.locality) as last_name_suburb")
+            ->selectRaw("concat(sales_contacts.customer_lastname, ' ', postcodes.locality) as last_name_suburb")
             ->joinSub($subQuery, 'leads', function ($join){
                 $join->on('leads.id', '=', 'customer_reviews.lead_id');
             })
-            ->joinSub($subQuery, 'sales_contact', function ($join){
-                $join->on('sales_contact.id', '=', 'leads.sales_contact_id');
+            ->joinSub($subQuery, 'sales_contacts', function ($join){
+                $join->on('sales_contacts.id', '=', 'leads.sales_contact_id');
             })
-            ->joinSub($subQuery, 'postcode', function ($join){
-                $join->on('postcode.id', '=', 'sales_contact.postcode_id');
-            });
+            ->leftJoin('postcodes', 'postcodes.id', '=', 'sales_contacts.postcodeid');
+            
 
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
@@ -127,6 +124,7 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
     {
         $subQuery = DB::table('leads')
             ->select('leads.id',
+                'leads.sales_contact_id',
                 'leads.lead_number',
                 'leads.lead_date',
                 'sales_staff.first_name',
@@ -135,13 +133,15 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'products.name as product_name',
                 'franchises.franchise_number',
                 'franchises.id as franchise_id',
-                'franchises.type as franchise_type'
-
+                'franchises.type as franchise_type',
+                'sales_contacts.last_name as customer_lastname',
+                'sales_contacts.postcode_id as postcodeid',
             )
             ->leftJoin('job_types', 'job_types.lead_id', '=',  'leads.id')
             ->leftJoin('sales_staff', 'job_types.sales_staff_id', '=',  'sales_staff.id')
             ->leftJoin('products', 'job_types.product_id', '=', 'products.id')
-            ->leftJoin('franchises', 'franchises.id', '=', 'leads.franchise_id');
+            ->leftJoin('franchises', 'franchises.id', '=', 'leads.franchise_id')
+            ->leftJoin('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id');
 
 
         $mainQuery = DB::table('customer_reviews')
@@ -154,18 +154,27 @@ class CustomerReviewReportRepository implements CustomerReviewReportInterface
                 'customer_reviews.design_consultant_rating',
                 'customer_reviews.comments',
                 'leads.first_name', 'leads.last_name',
+                'leads.sales_contact_id',
                 'leads.product_name',
                 'leads.lead_date',
                 'leads.lead_number',
                 'leads.franchise_number',
                 'leads.franchise_id',
                 'leads.franchise_type',
-                'leads.sales_staff_id'
+                'leads.sales_staff_id',
+                'postcodes.locality'
+                
             )
             ->selectRaw("concat(leads.first_name, ' ', leads.last_name) as salesStaff")
+            ->selectRaw("concat(sales_contacts.customer_lastname, ' ', postcodes.locality) as last_name_suburb")
             ->joinSub($subQuery, 'leads', function ($join){
                 $join->on('leads.id', '=', 'customer_reviews.lead_id');
-            })->whereIn('leads.franchise_id', $franchiseIds);;
+            })
+            ->joinSub($subQuery, 'sales_contacts', function ($join){
+                $join->on('sales_contacts.id', '=', 'leads.sales_contact_id');
+            })
+            ->leftJoin('postcodes', 'postcodes.id', '=', 'sales_contacts.postcodeid')
+            ->whereIn('leads.franchise_id', $franchiseIds);
 
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){

@@ -18,6 +18,7 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
             ->selectRaw("concat(sales_contacts.first_name, ' ', sales_contacts.last_name) as name")
             ->join('postcodes', 'postcodes.id', '=', 'sales_contacts.postcode_id');
 
+        
 
         $mainQuery = DB::table('leads')
             ->select(
@@ -28,8 +29,12 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
                 'sales_contacts.postcode',
                 'sales_contacts.suburb',
                 'products.name as product',
+                'contracts.id',
                 'contracts.total_contract',
-                'contracts.contract_date'
+                'contracts.contract_date',
+                'contracts.contract_price',
+                'contract_variations.variation_date',
+                'contract_variations.amount as variation_amount',
             )
             ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff_name")
             ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
@@ -37,10 +42,12 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
             ->join('sales_staff', 'job_types.sales_staff_id', '=', 'sales_staff.id')
             ->join('products', 'job_types.product_id', '=', 'products.id')
             ->join('appointments', 'appointments.lead_id', '=', 'leads.id')
+            
             ->joinSub($salesContactQuery, 'sales_contacts', function ($join){
                 $join->on('sales_contacts.id', '=', 'leads.sales_contact_id');
             })
             ->rightJoin('contracts', 'contracts.lead_id', '=', 'leads.id')
+            ->join('contract_variations', 'contract_variations.contract_id', '=', 'contracts.id')
             ->where('appointments.outcome', 'success');
 
 

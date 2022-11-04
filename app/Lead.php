@@ -85,5 +85,9 @@ class Lead extends Model
     {
         return $this->hasOne(CustomerReview::class);
     }
-
+    
+    public function warrantyClaim()
+    {
+        return $this->hasOne(WarrantyClaim::class);
+    }
 }

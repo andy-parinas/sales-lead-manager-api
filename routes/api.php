@@ -69,8 +69,14 @@ Route::resource('leads.constructions', 'Lead\LeadConstructionController', ['exce
 Route::resource('leads.authorities', 'Lead\LeadBuildingAuthorityController', ['except' => ['create', 'edit']]);
 Route::resource('leads.verifications', 'Lead\LeadVerificationController', ['except' => ['create', 'edit']]);
 Route::resource('leads.customer-reviews', 'Lead\LeadCustomerReviewController', ['except' => ['create', 'edit']]);
+Route::resource('leads.warranty-claim', 'Lead\LeadWarrantyClaimController', ['except' => ['create', 'edit']]);
 Route::resource('leads', 'Lead\LeadController', ['only' => ['index', 'show', 'destroy', 'update']]);
 
+/**
+ * Warranty Claims/Complaints dropdowns
+ */
+Route::resource('warranty-claim-dropdown', 'Lead\LeadWarrantyClaimDropdownController', ['except' => ['edit', 'create', 'show']]);
+Route::get('warranty-claim-dropdown/name/{name}', 'Lead\LeadWarrantyClaimDropdownController@dropdownText');
 /**
  * Finance Route
  */

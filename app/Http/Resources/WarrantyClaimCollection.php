@@ -17,6 +17,7 @@ class WarrantyClaimCollection extends JsonResource
         return [
             'id' => $this->id,
             'dateComplaint' => $this->date_complaint,
+            'dateComplaintClosed' => $this->date_complaint_closed,
             'complaintReceived' => $this->complaint_received,
             'complaintType' => $this->complaint_type,
             'homeAdditionType' => $this->home_addition_type,

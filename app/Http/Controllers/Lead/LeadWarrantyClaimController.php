@@ -48,6 +48,7 @@ class LeadWarrantyClaimController extends ApiController
         
         $data = $this->validate($request, [
             'date_complaint' => 'required',
+            'date_complaint_closed' => 'required',
             'complaint_received' => 'required',
             'complaint_type' => 'required',
             'home_addition_type' => 'required',
@@ -93,6 +94,7 @@ class LeadWarrantyClaimController extends ApiController
 
         $data = $this->validate($request, [
             'date_complaint' => 'required',
+            'date_complaint_closed' => 'required',
             'complaint_received' => 'required',
             'complaint_type' => 'required',
             'home_addition_type' => 'required',

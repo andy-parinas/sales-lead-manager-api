@@ -8,6 +8,7 @@ class WarrantyClaim extends Model
 {
     protected $fillable = [
         'date_complaint',
+        'date_complaint_closed',
         'complaint_received',
         'complaint_type',
         'home_addition_type',

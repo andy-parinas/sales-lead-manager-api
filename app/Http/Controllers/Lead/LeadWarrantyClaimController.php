@@ -52,10 +52,10 @@ class LeadWarrantyClaimController extends ApiController
             'complaint_type' => 'required',
             'home_addition_type' => 'required',
             'complaint_description' => 'sometimes',
-            'contacted_franchise' => 'required',
             'status' => 'required',
         ]);
 
+        $data['contacted_franchise'] = (isset($request->contacted_franchise))? $request->contacted_franchise : 'No';
         $data['date_complaint_closed'] = ($request->date_complaint_closed == '') ? '0000-00-00' : $request->date_complaint_closed;
 
         $warrantyClaim = $lead->WarrantyClaim()->create($data);
@@ -97,10 +97,10 @@ class LeadWarrantyClaimController extends ApiController
             'complaint_type' => 'required',
             'home_addition_type' => 'required',
             'complaint_description' => 'sometimes',
-            'contacted_franchise' => 'required',
             'status' => 'required',
         ]);
 
+        $data['contacted_franchise'] = $request->contacted_franchise;
         $data['date_complaint_closed'] = $request->date_complaint_closed;
         
         $warrantyClaim->update($data);

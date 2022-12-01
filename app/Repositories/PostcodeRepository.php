@@ -156,4 +156,9 @@ class PostcodeRepository implements Interfaces\PostcodeRepositoryInterface
 
 
     }
+    
+    public function getPcode($franchideNumber)
+    {
+        return Postcode::where('pcode', $franchideNumber)->get();
+    }
 }

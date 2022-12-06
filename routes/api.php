@@ -83,6 +83,12 @@ Route::get('warranty-claim-dropdown/name/{name}', 'Lead\LeadWarrantyClaimDropdow
  */
 Route::resource('appointment-dropdown', 'Lead\LeadAppointmentDropdownController', ['except' => ['edit', 'create', 'show']]);
 Route::get('appointment-dropdown/name/{name}', 'Lead\LeadAppointmentDropdownController@dropdownText');
+
+/**
+ * Roof Sheet dropdowns
+ */
+Route::resource('roof-sheet-dropdown', 'Lead\LeadRoofSheetDropdownController', ['except' => ['edit', 'create', 'show']]);
+
 /**
  * Finance Route
  */

@@ -174,17 +174,9 @@ class FranchisePostcodeController extends ApiController
 
     public function check($franchiseId, $postcodeId)
     {
-        $franchise = Franchise::findOrFail($franchiseId);
-
-        $postCodes = $this->postcodeRepository->getPcode($franchise->franchise_number);
+        $postCodes = $this->postcodeRepository->matchPostCodeTerritory($franchiseId);       
         $result = $postCodes->contains('id', $postcodeId);
 
         return response()->json($result);
-        
-        // $franchise = Franchise::findOrFail($franchiseId);
-        // $postcode = Postcode::findOrFail($postcodeId);
-
-
-        // $result = $franchise->postcodes->contains('id', $postcode->id);
     }
 }

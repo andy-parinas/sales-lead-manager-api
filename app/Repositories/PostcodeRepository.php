@@ -157,8 +157,17 @@ class PostcodeRepository implements Interfaces\PostcodeRepositoryInterface
 
     }
     
-    public function getPcode($franchideNumber)
+    public function matchPostCodeTerritory($franchiseId)
     {
-        return Postcode::where('pcode', $franchideNumber)->get();
+        $query = DB::table('postcodes')
+        ->join('franchise_postcode', 'franchise_postcode.postcode_id', '=', 'postcodes.id')
+        ->join('franchises', 'franchises.id', '=' , 'franchise_postcode.franchise_id')
+        ->select('postcodes.id',
+            'postcodes.pcode',
+            'postcodes.locality',
+            'postcodes.state'
+        )->where('franchise_postcode.franchise_id', '=', $franchiseId)->get();
+
+        return $query;
     }
 }

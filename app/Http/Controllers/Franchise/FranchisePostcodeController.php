@@ -174,7 +174,7 @@ class FranchisePostcodeController extends ApiController
 
     public function check($franchiseId, $postcodeId)
     {
-        $postCodes = $this->postcodeRepository->matchPostCodeTerritory($franchiseId);       
+        $postCodes = $this->postcodeRepository->matchPostCodeTerritory($franchiseId);      
         $result = $postCodes->contains('id', $postcodeId);
 
         return response()->json($result);

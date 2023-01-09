@@ -680,8 +680,11 @@ class ReportRepository implements Interfaces\ReportRepositoryInterface
         }
 
         if(key_exists("outcome", $queryParams) && $queryParams['outcome'] !== ""){
-
-            $mainQuery = $mainQuery->where('appointments.outcome',$queryParams['outcome'] );
+            if($queryParams['outcome'] === "cancelled"){
+                $mainQuery = $mainQuery->whereIn('appointments.outcome', ['cancelled', 'lost', 'deferred', 'did not proceed']);
+            } else {
+                $mainQuery = $mainQuery->where('appointments.outcome', $queryParams['outcome']);
+            }
         }
 
 

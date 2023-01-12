@@ -174,6 +174,7 @@ Route::get('reports/customer-reviews', 'Reports\CustomerReviewReportController')
 Route::get('reports/sales-contract', 'Reports\SalesContractReportController');
 Route::get('reports/sales-contract-variation', 'Reports\SalesContractVariationReportController');
 Route::get('reports/lead-contract', 'Reports\LeadAndContractReportController');
+Route::get('reports/lead-contract-date', 'Reports\LeadAndContractDateReportController@index');
 
 
 /**

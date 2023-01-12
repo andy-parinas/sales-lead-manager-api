@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use App\Reports\Interfaces\LeadAndContractReport;
+use App\Reports\Interfaces\LeadAndContracDatetReport;
 use App\Reports\Interfaces\ProductSalesSummaryReport;
 use App\Reports\Interfaces\SalesContractReport;
 use App\Reports\Interfaces\SalesContractVariationReport;
 use App\Reports\Interfaces\SalesStaffProductReport;
 use App\Reports\Interfaces\SalesStaffSummaryReport;
 use App\Reports\LeadAndContractReportImp;
+use App\Reports\LeadAndContractDateReportImp;
 use App\Reports\ProductSalesSummaryReportImp;
 use App\Reports\SalesContractReportImp;
 use App\Reports\SalesContractVariationReportImp;
@@ -60,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SalesContractReport::class, SalesContractReportImp::class);
         $this->app->bind(SalesContractVariationReport::class, SalesContractVariationReportImp::class);
         $this->app->bind(LeadAndContractReport::class, LeadAndContractReportImp::class);
+        $this->app->bind(LeadAndContractDateReport::class, LeadAndContractDateReportImp::class);
         $this->app->bind(LeadServiceInterface::class, LeadService::class);
     }
 }

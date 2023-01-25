@@ -50,11 +50,14 @@ class LeadDocumentController extends ApiController
         //Gate::authorize('non-staff-users');
 
         $data = $this->validate($request, [
-            'file' => 'required|file',
+            'file' => 'required|file|max:5120',
             'title' => 'required',
             'type' => 'required',
             'description' => 'sometimes'
-        ]);
+        ],[
+            'file.max' => 'You reached maximum file size which is 5MB'
+        ]
+    );
 
         $filename = time() . "_" . preg_replace("/\s+/", "_", strtolower($data['title']));
 

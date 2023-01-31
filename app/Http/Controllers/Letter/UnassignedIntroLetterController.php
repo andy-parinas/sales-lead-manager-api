@@ -33,7 +33,7 @@ class UnassignedIntroLetterController extends Controller
 
 
         $to = $salesContact->email;
-        $from = $user->email;
+        $from = 'support@spanline.com.au'; //$user->email;
         $subject = "Spanline Home Additions Design Consultation";
 
         $message = "<p> {$today->toFormattedDateString()}</p> <br/> <br/>" .

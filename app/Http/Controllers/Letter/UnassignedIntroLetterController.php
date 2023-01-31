@@ -48,8 +48,8 @@ class UnassignedIntroLetterController extends Controller
             'franchiseName' => $lead->franchise->name
         ])->render();
         
-        $this->emailService->sendEmail($salesContact->email, $from, $subject, $message);
-        Log::info("Unassigned Intro Letter Sent {$salesContact->email}");
+        $this->emailService->sendEmail($to, $from, $subject, $message);
+        Log::info("Unassigned Intro Letter Sent {$to}");
 
         $lead->update([
             'unassigned_intro_sent' => date("Y-m-d")

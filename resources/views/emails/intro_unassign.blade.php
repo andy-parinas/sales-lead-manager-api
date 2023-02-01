@@ -82,7 +82,7 @@
                 <div class="row" style="height:30px"></div>
                 <div class="row">
                     <div class="col-md">
-                    <img src="{{ asset('images/spanlineSig.jpg') }}">
+                    <img src="{{ asset('images/spanlinesignature.jpg') }}">
                     </div>
                 </div>
             </div>

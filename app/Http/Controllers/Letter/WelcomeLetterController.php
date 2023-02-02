@@ -7,6 +7,7 @@ use App\Lead;
 use App\SalesContact;
 use App\Services\Interfaces\EmailServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,6 @@ class WelcomeLetterController extends Controller
 
     public function send(Request $request, $leadId)
     {
-
         $lead = Lead::findOrFail($leadId);
 
         $salesContact = $lead->salesContact;
@@ -35,32 +35,25 @@ class WelcomeLetterController extends Controller
         }
 
         $user = Auth::user();
+        $today = Carbon::today();
 
         $to = $salesContact->email;
-        $from = $user->email;
+        $from = 'support@spanline.com.au';
 
         $subject = "Welcome to Spanline Home Additions";
 
-        $message = "<p> Monday, November 16, 2020 </p> <br/> <br/>" .
-            "<div>{$salesContact->title}. {$salesContact->frist_name} {$salesContact->last_name} </div>" .
-            "<div>{$salesContact->street1}, {$salesContact->street2}</div>" .
-            "<div>{$salesContact->postcode->locality}, {$salesContact->postcode->state}, {$salesContact->postcode->pcode}</div> <br/> <br/>" .
-            "<p>Dear {$salesContact->title}. {$salesContact->last_name},  </p>" .
-            "<p>On behalf of our Spanline Home Additions staff, we are honoured that you
-                have chosen us to provide you with a unique Spanline Home Addition and
-                particularly the lifestyle improvements that the finished project will bring.<p>" .
-            "<p>Spanline is about more than just a building project. It is about serving, satisfying and fulfilling
-                the expectations of our customers. This we look forward to most of all. During the project we will have the
-                opportunity to show you just how seriously we take our Code of Customer Service Excellence.</p>".
-            "<p>We would like to take this opportunity to assure you that we will be doing our utmost to ensure that everything runs smoothly,
-                but if at any time the unexpected does occur, we will keep you fully informed and aware.</p>" .
-            "<p>Like all of us, we understand that you are very proud of your home and your living environment,
-                and we know that upon completion your new Spanline will add to that pride.
-                We thank you for this opportunity and would like you to know that every one of us looks forward
-                to providing you our Service Excellence.</p><br/>".
-            "<p>Yours faithfully,</p> <br/>" .
-            "<div>Franchise Manager</div>".
-            "<div>Spanline Home Additions {$lead->franchise->name}</div>";
+        $message = view('emails.welcome_letter')->with([
+            'dateToday' => $today->format('l, F j, Y'),
+            'title' => $salesContact->title,
+            'firstName' => $salesContact->first_name,
+            'lastName' => $salesContact->last_name,
+            'street1' => $salesContact->street1,
+            'street2' => $salesContact->street2,
+            'locality' => $salesContact->postcode->locality,
+            'state' => $salesContact->postcode->state,
+            'pcode' => $salesContact->postcode->pcode,
+            'franchiseName' => $lead->franchise->name
+        ])->render();
 
         $this->emailService->sendEmail($to, $from, $subject, $message);
 

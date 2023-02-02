@@ -30,6 +30,15 @@ class AssignedIntroLetterController extends Controller
         $user = Auth::user();
         $today = Carbon::today();
 
+        $street1 = ($salesContact->street1 !==''? $salesContact->street1.', ' : '');
+        $street2 = ($salesContact->street2 !==''? $salesContact->street2.', ' : '');
+        $locality = ($salesContact->postcode->locality !==''? $salesContact->postcode->locality.', ' : '');
+        $state = ($salesContact->postcode->state !==''? $salesContact->postcode->state.', ' : '');
+        $pcode = ($salesContact->postcode->pcode !==''? $salesContact->postcode->pcode : '');
+
+        $address = $locality.''.$state.''.$pcode;
+        $street = $street1.''.$street2;
+
         $to = $salesContact->email;
         $from = 'support@spanline.com.au';
 
@@ -38,13 +47,10 @@ class AssignedIntroLetterController extends Controller
         $message = view('emails.intro_assign')->with([
             'dateToday' => $today->toFormattedDateString(),
             'title' => $salesContact->title,
-            'firstName' => $salesContact->frist_name,
+            'firstName' => $salesContact->first_name,
             'lastName' => $salesContact->last_name,
-            'street1' => $salesContact->street1,
-            'street2' => $salesContact->street2,
-            'locality' => $salesContact->postcode->locality,
-            'state' => $salesContact->postcode->state,
-            'pcode' => $salesContact->postcode->pcode,
+            'street' => $street,
+            'address' => $address,
             'franchiseName' => $lead->franchise->name,
             'designAdviserFullname' => $designAdvisor->fullName,
             'designAdviserFname' => $designAdvisor->first_name
@@ -66,10 +72,5 @@ class AssignedIntroLetterController extends Controller
         $lead->refresh();
 
         return response(['data' => $lead], Response::HTTP_OK);
-    }
-
-    public function asssignHtmlEmail()
-    {
-        return view('emails.intro_unassign');
     }
 }

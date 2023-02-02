@@ -23,8 +23,8 @@
                 <div class="row" style="height:50px"></div>
                 <div class="row">
                     <div class="col-md">{{ $title }}. {{ $firstName }} {{ $lastName }}</div>
-                    <div class="col-md">{{ $street1 }} {{ $street2 }},</div>
-                    <div class="col-md">{{ $locality }}, {{ $state }}, {{ $pcode }}</div>
+                    <div class="col-md">{{ $street }},</div>
+                    <div class="col-md">{{ $address }}</div>
                 </div>
                 <div class="row" style="height:30px"></div>                
                 <div class="row">

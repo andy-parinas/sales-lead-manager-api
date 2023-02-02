@@ -7,6 +7,7 @@ use App\Lead;
 use App\SalesContact;
 use App\Services\Interfaces\EmailServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,8 +20,7 @@ class NoCouncilLetterController extends Controller
         $this->middleware("auth:sanctum");
         $this->emailService = $emailService;
     }
-
-
+    
     public function send(Request $request, $leadId)
     {
         $lead = Lead::findOrFail($leadId);
@@ -34,30 +34,30 @@ class NoCouncilLetterController extends Controller
         }
 
         $user = Auth::user();
+        $today = Carbon::today();
+        
+        $street1 = ($salesContact->street1 !==''? $salesContact->street1.', ' : '');
+        $street2 = ($salesContact->street2 !==''? $salesContact->street2.', ' : '');
+        $locality = ($salesContact->postcode->locality !==''? $salesContact->postcode->locality.', ' : '');
+        $state = ($salesContact->postcode->state !==''? $salesContact->postcode->state.', ' : '');
+        $pcode = ($salesContact->postcode->pcode !==''? $salesContact->postcode->pcode : '');
+
+        $address = $locality.''.$state.''.$pcode;
+        $street = $street1.''.$street2;
 
         $to = $salesContact->email;
-        $from = $user->email;
+        $from = 'support@spanline.com.au';
 
         $subject = "Spanline Home Additions – Project Update";
 
-        $message = "<p> Monday, November 16, 2020 </p> <br/> <br/>" .
-            "<div>{$salesContact->title}. {$salesContact->frist_name} {$salesContact->last_name} </div>" .
-            "<div>{$salesContact->street1}, {$salesContact->street2}</div>" .
-            "<div>{$salesContact->postcode->locality}, {$salesContact->postcode->state}, {$salesContact->postcode->pcode}</div> <br/> <br/>" .
-            "<p>Dear {$salesContact->title}. {$salesContact->last_name},  </p>" .
-            "<p>We are pleased to inform you that your Spanline Home Additions project has
-                been entered into our check measure program.<p>" .
-            "<p>Overleaf we have provided you with some important information relating to
-                your project including details of Product and Materials specifications. Please
-                take the time to read this information, as it will confirm a number of important
-                details about our project.</p>" .
-            "<p>If you have any queries, please do not hesitate to contact our Customer
-                Service Department. If you are satisfied with all the details there is no need to
-                contact us at this point.</p>" .
-            "<p>Spanline Home Additions will be contacting you soon with details regarding
-                the commencement date of your project.</p> <br/>" .
-            "<p>Yours faithfully,</p> <br/>" .
-            "<div>Project Manager</div><div>Spanline Home Additions</div>";
+        $message = view('emails.no_council')->with([
+            'dateToday' => $today->format('l, F j, Y'),
+            'title' => $salesContact->title,
+            'firstName' => $salesContact->first_name,
+            'lastName' => $salesContact->last_name,            
+            'address' => $address,
+            'street' => $street
+        ])->render();
 
         $this->emailService->sendEmail($to, $from, $subject, $message);
 

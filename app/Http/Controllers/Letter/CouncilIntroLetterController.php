@@ -7,6 +7,7 @@ use App\Lead;
 use App\SalesContact;
 use App\Services\Interfaces\EmailServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +23,7 @@ class CouncilIntroLetterController extends Controller
 
 
     public function send(Request $request, $leadId)
-    {
-
+    {   
         $lead = Lead::findOrFail($leadId);
 
         $salesContact = $lead->salesContact;
@@ -35,38 +35,32 @@ class CouncilIntroLetterController extends Controller
         }
 
         $user = Auth::user();
+        $today = Carbon::today();
+        
+        $street1 = ($salesContact->street1 !==''? $salesContact->street1.', ' : '');
+        $street2 = ($salesContact->street2 !==''? $salesContact->street2.', ' : '');
+        $locality = ($salesContact->postcode->locality !==''? $salesContact->postcode->locality.', ' : '');
+        $state = ($salesContact->postcode->state !==''? $salesContact->postcode->state.', ' : '');
+        $pcode = ($salesContact->postcode->pcode !==''? $salesContact->postcode->pcode : '');
+
+        $address = $locality.''.$state.''.$pcode;
+        $street = $street1.''.$street2;
 
         $to = $salesContact->email;
-        $from = $user->email;
+        $from = 'support@spanline.com.au';
 
         $subject = "Spanline Home Additions – Project Update";
 
-        $message = "<p> Monday, November 16, 2020 </p> <br/> <br/>" .
-            "<div>{$salesContact->title}. {$salesContact->frist_name} {$salesContact->last_name} </div>" .
-            "<div>{$salesContact->street1}, {$salesContact->street2}</div>" .
-            "<div>{$salesContact->postcode->locality}, {$salesContact->postcode->state}, {$salesContact->postcode->pcode}</div> <br/> <br/>" .
-            "<p>Dear {$salesContact->title}. {$salesContact->last_name},  </p>" .
-            "<p>We are delighted to advise you that your Spanline Home Addition project has
-                now been submitted for statutory approval and we enclose a copy of the plans for
-                your information.<p>" .
-            "<p>While we do not foresee any problems, occasionally the council application
-                requires additional processes, therefore delays do occur. Should this happen,
-                we will be in contact with you as soon as possible.</p>".
-            "<p>Overleaf we have provided you with some important information relating to
-                your project including details of the Product and Materials specification.
-                Please take the time to read this information, as it will confirm a number of details
-                about your project. If you have any queries at all please contact our Customer
-                Service Department.</p>" .
-            "<p>If you are having concreting or any other structural work completed prior to
-                your Spanline project starting, please advise us once the work is complete, as
-                your project may need to be re-measured.</p>".
-            "<p>We look forward to contacting you soon to advise that your project has been
-                approved and providing you with material delivery and works schedule details.</p><br/> <br/>" .
-            "<p>Yours faithfully,</p> <br/>" .
-            "<div>Project Manager</div><div>Spanline Home Additions</div>";
+        $message = view('emails.council_intro')->with([
+            'dateToday' => $today->format('l, F j, Y'),
+            'title' => $salesContact->title,
+            'firstName' => $salesContact->first_name,
+            'lastName' => $salesContact->last_name,            
+            'address' => $address,
+            'street' => $street
+        ])->render();
 
         $this->emailService->sendEmail($to, $from, $subject, $message);
-
 
         $buildingAuthority->update([
             'intro_council_letter_sent' => date("Y-m-d")

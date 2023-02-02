@@ -29,49 +29,50 @@ class JobTypeEmailController extends Controller
         $lead = Lead::findOrFail($leadId);
         $salesContact = $lead->salesContact;
         $salesStaff = SalesStaff::findOrFail($salesStaffId);
+        $jobType = $lead->jobType;
+
         $user = Auth::user();
+        $today = Carbon::today();
 
         $leadDate = Carbon::parse($lead->lead_date);
         $postcode = $salesContact->postcode;
+        
+        $fullName = $salesContact->first_name.' '.$salesContact->last_name;
 
-        $message = "<h1>A new Sales Lead has been assigned to you</h1>" .
-            "<p>Lead Number: <strong>{$lead->lead_number}</strong> </p>" .
-            "<p>Name: <strong>{$salesContact->full_name}</strong></p>" .
-            "<p>Contact Number: <strong>{$salesContact->contact_number}</strong></p>" .
-            "<p>Address: <strong>{$salesContact->street1} {$salesContact->street2}, {$postcode->locality}, {$postcode->state} {$postcode->pcode}</strong></p>" .
-            "<p>Email: <strong>{$salesContact->email}</strong></p>" .
-            "<p>Lead Date: <strong>{$leadDate->toDateString()}</strong></p>" .
-            "<p>Product: <strong>{$lead->jobType->product->name}</strong></p>" .
-            "<p>Description: <strong>{$lead->jobType->description}</strong></p>" .
-            "<p>Lead Received Via: <strong>{$lead->received_via}</strong></p>" .
-            "<p>Lead Source: <strong>{$lead->leadSource->name}</strong></p>";
+        $street1 = ($salesContact->street1 !==''? $salesContact->street1.', ' : '');
+        $street2 = ($salesContact->street2 !==''? $salesContact->street2.', ' : '');
+        $locality = ($postcode->locality !==''? $postcode->locality.', ' : '');
+        $state = ($postcode->state !==''? $postcode->state.', ' : '');
+        $pcode = ($postcode->pcode !==''? $postcode->pcode : '');
 
-
+        $address = $street1.''.$street2.''.$locality.''.$state.''.$pcode;
+        
         $to = $salesStaff->email;
-        $from = $user->email;
+        $from = 'support@spanline.com.au';
+
         $subject = "New Sales Lead Assigned: {$lead->lead_number}";
 
+        $message = view('emails.job_type')->with([
+            'dateToday' => $today->toFormattedDateString(),
+            'leadNumber' => $lead->lead_number,            
+            'fullName' => $fullName,
+            'contactNumber' => $salesContact->contact_number,
+            'address' => $address,            
+            'email' => $salesContact->email,
+            'leadDate' => $leadDate->toDateString(),
+            'product' => $lead->jobType->product->name,
+            'description' => $lead->jobType->description,
+            'leadReceivedVia' => $lead->received_via,
+            'leadSource' => $lead->leadSource->name
+        ])->render();
+
         $this->emailService->sendEmail($to, $from, $subject, $message);
-
-        $jobType = $lead->jobType;
-
+        
         $jobType->update([
             'email_sent_to_design_advisor' => date("Y-m-d")
         ]);
 
-        return response(['data' => $jobType->email_sent_to_design_advisor], Response::HTTP_OK);
-
-
-//        try {
-//
-//
-//
-//        }catch (\Exception $exception)
-//        {
-//            abort(Response::HTTP_INTERNAL_SERVER_ERROR, "Error Sending Message");
-//            Log::error($exception);
-//        }
-
+        return response(['data' => $jobType], Response::HTTP_OK);
 
     }
 }

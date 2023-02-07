@@ -23,6 +23,7 @@ use App\Repositories\Interfaces\CustomerReviewReportInterface;
 use App\Repositories\Interfaces\DocumentRepositoryInterface;
 use App\Repositories\Interfaces\FranchiseRepositoryInterface;
 use App\Repositories\Interfaces\LeadRepositoryInterface;
+use App\Repositories\Interfaces\LeadTransferRepositoryInterface;
 use App\Repositories\Interfaces\PostcodeRepositoryInterface;
 use App\Repositories\Interfaces\ReportRepositoryInterface;
 use App\Repositories\Interfaces\SalesContactRepositoryInterface;
@@ -30,6 +31,7 @@ use App\Repositories\Interfaces\SalesStafRepositoryInterface;
 use App\Repositories\Interfaces\TradeStaffRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\LeadRepository;
+use App\Repositories\LeadTransferRepository;
 use App\Repositories\PostcodeRepository;
 use App\Repositories\ReportRepository;
 use App\Repositories\SalesContactRepository;
@@ -60,6 +62,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(FranchiseRepositoryInterface::class, FranchiseRepository::class);
         $this->app->bind(LeadRepositoryInterface::class, LeadRepository::class);
+        $this->app->bind(LeadTransferRepositoryInterface::class, LeadTransferRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(SalesContactRepositoryInterface::class, SalesContactRepository::class);
         $this->app->bind(DocumentRepositoryInterface::class, DocumentRepository::class);

@@ -73,6 +73,13 @@ Route::resource('leads.warranty-claim', 'Lead\LeadWarrantyClaimController', ['ex
 Route::resource('leads', 'Lead\LeadController', ['only' => ['index', 'show', 'destroy', 'update']]);
 
 /**
+ * Lead Transfer Route
+ */
+Route::get('leadstransfer/byfranchiseid/{franchiseid}', 'Lead\LeadTransferController@byFranchiseId');
+Route::get('leadstransfer/franchiseinleads', 'Lead\LeadTransferController@franchiseInLeads');
+Route::get('leadstransfer/totalfranchiseinleads/{franchiseid}', 'Lead\LeadTransferController@totalFranchiseInLeads');
+Route::resource('leadstransfer', 'Lead\LeadTransferController', ['except' => ['create', 'edit']]);
+/**
  * Warranty Claims/Complaints dropdowns
  */
 Route::resource('warranty-claim-dropdown', 'Lead\LeadWarrantyClaimDropdownController', ['except' => ['edit', 'create', 'show']]);

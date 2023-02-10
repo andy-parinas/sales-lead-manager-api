@@ -33,25 +33,18 @@ class LeadController extends ApiController
      */
     public function index()
     {
-        //$this->authorize('viewAny', Lead::class);
-
         $user = Auth::user();
 
         if ($user->isHeadOffice()){
-
             $leads = $this->leadRepository->getAllLeads($this->getRequestParams());
-
             return $this->showPaginated($leads);
         }
 
         $franchiseIds = $user->franchises->pluck('id')->toArray();
 
         $leads = $this->leadRepository->findLeadsByUsersFranchise($franchiseIds, $this->getRequestParams());
-
-//        dd($leads);
-
+        
         return $this->showPaginated($leads);
-
     }
 
 

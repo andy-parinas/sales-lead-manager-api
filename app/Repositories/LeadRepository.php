@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class LeadRepository implements LeadRepositoryInterface
 {
-
     public function findSortPaginateByFranchise(Franchise $franchise, Array $params)
     {
-
         $query = DB::table('leads')->where('franchise_id', $franchise->id)
             ->join('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id')
             ->join('postcodes', 'postcodes.id', '=', 'sales_contacts.postcode_id')
@@ -30,8 +28,7 @@ class LeadRepository implements LeadRepositoryInterface
                 'postcodes.state',
                 'postcodes.pcode as postcode'
             );
-
-
+            
         if(key_exists('search', $params) && key_exists('on', $params))
         {
 
@@ -41,15 +38,11 @@ class LeadRepository implements LeadRepositoryInterface
                 $query = $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
             }
 
-            return $query->orderBy($params['column'], $params['direction'])
-                    ->paginate($params['size']);
+            return $query->orderBy($params['column'], $params['direction'])->paginate($params['size']);
 
         }
 
-        return $query->orderBy($params['column'], $params['direction'])
-                    ->paginate($params['size']);
-
-
+        return $query->orderBy($params['column'], $params['direction'])->paginate($params['size']);
     }
 
     public function findLeadById($lead_id)
@@ -66,7 +59,7 @@ class LeadRepository implements LeadRepositoryInterface
             })
             ->leftJoin('appointments', 'appointments.lead_id', '=', $lead_id)
             ->select(
-                'leads.id',
+                    'leads.id',
                     'leads.lead_number as leadNumber',
                     'leads.lead_date as leadDate',
                     'lead_sources.name as source',
@@ -125,69 +118,36 @@ class LeadRepository implements LeadRepositoryInterface
                 'appointments.outcome as outcome',
                 'appointments.quoted_price as quotedPrice'
             );
-
+        
         if(key_exists('search', $params) && key_exists('on', $params))
         {
-
-            if($params['on'] == 'postcode'){
-
-                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%');
-
-            }elseif($params['on'] == 'suburb'){
-
-                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%');
-                
-            }else {
-
-                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
-
-            }
-
-            if($params['column'] == 'postcode'){
-
-                $query->orderBy('postcodes.pcode', $params['direction']);
-
-            }elseif($params['column'] == 'suburb'){
-                
-                $query->orderBy('postcodes.locality', $params['direction']);
-            }else {
-
-                $query->orderBy($params['column'], $params['direction']);
-            }
-
-           
-            return $query->paginate($params['size']);
-
+            return $query->when($params['on'] == 'postcode', function($query) use($params) {
+                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy('postcodes.pcode', $params['direction']);
+            })->when($params['on'] == 'suburb', function($query) use($params) {
+                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy('postcodes.locality', $params['direction']);
+            })->when($params['on'] == 'address', function($query) use($params){
+                $query->where('sales_contacts.street1', 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy('sales_contacts.street1', $params['direction']);
+            }, function($query) use($params){
+                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy($params['on'], $params['direction']);
+            })->paginate($params['size']);
         }
-
         
-        if($params['column'] == 'postcode'){
-
-            $query->orderBy('postcodes.pcode', $params['direction']);
-
-        }else {
-            
-            $query->orderBy($params['column'], $params['direction']);
-        }
-
-
+        $query->orderBy($params['column'], $params['direction']);
+        
         return $query->paginate($params['size']);
-
     }
 
     public function getAllLeads(Array $params)
     {
-    
         $query = DB::table('leads')
             ->join('franchises', 'franchises.id', '=', 'leads.franchise_id')
             ->join('sales_contacts', 'sales_contacts.id', '=', 'leads.sales_contact_id')
             ->join('postcodes', 'postcodes.id', '=', 'sales_contacts.postcode_id')
             ->join('lead_sources', 'lead_sources.id', '=', 'leads.lead_source_id')
-//            ->leftJoin('job_types', function($join) {
-//                $join->on( 'job_types.lead_id', '=', 'leads.id')
-//                    ->join('products', 'products.id', '=', 'job_types.product_id')
-//                    ->join('design_assessors', 'design_assessors.id', '=', 'job_types.design_assessor_id');
-//            })
             ->leftJoin('appointments', 'appointments.lead_id', '=', 'leads.id')
             ->select(
                 'leads.id as leadId',
@@ -211,51 +171,23 @@ class LeadRepository implements LeadRepositoryInterface
 
         if(key_exists('search', $params) && key_exists('on', $params))
         {
-
-            if($params['on'] == 'postcode'){
-
-                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%');
-
-            }elseif($params['on'] == 'suburb'){
-                
-                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%');
-
-            }else {
-
-                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
-
-            }
-
-            if($params['column'] == 'postcode'){
-
-                $query->orderBy('postcodes.pcode', $params['direction']);
-
-            }elseif($params['column'] == 'suburb'){
-                
-                $query->orderBy('postcodes.locality', $params['direction']);
-            }else {
-
-                $query->orderBy($params['column'], $params['direction']);
-            }
-
-           
-            return $query->paginate($params['size']);
-
-           
-
+            return $query->when($params['on'] == 'postcode', function($query) use($params) {
+                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy('postcodes.pcode', $params['direction']);
+            })->when($params['on'] == 'suburb', function($query) use($params) {
+                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy('postcodes.locality', $params['direction']);
+            })->when($params['on'] == 'address', function($query) use($params){
+                $query->where('sales_contacts.street1', 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy('sales_contacts.street1', $params['direction']);
+            }, function($query) use($params){
+                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
+                ->orderBy($params['on'], $params['direction']);
+            })->paginate($params['size']);
         }
-
-            
-        if($params['column'] == 'postcode'){
-
-            $query->orderBy('postcodes.pcode', $params['direction']);
-
-        }else {
-            
-            $query->orderBy($params['column'], $params['direction']);
-        }
-
-
+        
+        $query->orderBy($params['column'], $params['direction']);
+        
         return $query->paginate($params['size']);
     }
 }

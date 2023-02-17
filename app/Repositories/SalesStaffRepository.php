@@ -27,11 +27,8 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
 
         if(key_exists('search', $params) && key_exists('on', $params))
         {
-
             $query = $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
-
         }
-
 
         if($params['column'] == 'franchises')
         {
@@ -54,11 +51,8 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
 
         if(key_exists('size', $params) && key_exists('page', $params))
         {
-
             $offset = ((int)$params['page'] - 1) * (int)$params['size'];
-            $size = $params['size'];
-
-          
+            $size = $params['size'];          
         }
 
         $query->limit($size)
@@ -72,15 +66,10 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
             'sales_staff.contact_number', 
             'sales_staff.status',
             'sales_staff.created_at'
-        ]);
-
-        
+        ]);        
 
         $items = $query->get();
         $count = SalesStaff::count();
-        
-
-    
 
         // return $query->get();
         return [
@@ -89,28 +78,17 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
         ];
 
     }
-
-
+    
     public function searchAll($search)
     {
-
         return DB::table('sales_staff')
-            ->select('id',
-                'first_name',
-                'last_name',
-                'email',
-                'status',
-                'contact_number'
-            )
-            //->where('status', 'active')
-            ->where(function ($query) use ($search){
-                $query->where('first_name','LIKE', '%' . $search . '%' )
-                    ->orWhere('last_name','LIKE', '%' . $search . '%' )
-                    ->orWhere('email', 'LIKE', '%' . $search . '%');
-            })
-            ->get();
-
-
+        ->select('id',
+            'first_name',
+            'last_name',
+            'email',
+            'status',
+            'contact_number'
+        )->get();
     }
 
     public function getAllByFranchise(array $franchiseIds, array $params)
@@ -183,8 +161,6 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
             'sales_staff.created_at'
         ]);
 
-        
-
         $items = $query->get();
         $count = SalesStaff::leftJoin('franchise_sales_staff', 'franchise_sales_staff.sales_staff_id', '=', 'sales_staff.id')
         ->leftJoin('franchises', 'franchises.id', '=','franchise_sales_staff.franchise_id' )
@@ -197,10 +173,6 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
             'data' => $items,
             'count' => $count
         ];
-
-
-
-
     }
 
     public function searchAllByFranchise(array $franchiseIds, $search)

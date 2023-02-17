@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class SalesStaffLeadSummaryReportImp implements SalesStaffLeadSummaryReport
 {
-
     public function generate($queryParams)
     {
-
         $mainQuery= DB::table('leads')
             ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as salesStaff")
             ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")

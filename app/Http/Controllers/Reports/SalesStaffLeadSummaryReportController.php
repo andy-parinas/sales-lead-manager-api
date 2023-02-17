@@ -29,7 +29,6 @@ class SalesStaffLeadSummaryReportController extends ApiController
 
     public function index(Request $request)
     {
-
         $user = Auth::user();
 
         if($request->has('start_date') && $request->has('end_date')){
@@ -37,28 +36,20 @@ class SalesStaffLeadSummaryReportController extends ApiController
             $results = [];
 
             if($user->user_type == User::HEAD_OFFICE){
-
                 #$results = $this->reportRepository->generateSalesSummary($request->all());
                 $results = $this->salesStaffLeadSummaryReport->generate($request->all());
-
             }else {
-
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
-
                 #$results = $this->reportRepository->generateSalesSummaryByFranchises($franchiseIds, $request->all());
                 $results = $this->salesStaffLeadSummaryReport->generateByFranchise($franchiseIds, $request->all());
             }
 
-
-
             if($results->count() > 0){
                 $total = $this->computeTotal($results);
-
                 return $this->showOne([
                     'results' => $results,
                     'total' => $total
                 ]);
-
             }
 
             return $this->showOne([

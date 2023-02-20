@@ -155,6 +155,7 @@ Route::resource('design-assessors', 'DesignAssessor\DesignAssessorController', [
  * SalesStaff Routes
  */
 Route::get('sales-staffs/search', 'SalesStaff\SalesStaffController@search');
+Route::get('sales-staffs/getall', 'SalesStaff\SalesStaffController@allSalesStaff');
 Route::resource('sales-staffs', 'SalesStaff\SalesStaffController', ['except' => ['create', 'edit']]);
 Route::post('sales-staffs/{salesStaffId}/franchises/{franchiseId}', 'SalesStaff\SalesStaffController@attachFranchise');
 Route::post('sales-staffs/{salesStaffId}/franchises/{franchiseNumber}/detach', 'SalesStaff\SalesStaffController@detachFranchise');

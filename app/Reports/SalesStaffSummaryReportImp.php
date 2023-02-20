@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Reports;
-
 
 use App\Reports\Interfaces\SalesStaffSummaryReport;
 use App\SalesStaff;
@@ -10,10 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
 {
-
     public function generate($franchiseIds, $queryParams)
-    {
-
+    {   
         $mainQuery= DB::table('leads')
             ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as salesStaff")
             ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
@@ -28,60 +24,11 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
             ->join("franchises", "leads.franchise_id", "=", "franchises.id")
             ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id");
 
-
-        if(key_exists("status", $queryParams) && $queryParams['status'] !== ""){
-
-            if($queryParams['status'] == 'active'){
-                $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
-            }elseif ($queryParams['status'] == 'blocked'){
-                $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
-            }
-
-        }
-
-
-        if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
-
-            $mainQuery = $mainQuery
-                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
-        }
-
-        if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
-
-            //$mainQuery = $mainQuery->where('franchises.id', $queryParams['franchise_id'] );
-            $mainQuery = $mainQuery->whereIn('franchises.id', $franchiseIds);
-        }
-
-        if(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== ""){
-
-            $mainQuery = $mainQuery->where('franchises.type', $queryParams['franchise_type'] );
-        }
-
-
-        if(key_exists("sales_staff_id", $queryParams) && $queryParams['sales_staff_id'] !== ""){
-
-            $mainQuery = $mainQuery->where('sales_staff.id',$queryParams['sales_staff_id'] );
-        }
-
-        $mainQuery = $mainQuery->groupBy([
-            'sales_staff.last_name',
-            'sales_staff.first_name',
-            'franchises.franchise_number'
-        ]);
-
-        if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
-
-            $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
-        }else {
-            $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc');
-        }
-
+        $mainQuery = $this->getQuery($mainQuery, $queryParams, $franchiseIds);
 
         return $mainQuery->get();
     }
-
-
-
+    
     public function generateByFranchise($franchiseIds, $queryParams)
     {
         $mainQuery= DB::table('leads')
@@ -99,44 +46,32 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
             ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id")
             ->whereIn('franchises.id', $franchiseIds);
 
+        $mainQuery = $this->getQuery($mainQuery, $queryParams, $franchiseIds);
 
-        if(key_exists("status", $queryParams) && $queryParams['status'] !== ""){
+        return $mainQuery->get();
+    }
 
-            if($queryParams['status'] == 'active'){
-                $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
-            }elseif ($queryParams['status'] == 'blocked'){
-                $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
-            }
+    public function getQuery($mainQuery, $queryParams, $franchiseIds)
+    {
+        $mainQuery->when(key_exists("status", $queryParams) && $queryParams['status'] == 'active', function($mainQuery) use($queryParams){
+            $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
+        })->when(key_exists("status", $queryParams) && $queryParams['status'] == 'blocked', function($mainQuery){
+            $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
+        })->when(key_exists("status", $queryParams) && $queryParams['status'] == '', function($mainQuery){
+            $mainQuery = $mainQuery->whereIn('sales_staff.status', [SalesStaff::ACTIVE, SalesStaff::BLOCKED]);
+        });
 
-        }
-        // else {
+        $mainQuery->when($queryParams['start_date'] !== null && $queryParams['end_date'] !== null, function($mainQuery) use($queryParams){
+            $mainQuery->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
+        });
 
-        //     $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
-        // }
+        $mainQuery->when(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== "", function($mainQuery) use($franchiseIds){
+            $mainQuery->whereIn('franchises.id', $franchiseIds);
+        });
 
-
-        if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
-
-            $mainQuery = $mainQuery
-                ->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
-        }
-
-        if(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== ""){
-
-            //$mainQuery = $mainQuery->where('franchises.id', $queryParams['franchise_id'] );
-            $mainQuery = $mainQuery->whereIn('franchises.id', $franchiseIds );
-        }
-
-        if(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== ""){
-
-            $mainQuery = $mainQuery->where('franchises.type', $queryParams['franchise_type'] );
-        }
-
-
-        if(key_exists("sales_staff_id", $queryParams) && $queryParams['sales_staff_id'] !== ""){
-
-            $mainQuery = $mainQuery->where('sales_staff.id',$queryParams['sales_staff_id'] );
-        }
+        $mainQuery->when(key_exists("sales_staff_id", $queryParams) && $queryParams['sales_staff_id'] !== "", function($mainQuery) use($queryParams){
+            $mainQuery->where('sales_staff.id', $queryParams['sales_staff_id'] );
+        });
 
         $mainQuery = $mainQuery->groupBy([
             'sales_staff.last_name',
@@ -144,14 +79,12 @@ class SalesStaffSummaryReportImp implements SalesStaffSummaryReport
             'franchises.franchise_number'
         ]);
 
-        if(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== ""){
+        $mainQuery->when(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== "", function($mainQuery) use($queryParams){
+            $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        });
 
-            $mainQuery = $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
-        }else {
-            $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc');
-        }
-
-
-        return $mainQuery->get();
+        $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc');
+        
+        return $mainQuery;
     }
 }

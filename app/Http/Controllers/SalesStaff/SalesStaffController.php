@@ -33,15 +33,12 @@ class SalesStaffController extends ApiController
      */
     public function index()
     {
-
-
         $user = Auth::user();
 
         if($user->user_type == User::HEAD_OFFICE){
 
             $salesStaffs = $this->salesStaffRepository->getAll($this->getRequestParams());
-            // $data = $this->salesStaffRepository->getAll($this->getRequestParams());
-
+            
             $collection = new SalesStaffCollection($salesStaffs['data']);
             $count = $salesStaffs['count'];
 
@@ -51,10 +48,7 @@ class SalesStaffController extends ApiController
 
             $userFranchiseIds = $user->franchises->pluck('id')->toArray();
 
-
             $salesStaffs = $this->salesStaffRepository->getAllByFranchise($userFranchiseIds, $this->getRequestParams());
-
-            // return $this->showApiCollection(new SalesStaffCollection($salesStaffs));
 
             $collection = new SalesStaffCollection($salesStaffs['data']);
             $count = $salesStaffs['count'];
@@ -62,9 +56,7 @@ class SalesStaffController extends ApiController
             return $this->showApiCollection(['salesStaff' => $collection, 'count' => $count]);
 
         }
-
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -103,18 +95,30 @@ class SalesStaffController extends ApiController
 
         if($user->user_type == User::HEAD_OFFICE){
             $salesStaffs = $this->salesStaffRepository->searchAll($request->search);
-
-            return $this->showAll(new SalesStaffSearchCollection($salesStaffs));
-
+            $allSalesStaff = $this->showAll(new SalesStaffSearchCollection($salesStaffs));
         }else {
-
             $userFranchiseIds = $user->franchises->pluck('id')->toArray();
-
             $salesStaffs = $this->salesStaffRepository->searchAllByFranchise($userFranchiseIds, $request->search);
-
-            return $this->showAll(new SalesStaffSearchCollection($salesStaffs));
+            $allSalesStaff = $this->showAll(new SalesStaffSearchCollection($salesStaffs));
         }
 
+        return $allSalesStaff;
+    }
+
+    public function allSalesStaff()
+    {
+        $user = Auth::user();
+
+        if($user->user_type == User::HEAD_OFFICE){
+            $salesStaffs = $this->salesStaffRepository->getAllSalesStaff();
+            $allSalesStaff = $this->showAll(new SalesStaffSearchCollection($salesStaffs));
+        }else {
+            $userFranchiseIds = $user->franchises->pluck('id')->toArray();
+            $salesStaffs = $this->salesStaffRepository->getAllSalesStaffByFranchise($userFranchiseIds);
+            $allSalesStaff = $this->showAll(new SalesStaffSearchCollection($salesStaffs));
+        }
+
+        return $allSalesStaff;
     }
 
     /**

@@ -27,5 +27,4 @@ class SalesStaff extends Model
     {
         return $this->hasMany(JobType::class);
     }
-
 }

@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesStaffProductSummaryReportController extends ApiController
 {
-
     use ReportComputer;
 
     protected $reportRepository;
     protected $salesStaffProductReport;
 
-    public function __construct(ReportRepositoryInterface $reportRepository,
-                                SalesStaffProductReport $salesStaffProductReport)
+    public function __construct(
+        ReportRepositoryInterface $reportRepository,
+        SalesStaffProductReport $salesStaffProductReport)
     {
         $this->middleware('auth:sanctum');
         $this->reportRepository = $reportRepository;
@@ -37,16 +37,12 @@ class SalesStaffProductSummaryReportController extends ApiController
             $results = [];
 
             if($user->user_type == User::HEAD_OFFICE){
-                #$results = $this->reportRepository->generateSalesStaffProductSummary($request->all());
                 $results = $this->salesStaffProductReport->generate($request->all());
             }else {
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
-
-                #$results = $this->salesStaffProductReport->gen($franchiseIds, $request->all());
                 $results = $this->salesStaffProductReport->generateByFranchise($franchiseIds, $request->all());
             }
-
-
+            
             if($results->count() > 0){
                 $total = $this->computeTotal($results);
 
@@ -54,7 +50,6 @@ class SalesStaffProductSummaryReportController extends ApiController
                     'results' => $results,
                     'total' => $total
                 ]);
-
             }
 
             return $this->showOne([

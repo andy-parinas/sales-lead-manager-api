@@ -118,37 +118,7 @@ class LeadRepository implements LeadRepositoryInterface
                 'appointments.quoted_price as quotedPrice'
             );
         
-        if(key_exists('search', $params) && key_exists('on', $params))
-        {
-            return $query->when($params['on'] == 'postcode', function($query) use($params) {
-                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'suburb', function($query) use($params) {
-                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'address', function($query) use($params){
-                $query->where('sales_contacts.street1', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'lead_number', function($query) use($params){
-                $query->where('leads.lead_number', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'reference_number', function($query) use($params){
-                $query->where('leads.reference_number', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'first_name', function($query) use($params){
-                $query->where('sales_contacts.first_name', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'last_name', function($query) use($params){
-                $query->where('sales_contacts.last_name', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'state', function($query) use($params){
-                $query->where('postcodes.state', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'outcome', function($query) use($params){
-                $query->where('appointments.outcome', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'franchise_number', function($query) use($params){
-                $query->where('franchises.franchise_number', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == null, function($query) {
-                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
-                ->orderBy($params['on'], $params['direction']);
-            })->paginate($params['size']);
-        }
-        
-        $query->orderBy($params['column'], $params['direction']);
-        
-        return $query->paginate($params['size']);
+        return $this->getQuery($query, $params);
     }
 
     public function getAllLeads(Array $params)
@@ -179,6 +149,11 @@ class LeadRepository implements LeadRepositoryInterface
                 'appointments.quoted_price as quotedPrice'
             );
             
+        return $this->getQuery($query, $params);
+    }
+
+    public function getQuery($query, $params)
+    {
         if(key_exists('search', $params) && key_exists('on', $params))
         {
             return $query->when($params['on'] == 'postcode', function($query) use($params) {

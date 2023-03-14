@@ -33,6 +33,9 @@ Route::get('auth-test', 'HomeController@index');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout');
 
+Route::post('verify', 'Auth\LoginController@verifyOtp');
+Route::post('resend', 'Auth\LoginController@resendOtp');
+Route::get('useremail', 'Auth\LoginController@getAllUserEmail');
 /**
  * Franchise Route
  */

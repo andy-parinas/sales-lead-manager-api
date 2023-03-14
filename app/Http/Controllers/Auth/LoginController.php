@@ -55,22 +55,25 @@ class LoginController extends ApiController
 
         if(Auth::attempt($loginData)){
             $user = Auth::user();
-            
-            OneTimePin::where('user_id', $user->id)->delete();
 
-            $otp = rand(100000, 999999);
-
-            $expiredAt = date('Y-m-d H:i:s', strtotime("+5 min"));
-
-            $oneTimePin = new OneTimePin();
-            $oneTimePin->code = $otp;
-            $oneTimePin->expired_at = $expiredAt;
-            $oneTimePin->user_id = $user->id;
-            $oneTimePin->save();
+            $franchises = $user->franchises;
+            return response()->json(['data' => Auth::user(), 'franchises' => FranchiseResource::collection($franchises) ], Response::HTTP_OK);
             
-            $this->sendOtpEmail($user->email, $otp);
+            // OneTimePin::where('user_id', $user->id)->delete();
+
+            // $otp = rand(100000, 999999);
+
+            // $expiredAt = date('Y-m-d H:i:s', strtotime("+5 min"));
+
+            // $oneTimePin = new OneTimePin();
+            // $oneTimePin->code = $otp;
+            // $oneTimePin->expired_at = $expiredAt;
+            // $oneTimePin->user_id = $user->id;
+            // $oneTimePin->save();
             
-            return response()->json(null, Response::HTTP_OK);
+            // $this->sendOtpEmail($user->email, $otp);
+            
+            // return response()->json(null, Response::HTTP_OK);
         }
 
         return $this->errorResponse("Invalid Username or Password", Response::HTTP_UNAUTHORIZED);

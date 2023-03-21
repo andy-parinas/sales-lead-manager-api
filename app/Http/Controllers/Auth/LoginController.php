@@ -56,24 +56,24 @@ class LoginController extends ApiController
         if(Auth::attempt($loginData)){
             $user = Auth::user();
 
-            $franchises = $user->franchises;
-            return response()->json(['data' => Auth::user(), 'franchises' => FranchiseResource::collection($franchises) ], Response::HTTP_OK);
-            
-            // OneTimePin::where('user_id', $user->id)->delete();
+            if($user->user_type == 'head_office') {
+                OneTimePin::where('user_id', $user->id)->delete();
 
-            // $otp = rand(100000, 999999);
+                $otp = rand(100000, 999999);
 
-            // $expiredAt = date('Y-m-d H:i:s', strtotime("+5 min"));
+                $expiredAt = date('Y-m-d H:i:s', strtotime("+5 min"));
 
-            // $oneTimePin = new OneTimePin();
-            // $oneTimePin->code = $otp;
-            // $oneTimePin->expired_at = $expiredAt;
-            // $oneTimePin->user_id = $user->id;
-            // $oneTimePin->save();
-            
-            // $this->sendOtpEmail($user->email, $otp);
-            
-            // return response()->json(null, Response::HTTP_OK);
+                $oneTimePin = new OneTimePin();
+                $oneTimePin->code = $otp;
+                $oneTimePin->expired_at = $expiredAt;
+                $oneTimePin->user_id = $user->id;
+                $oneTimePin->save();
+
+                $this->sendOtpEmail($user->email, $otp);
+                
+                return response()->json(null, Response::HTTP_OK);
+            }
+            return response()->json(['data' => Auth::user()], Response::HTTP_OK);
         }
 
         return $this->errorResponse("Invalid Username or Password", Response::HTTP_UNAUTHORIZED);

@@ -89,16 +89,15 @@ class PostcodeRepository implements Interfaces\PostcodeRepositoryInterface
 
     public function searchAll($search)
     {
-        return DB::table('postcodes')
-            ->select( 'id',
+        return Postcode::where('pcode', 'LIKE', $search . '%' )
+            ->orWhere('locality', 'LIKE','%' . $search . '%' )
+            ->select(
+                'id',
                 'pcode as postcode',
                 'locality as suburb',
                 'state'
             )
-            ->where('pcode', 'LIKE', $search . '%' )
-            ->orWhere('locality', 'LIKE','%' . $search . '%' )
             ->get();
-
     }
 
     public function getAvailableFranchisePostcode(array $params, $franchise){

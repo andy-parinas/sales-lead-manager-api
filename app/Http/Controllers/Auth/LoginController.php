@@ -73,7 +73,9 @@ class LoginController extends ApiController
                 
                 return response()->json(null, Response::HTTP_OK);
             }
-            return response()->json(['data' => Auth::user()], Response::HTTP_OK);
+            
+            $franchises = $user->franchises;
+            return response()->json(['data' => Auth::user(), 'franchises' => FranchiseResource::collection($user->franchises) ], Response::HTTP_OK);
         }
 
         return $this->errorResponse("Invalid Username or Password", Response::HTTP_UNAUTHORIZED);

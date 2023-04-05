@@ -12,7 +12,6 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
     public function generate($queryParams)
     {
 
-
         $salesContactQuery = DB::table('sales_contacts')
             ->select('sales_contacts.id', 'postcodes.pcode as postcode', 'postcodes.locality as suburb')
             ->selectRaw("concat(sales_contacts.first_name, ' ', sales_contacts.last_name) as name")
@@ -33,6 +32,7 @@ class SalesContractReportImp implements Interfaces\SalesContractReport
                 'contracts.total_contract',
                 'contracts.contract_date',
                 'contracts.contract_price',
+                'contracts.roof_sheet_profile',
             )
             ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as sales_staff_name")
             ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')

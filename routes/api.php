@@ -183,10 +183,10 @@ Route::get('reports/outcome-sales-staff', 'Reports\OutcomeSalesStaffReportContro
 Route::get('reports/lead-sources', 'Reports\LeadSourceReportController');
 Route::get('reports/customer-reviews', 'Reports\CustomerReviewReportController');
 Route::get('reports/sales-contract', 'Reports\SalesContractReportController');
+Route::get('reports/roof-sheet-profile', 'Reports\RoofSheetProfileReportController');
 Route::get('reports/sales-contract-variation', 'Reports\SalesContractVariationReportController');
 Route::get('reports/lead-contract', 'Reports\LeadAndContractReportController');
 Route::get('reports/lead-contract-date', 'Reports\LeadAndContractDateReportController@index');
-
 
 /**
  * Build Log Routes

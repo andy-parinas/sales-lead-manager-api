@@ -156,33 +156,80 @@ class LeadRepository implements LeadRepositoryInterface
     {
         if(key_exists('search', $params) && key_exists('on', $params))
         {
-            return $query->when($params['on'] == 'postcode', function($query) use($params) {
-                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'suburb', function($query) use($params) {
-                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'address', function($query) use($params){
-                $query->where('sales_contacts.street1', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'lead_number', function($query) use($params){
-                $query->where('leads.lead_number', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'reference_number', function($query) use($params){
-                $query->where('leads.reference_number', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'first_name', function($query) use($params){
-                $query->where('sales_contacts.first_name', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'last_name', function($query) use($params){
-                $query->where('sales_contacts.last_name', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'state', function($query) use($params){
-                $query->where('postcodes.state', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'outcome', function($query) use($params){
-                $query->where('appointments.outcome', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == 'franchise_number', function($query) use($params){
-                $query->where('franchises.franchise_number', 'LIKE', '%' . $params['search'] . '%')->orderBy('leads.lead_date', $params['direction']);
-            })->when($params['on'] == null, function($query) {
-                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%')
-                ->orderBy($params['on'], $params['direction']);
-            })->paginate($params['size']);
+            if($params['on'] == 'postcode'){
+                $query->where('postcodes.pcode', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'suburb'){                
+                $query->where('postcodes.locality', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'address'){                
+                $query->where('sales_contacts.street1', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'lead_number'){                
+                $query->where('leads.lead_number', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'reference_number'){                
+                $query->where('leads.reference_number', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'first_name'){                
+                $query->where('sales_contacts.first_name', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'last_name'){                
+                $query->where('sales_contacts.last_name', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'state'){                
+                $query->where('postcodes.state', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'outcome'){                
+                $query->where('appointments.outcome', 'LIKE', '%' . $params['search'] . '%');
+            }elseif($params['on'] == 'franchise_number'){                
+                $query->where('franchises.franchise_number', 'LIKE', '%' . $params['search'] . '%');
+            }else {
+                $query->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
+            }
+
+            if($params['column'] == 'postcode'){
+                $query->orderBy('postcodes.pcode', $params['direction']);
+            }elseif($params['column'] == 'suburb'){                
+                $query->orderBy('postcodes.locality', $params['direction']);
+            }elseif($params['column'] == 'address'){                
+                $query->orderBy('sales_contacts.street1', $params['direction']);
+            }elseif($params['column'] == 'lead_number'){                
+                $query->orderBy('leads.lead_number', $params['direction']);
+            }elseif($params['column'] == 'reference_number'){                
+                $query->orderBy('leads.reference_number', $params['direction']);
+            }elseif($params['column'] == 'first_name'){                
+                $query->orderBy('sales_contacts.first_name', $params['direction']);
+            }elseif($params['column'] == 'last_name'){                
+                $query->orderBy('sales_contacts.last_name', $params['direction']);
+            }elseif($params['column'] == 'state'){                
+                $query->orderBy('postcodes.state', $params['direction']);
+            }elseif($params['column'] == 'outcome'){                
+                $query->orderBy('appointments.outcome', $params['direction']);
+            }elseif($params['column'] == 'franchise_number'){                
+                $query->orderBy('franchises.franchise_number', $params['direction']);
+            }else {
+                $query->orderBy($params['column'], $params['direction']);
+            }
+
+            return $query->paginate($params['size']);
         }
-        
-        $query->orderBy($params['column'], $params['direction']);
+            
+        if($params['column'] == 'postcode'){
+            $query->orderBy('postcodes.pcode', $params['direction']);
+        }elseif($params['column'] == 'suburb'){                
+            $query->orderBy('postcodes.locality', $params['direction']);
+        }elseif($params['column'] == 'address'){                
+            $query->orderBy('sales_contacts.street1', $params['direction']);
+        }elseif($params['column'] == 'lead_number'){                
+            $query->orderBy('leads.lead_number', $params['direction']);
+        }elseif($params['column'] == 'reference_number'){                
+            $query->orderBy('leads.reference_number', $params['direction']);
+        }elseif($params['column'] == 'first_name'){                
+            $query->orderBy('sales_contacts.first_name', $params['direction']);
+        }elseif($params['column'] == 'last_name'){                
+            $query->orderBy('sales_contacts.last_name', $params['direction']);
+        }elseif($params['column'] == 'state'){                
+            $query->orderBy('postcodes.state', $params['direction']);
+        }elseif($params['column'] == 'outcome'){                
+            $query->orderBy('appointments.outcome', $params['direction']);
+        }elseif($params['column'] == 'franchise_number'){                
+            $query->orderBy('franchises.franchise_number', $params['direction']);
+        }else {
+            $query->orderBy($params['column'], $params['direction']);
+        }
         
         return $query->paginate($params['size']);
     }

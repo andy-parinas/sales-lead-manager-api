@@ -187,6 +187,7 @@ Route::get('reports/roof-sheet-profile', 'Reports\RoofSheetProfileReportControll
 Route::get('reports/sales-contract-variation', 'Reports\SalesContractVariationReportController');
 Route::get('reports/lead-contract', 'Reports\LeadAndContractReportController');
 Route::get('reports/lead-contract-date', 'Reports\LeadAndContractDateReportController@index');
+Route::get('reports/combine-lead-contract-date', 'Reports\LeadAndContractDateReportController@leadAndContract');
 
 /**
  * Build Log Routes

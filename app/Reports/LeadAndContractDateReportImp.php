@@ -109,118 +109,67 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
     public function generateLeadAndContract($userType, $franchiseIds, $queryParams)
     {
         $mainLeadsQuery = DB::table('leads')
-        ->join('job_types', 'job_types.lead_id', 'leads.id')
-        ->join('sales_staff', 'sales_staff.id', 'job_types.sales_staff_id')
-        ->join('franchises', 'franchises.id', 'leads.franchise_id')
-        ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
-        ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
-        ->selectRaw('count(leads.id) as total_leads')
-        ->addSelect('leads.id as lead_id')
-        ->groupBy('job_types.sales_staff_id', 'leads.id');
+            ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
+            ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
+            ->selectRaw("count(leads.id) as total_leads")
+            ->selectRaw("count( IF (contracts.contract_price > 0 and appointments.outcome = 'success' , 1, null)) as numberOfSales")
+            ->join("job_types", "job_types.lead_id", "=", "leads.id")
+            ->join("appointments", "appointments.lead_id", "=", "leads.id")
+            ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
+            ->join("franchises", "leads.franchise_id", "=", "franchises.id")
+            ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id");
         
         $mainLeadsQuery = $this->leadsParamFilters($mainLeadsQuery, $franchiseIds, $queryParams);
         
-        $newLeadsIds1 = [];
-        $newLeads1 = [];
-        foreach($mainLeadsQuery as $key => $lead) {
-            $lead = (array)$lead;
-            $newLeads1[$lead['franchiseNumber']] = $lead;
-            $newLeadsIds1[$lead['franchiseNumber']]['lead_ids'][] = $lead['lead_id'];
-            unset($newLeads1[$lead['franchiseNumber']]['lead_id']);
-        }
-
-        foreach($newLeads1 as $key => $newLead) {
-            $newLeads1[$key]['lead_ids'] = $newLeadsIds1[$key]['lead_ids'];
-            $newLeads1[$key]['total_leads'] = count($newLeadsIds1[$key]['lead_ids']);
+        $leadCountsArray = [];
+        foreach($mainLeadsQuery as $lead) {
+            $leadCountsArray[$lead->franchiseNumber."_".$lead->design_advisor] = [
+                'franchiseNumber' => isset($lead->franchiseNumber) ? $lead->franchiseNumber : '',
+                'salesStaff' => isset($lead->design_advisor) ? $lead->design_advisor : '',
+                'totalLeads' => $lead->total_leads,
+                'totalContracts' => $lead->numberOfSales,
+            ];
         }
         
-        $newArray1 = [];
-        foreach($newLeads1 as $lead) {
-            if(isset($queryParams['start_date']) && $queryParams['start_date'] !== null && isset($queryParams['end_date']) && $queryParams['end_date'] !== null){
-
-                $contracts = DB::table('contracts')
-                            ->whereBetween('contracts.contract_date',[$queryParams['start_date'], $queryParams['end_date']])
-                            ->whereIn('contracts.lead_id', $lead['lead_ids'])
-                            ->get();
-                            
-                $newArray1[$lead['franchiseNumber']] = [
-                    'franchiseNumber' => isset($lead['franchiseNumber']) ? $lead['franchiseNumber'] : '',
-                    'salesStaff' => isset($lead['design_advisor']) ? $lead['design_advisor'] : '',
-                    'totalLeads' => $lead['total_leads'],
-                    'totalContracts' => $contracts->count(),
-                    'sumOfTotalContracts' => $contracts->sum('total_contract'),
-                ];
-            }
-        }
-        //END LEADS QUERY
+        $mainQuery = DB::table('contracts')->select('lead_id');        
+        $combinedLeadsAndContracts = $this->contractsQuery($userType, $mainQuery, $leadCountsArray, $franchiseIds, $queryParams);
         
-        //START CONTRACTS QUERY
-        $mainQuery = DB::table('contracts')->select('lead_id');
-        
-        $combinedLeadsAndContracts = $this->contractsQuery($userType, $mainQuery, $newArray1, $franchiseIds, $queryParams);
         return $combinedLeadsAndContracts;
-        //END CONTRACTS QUERY
     }
 
     public function generateLeadAndContractByFranchise($userType, $franchiseIds, $queryParams)
     {
-        //START LEADS QUERY
         $mainLeadsQuery = DB::table('leads')
-        ->join('job_types', 'job_types.lead_id', 'leads.id')
-        ->join('sales_staff', 'sales_staff.id', 'job_types.sales_staff_id')
-        ->join('franchises', 'franchises.id', 'leads.franchise_id')
-        ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
         ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
-        ->selectRaw('count(leads.id) as total_leads')
-        ->addSelect('leads.id as lead_id')
+        ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
+        ->selectRaw("count(leads.id) as total_leads")
+        ->selectRaw("count( IF (contracts.contract_price > 0 and appointments.outcome = 'success' , 1, null)) as numberOfSales")
+        ->join("job_types", "job_types.lead_id", "=", "leads.id")
+        ->join("appointments", "appointments.lead_id", "=", "leads.id")
+        ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
+        ->join("franchises", "leads.franchise_id", "=", "franchises.id")
+        ->rightJoin("contracts", "contracts.lead_id", "=", "leads.id")
         ->whereIn('franchises.id', $franchiseIds);
-                
+
         $mainLeadsQuery = $this->leadsParamFilters($mainLeadsQuery, $franchiseIds, $queryParams);
+    
+        $leadCountsArray = [];
+        foreach($mainLeadsQuery as $lead) {
+            $leadCountsArray[$lead->franchiseNumber."_".$lead->design_advisor] = [
+                'franchiseNumber' => isset($lead->franchiseNumber) ? $lead->franchiseNumber : '',
+                'salesStaff' => isset($lead->design_advisor) ? $lead->design_advisor : '',
+                'totalLeads' => $lead->total_leads,
+                'totalContracts' => $lead->numberOfSales,
+            ];
+        }
         
-        $newLeadsIds1 = [];
-        $newLeads1 = [];
-        foreach($mainLeadsQuery as $key => $lead) {
-            $lead = (array)$lead;
-            $newLeads1[$lead['franchiseNumber']] = $lead;
-            $newLeadsIds1[$lead['franchiseNumber']]['lead_ids'][] = $lead['lead_id'];
-            unset($newLeads1[$lead['franchiseNumber']]['lead_id']);
-        }
-
-        foreach($newLeads1 as $key => $newLead) {
-            $newLeads1[$key]['lead_ids'] = $newLeadsIds1[$key]['lead_ids'];
-            $newLeads1[$key]['total_leads'] = count($newLeadsIds1[$key]['lead_ids']);
-        }
-
-        $newArray1 = [];
-        foreach($newLeads1 as $lead) {
-            if(isset($queryParams['start_date']) && $queryParams['start_date'] !== null && isset($queryParams['end_date']) && $queryParams['end_date'] !== null){
-
-                $contracts = DB::table('contracts')
-                            ->whereBetween('contracts.contract_date',[$queryParams['start_date'], $queryParams['end_date']])
-                            ->whereIn('contracts.lead_id', $lead['lead_ids'])
-                            ->get();
-
-                $newArray1[$lead['franchiseNumber']] = [
-                    'franchiseNumber' => isset($lead['franchiseNumber']) ? $lead['franchiseNumber'] : '',
-                    'salesStaff' => isset($lead['design_advisor']) ? $lead['design_advisor'] : '',
-                    'totalLeads' => $lead['total_leads'],
-                    'totalContracts' => $contracts->count(),
-                    'sumOfTotalContracts' => $contracts->sum('total_contract'),
-                ];
-            }
-        }
-        //dd($newArray1);
-        //END LEADS QUERY
-
-        //START CONTRACTS QUERY
-        $mainQuery = DB::table('contracts')->select('lead_id');
+        $mainQuery = DB::table('contracts')->select('lead_id');        
+        $combinedLeadsAndContracts = $this->contractsQuery($userType, $mainQuery, $leadCountsArray, $franchiseIds, $queryParams);
         
-        $combinedLeadsAndContracts = $this->contractsQuery($userType, $mainQuery, $newArray1, $franchiseIds, $queryParams);
         return $combinedLeadsAndContracts;
-        //END CONTRACTS QUERY
     }
 
-    public function contractsQuery($userType, $mainQuery, $newArray1, $franchiseIds, $queryParams)
+    public function contractsQuery($userType, $mainQuery, $leadCountsArray, $franchiseIds, $queryParams)
     {
         $mainQuery = $this->paramContractFilters($mainQuery, $queryParams);
         $leadIds = $mainQuery->pluck('lead_id')->toArray();
@@ -270,12 +219,18 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                             ->whereBetween('contracts.contract_date',[$queryParams['start_date'], $queryParams['end_date']])
                             ->whereIn('contracts.lead_id', $lead['lead_ids'])
                             ->get();
-                            
+
+                $franchiseNumber = $lead['franchiseNumber'];  
+                $designAdvisor = $lead['design_advisor'];   
+
+                $totalLeads = isset($leadCountsArray[$franchiseNumber."_".$designAdvisor]['totalLeads'])? $leadCountsArray[$franchiseNumber."_".$designAdvisor]['totalLeads'] : 0;
+                $totalContracts = isset($leadCountsArray[$franchiseNumber."_".$designAdvisor]['totalContracts'])? $leadCountsArray[$franchiseNumber."_".$designAdvisor]['totalContracts'] : 0;           
+                
                 $newArray[] = [
                     'franchiseNumber' => isset($lead['franchiseNumber']) ? $lead['franchiseNumber'] : '',
                     'salesStaff' => isset($lead['design_advisor']) ? $lead['design_advisor'] : '',
-                    'totalLeads' => isset($newArray1[$lead['franchiseNumber']]['totalLeads'])? $newArray1[$lead['franchiseNumber']]['totalLeads'] : 0,
-                    'totalContracts' => isset($newArray1[$lead['franchiseNumber']]['totalContracts'])? $newArray1[$lead['franchiseNumber']]['totalContracts'] : 0,
+                    'totalLeads' => $totalLeads,
+                    'totalContracts' => $totalContracts,
                     'sumOfTotalContracts' => $contracts->sum('total_contract'),
                 ];
             }
@@ -321,29 +276,41 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
 
     public function leadsParamFilters($mainQuery, $franchiseIds, $queryParams)
     {
-        if(isset($queryParams['start_date']) && $queryParams['start_date'] !== null && isset($queryParams['end_date']) && $queryParams['end_date'] !== null){
-            $mainQuery = $mainQuery->whereBetween('leads.lead_date',[$queryParams['start_date'], $queryParams['end_date']]);
-        }
+        $mainQuery->when(key_exists("status", $queryParams) && $queryParams['status'] == 'active', function($mainQuery) use($queryParams){
+            $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
+        })->when(key_exists("status", $queryParams) && $queryParams['status'] == 'blocked', function($mainQuery){
+            $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
+        })->when(key_exists("status", $queryParams) && $queryParams['status'] == '', function($mainQuery){
+            $mainQuery = $mainQuery->whereIn('sales_staff.status', [SalesStaff::ACTIVE, SalesStaff::BLOCKED]);
+        });
 
-        if(isset($queryParams['franchise_id']) && $queryParams['franchise_id'] !== null){
-            $mainQuery = $mainQuery->where('franchises.id', $franchiseIds);
-        }
-
-        if(isset($queryParams['sales_staff_id']) && $queryParams['sales_staff_id'] !== null){
-            $mainQuery = $mainQuery->where('sales_staff.id', $queryParams['sales_staff_id']);
-        }
-
-        if(isset($queryParams['status']) && $queryParams['status'] !== null){
-            if($queryParams['status'] == 'active'){
-                $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::ACTIVE);
-            }else if($queryParams['status'] == 'blocked'){
-                $mainQuery = $mainQuery->where('sales_staff.status', SalesStaff::BLOCKED);
-            }else{
-                $mainQuery = $mainQuery->whereIn('sales_staff.status', [SalesStaff::ACTIVE, SalesStaff::BLOCKED]);
-            }
-        }
+        $mainQuery->when($queryParams['start_date'] !== null && $queryParams['end_date'] !== null, function($mainQuery) use($queryParams){
+            $mainQuery->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
+        });
         
-        $mainQuery = $mainQuery->get();
+        $mainQuery->when(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== "", function($mainQuery) use($queryParams){
+            $mainQuery->where('franchises.id', $queryParams['franchise_id'] );
+        });
+        
+        $mainQuery->when(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== "", function($mainQuery) use($queryParams){
+            $mainQuery->where('franchises.type', $queryParams['franchise_type'] );
+        });
+
+        $mainQuery->when(key_exists("sales_staff_id", $queryParams) && $queryParams['sales_staff_id'] !== "", function($mainQuery) use($queryParams){
+            $mainQuery->where('sales_staff.id', $queryParams['sales_staff_id'] );
+        });
+
+        $mainQuery = $mainQuery->groupBy([
+            'sales_staff.last_name',
+            'sales_staff.first_name',
+            'franchises.franchise_number'
+        ]);
+
+        $mainQuery->when(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== "", function($mainQuery) use($queryParams){
+            $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
+        });
+
+        $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc')->get();
 
         return $mainQuery;
     }

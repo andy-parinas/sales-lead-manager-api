@@ -77,10 +77,10 @@ class LeadAndContractDateReportController extends ApiController
                     $franchiseIds = $this->franchiseRepository->all()->pluck('id')->toArray();
                 }
 
-                $results = $this->leadAndContractDateReport->generateLeadAndContract($user->user_type, $franchiseIds, $request->all());
+                $results = $this->leadAndContractDateReport->generateLeadAndContract($franchiseIds, $request->all());
             }else {
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
-                $results =  $this->leadAndContractDateReport->generateLeadAndContractByFranchise($user->user_type, $franchiseIds, $request->all());
+                $results =  $this->leadAndContractDateReport->generateLeadAndContractByFranchise($franchiseIds, $request->all());
             }
 
             if(count($results) > 0){

@@ -149,12 +149,12 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
 
         $contractCountsArray = [];
         foreach($contractCountQuery as $contract) {
+            
             $contractCountsArray[$contract->franchiseNumber."_".$contract->design_advisor."_".$contract->sales_staff_id] = [
                 'franchiseNumber' => isset($contract->franchiseNumber) ? $contract->franchiseNumber : '',
                 'salesStaff' => isset($contract->design_advisor) ? $contract->design_advisor : '',
                 'totalContracts' => $contract->numberOfContracts,
-                'averageSalesPrice' => $contract->averageSalesPrice,
-                'conversionRate' => $contract->conversionRate,
+                'averageSalesPrice' => $contract->averageSalesPrice,                
             ];
         }
 
@@ -201,7 +201,12 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         
         $newleadAndContractCounts = $this->array_merge_recursive_ex($leadAndContractCounts, $sumContractArray);
         
-        foreach($newleadAndContractCounts as $key => $leadAndContractCount) {
+        foreach($newleadAndContractCounts as $key => $leadAndContractCount) {            
+            $totalLeadToOne = ($leadAndContractCount['totalLeads'] == 0? 1 : $leadAndContractCount['totalLeads']);
+            $conversionRate = $leadAndContractCount['totalContracts'] / $totalLeadToOne;
+
+            $newleadAndContractCounts[$key]['conversionRate'] = $conversionRate;
+
             if(!isset($leadAndContractCount['sumOfTotalContracts'])) {
                 $newleadAndContractCounts[$key]['sumOfTotalContracts'] = 0;
             }

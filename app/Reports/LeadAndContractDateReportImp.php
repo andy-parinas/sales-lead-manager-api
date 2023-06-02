@@ -241,8 +241,10 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         //START STEP 2 CONTRACT QUERY
         $contractCountQuery = DB::table('contracts')
         ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
+        ->selectRaw("avg(contracts.contract_price) as averageSalesPrice")
         ->selectRaw("sales_staff.id as sales_staff_id")
         ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
+        ->selectRaw("count( IF (contracts.contract_price > 0 and appointments.outcome = 'success' , 1, null)) / count(leads.id) * 100 as conversionRate")
         ->selectRaw("count( IF (contracts.contract_price > 0 and appointments.outcome = 'success' , 1, null)) as numberOfContracts")
         ->join("leads", "leads.id", "=", "contracts.lead_id")
         ->join("job_types", "job_types.lead_id", "=", "leads.id")
@@ -259,6 +261,8 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 'franchiseNumber' => isset($contract->franchiseNumber) ? $contract->franchiseNumber : '',
                 'salesStaff' => isset($contract->design_advisor) ? $contract->design_advisor : '',
                 'totalContracts' => $contract->numberOfContracts,
+                'averageSalesPrice' => $contract->averageSalesPrice,
+                'conversionRate' => $contract->conversionRate,
             ];
         }
 
@@ -271,6 +275,14 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
 
             if(!isset($leadAndContractCount['totalLeads'])) {
                 $leadAndContractCounts[$key]['totalLeads'] = 0;
+            }
+
+            if(!isset($leadAndContractCount['averageSalesPrice'])) {
+                $leadAndContractCounts[$key]['averageSalesPrice'] = 0;
+            }
+
+            if(!isset($leadAndContractCount['conversionRate'])) {
+                $leadAndContractCounts[$key]['conversionRate'] = 0;
             }
         }
 

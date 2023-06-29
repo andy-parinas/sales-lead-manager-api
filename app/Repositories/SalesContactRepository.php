@@ -79,7 +79,7 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
 
     public function simpleSearch(Array $params, $postcodeIds = null)
     {
-        
+        //dd($postcodeIds);
         $query =  DB::table('sales_contacts')
             ->select("sales_contacts.id",
                 'title',
@@ -107,7 +107,8 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
         {
             $query =  $query
                 ->where(function($query) use($params) {
-                    $query->where('first_name', 'LIKE',  $params['search'] . '%')
+                    $query->where('status', 'active')
+                    ->orWhere('first_name', 'LIKE',  $params['search'] . '%')
                     ->orWhere('last_name', 'LIKE',  $params['search'] . '%')
                     ->orWhere('email', 'LIKE',  '%'. $params['search'] . '%');
                 });

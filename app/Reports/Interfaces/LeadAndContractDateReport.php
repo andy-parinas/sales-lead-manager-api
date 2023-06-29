@@ -10,4 +10,5 @@ interface LeadAndContractDateReport
     public function generateByFranchise($franchiseIds, $queryParams);
     public function generateLeadAndContract($franchiseIds, $queryParams);
     public function generateLeadAndContractByFranchise($franchiseIds, $queryParams);
+    public function generateDesignAdvisorById($franchiseId);
 }

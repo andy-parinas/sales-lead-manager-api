@@ -157,6 +157,7 @@ Route::resource('design-assessors', 'DesignAssessor\DesignAssessorController', [
 /**
  * SalesStaff Routes
  */
+Route::get('active-sales-staffs/active-search', 'SalesStaff\SalesStaffController@activeSearch');
 Route::get('sales-staffs/search', 'SalesStaff\SalesStaffController@search');
 Route::get('sales-staffs/getall', 'SalesStaff\SalesStaffController@allSalesStaff');
 Route::resource('sales-staffs', 'SalesStaff\SalesStaffController', ['except' => ['create', 'edit']]);
@@ -188,7 +189,7 @@ Route::get('reports/sales-contract-variation', 'Reports\SalesContractVariationRe
 Route::get('reports/lead-contract', 'Reports\LeadAndContractReportController');
 Route::get('reports/lead-contract-date', 'Reports\LeadAndContractDateReportController@index');
 Route::get('reports/combine-lead-contract-date', 'Reports\LeadAndContractDateReportController@leadAndContract');
-
+Route::get('reports/design-advisor', 'Reports\LeadAndContractDateReportController@allDesignAdvisory');
 /**
  * Build Log Routes
  */

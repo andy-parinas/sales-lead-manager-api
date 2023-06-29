@@ -146,7 +146,7 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         ->join("franchises", "leads.franchise_id", "=", "franchises.id");
 
         $contractCountQuery = $this->leadsParamFilters($contractCountQuery, $franchiseIds, $queryParams, 'contract');
-
+        
         $contractCountsArray = [];
         foreach($contractCountQuery as $contract) {
             
@@ -424,6 +424,35 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         $mainQuery->when(key_exists("sort_by", $queryParams) && $queryParams['sort_by'] !== "" && key_exists("direction", $queryParams) && $queryParams['direction'] !== "", function($mainQuery) use($queryParams){
             $mainQuery->orderBy($queryParams['sort_by'], $queryParams['direction']);
         });
+
+        $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc')->get();
+
+        return $mainQuery;
+    }
+
+    public function generateDesignAdvisorById($franchiseId)
+    {
+        $mainQuery = DB::table('leads')
+        ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
+        ->selectRaw("sales_staff.id as sales_staff_id")
+        ->selectRaw("GROUP_CONCAT(DISTINCT franchises.franchise_number)  as franchiseNumber")
+        ->selectRaw("count(leads.id) as total_leads")
+        ->selectRaw("GROUP_CONCAT(DISTINCT leads.id) as lead_ids")
+        ->join("job_types", "job_types.lead_id", "=", "leads.id")
+        ->join("appointments", "appointments.lead_id", "=", "leads.id")
+        ->join("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
+        ->join("franchises", "leads.franchise_id", "=", "franchises.id")
+        ->leftJoin("contracts", "contracts.lead_id", "=", "leads.id");
+
+        $mainQuery = $mainQuery->whereIn('sales_staff.status', [SalesStaff::ACTIVE, SalesStaff::BLOCKED]);
+
+        $mainQuery->where('franchises.id', $franchiseId);
+
+        $mainQuery = $mainQuery->groupBy([
+            'sales_staff.last_name',
+            'sales_staff.first_name',
+            'franchises.franchise_number'
+        ]);
 
         $mainQuery = $mainQuery->orderBy('sales_staff.first_name', 'asc')->get();
 

@@ -89,6 +89,22 @@ class SalesStaffController extends ApiController
     }
 
 
+    public function activeSearch(Request $request)
+    {
+        $user = Auth::user();
+        
+        if($user->user_type == User::HEAD_OFFICE){
+            $salesStaffs = $this->salesStaffRepository->searchAllActive($request->search);
+            $allSalesStaff = $this->showAll(new SalesStaffSearchCollection($salesStaffs));
+        }else {
+            $userFranchiseIds = $user->franchises->pluck('id')->toArray();
+            $salesStaffs = $this->salesStaffRepository->searchAllActiveByFranchise($userFranchiseIds, $request->search);
+            $allSalesStaff = $this->showAll(new SalesStaffSearchCollection($salesStaffs));
+        }
+
+        return $allSalesStaff;
+    }
+
     public function search(Request $request)
     {
         $user = Auth::user();

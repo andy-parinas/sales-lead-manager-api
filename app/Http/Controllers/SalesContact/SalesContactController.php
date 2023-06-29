@@ -179,8 +179,7 @@ class SalesContactController extends ApiController
 
 
     public function search(Request $request)
-    {
-        
+    {   
         $user = Auth::user();
         $postcodeIds = null;
 

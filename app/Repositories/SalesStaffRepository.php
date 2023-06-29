@@ -79,6 +79,24 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
 
     }
     
+    public function searchAllActive($search)
+    {
+        return DB::table('sales_staff')
+        ->select('id',
+            'first_name',
+            'last_name',
+            'email',
+            'status',
+            'contact_number'
+        )->where(function ($query) use ($search){
+            $query->where('first_name','LIKE', '%' . $search . '%' )
+            ->orWhere('last_name','LIKE', '%' . $search . '%' )
+            ->orWhere('email', 'LIKE', '%' . $search . '%');
+        })
+        ->where('status','active' )
+        ->get();
+    }
+
     public function searchAll($search)
     {
         return DB::table('sales_staff')
@@ -177,6 +195,28 @@ class SalesStaffRepository implements Interfaces\SalesStafRepositoryInterface
             'data' => $items,
             'count' => $count
         ];
+    }
+
+    public function searchAllActiveByFranchise(array $franchiseIds, $search)
+    {
+        return DB::table('sales_staff')
+            ->select('sales_staff.id',
+                'first_name',
+                'last_name',
+                'email',
+                'status',
+                'contact_number'
+            )
+            ->join("franchise_sales_staff", "sales_staff.id", '=', "franchise_sales_staff.sales_staff_id")
+            ->join("franchises", "franchises.id", '=', "franchise_sales_staff.franchise_id")
+            ->where('status', 'active')
+            ->where(function ($query) use ($search){
+                $query->where('first_name','LIKE', '%' . $search . '%' )
+                    ->orWhere('last_name','LIKE', '%' . $search . '%' )
+                    ->orWhere('email', 'LIKE', '%' . $search . '%');
+            })
+            ->whereIn('franchises.id', $franchiseIds)
+            ->get();
     }
 
     public function searchAllByFranchise(array $franchiseIds, $search)

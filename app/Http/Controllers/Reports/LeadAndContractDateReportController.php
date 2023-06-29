@@ -97,4 +97,13 @@ class LeadAndContractDateReportController extends ApiController
             ]);
         }
     }
+
+    public function allDesignAdvisory(Request $request)
+    {
+        $results = $this->leadAndContractDateReport->generateDesignAdvisorById($request->franchise_id);
+        //dd($results->toArray());
+        return $this->showOne([
+            'results' => $results
+        ]);
+    }
 }

@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+Disallow: /sales-lead-manager/resources/views/welcome.blade.php
+Disallow: /sales-lead-manager/routes/api.php

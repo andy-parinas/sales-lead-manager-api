@@ -196,8 +196,6 @@ class SalesContactController extends ApiController
                 $postcodeIds = array_merge($postcodeIds, $postcodes);
 
             }
-
-
         }
 
         $salesContacts = $this->salesContactRepository->simpleSearch($this->getRequestParams(), $postcodeIds);

@@ -79,7 +79,6 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
 
     public function simpleSearch(Array $params, $postcodeIds = null)
     {
-        //dd($postcodeIds);
         $query =  DB::table('sales_contacts')
             ->select("sales_contacts.id",
                 'title',
@@ -99,20 +98,19 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
             )->join('postcodes','postcodes.id', '=', 'sales_contacts.postcode_id');
 
         if($postcodeIds != null){
-            // dd($postcodeIds);
             $query = $query->whereIn('postcodes.id', $postcodeIds);
         }
 
         if(key_exists('search', $params))
         {
-            $query =  $query
+            $query = $query
                 ->where(function($query) use($params) {
-                    $query->where('status', 'active')
-                    ->orWhere('first_name', 'LIKE',  $params['search'] . '%')
+                    $query->where('first_name', 'LIKE',  $params['search'] . '%')
                     ->orWhere('last_name', 'LIKE',  $params['search'] . '%')
                     ->orWhere('email', 'LIKE',  '%'. $params['search'] . '%');
                 });
 
+            $query = $query->where('status', 'active');
 
             if(key_exists('column', $params) && ($params['column'] == 'pcode' || $params['column'] == 'state' || $params['column'] == 'locality' ) ){
 

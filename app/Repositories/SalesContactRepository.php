@@ -103,13 +103,29 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
 
         if(key_exists('search', $params))
         {
-            $query = $query
-                ->where(function($query) use($params) {
-                    $query->where('first_name', 'LIKE',  $params['search'] . '%')
-                    ->orWhere('last_name', 'LIKE',  $params['search'] . '%')
-                    ->orWhere('email', 'LIKE',  '%'. $params['search'] . '%');
-                });
+            $search = $params['search'];
+            $search = trim($search);
 
+            if(strpos($search, ' ') !== false){
+                $search = explode(' ', $search);
+                $firstName = trim($search[0]);
+                $lastName = trim($search[1]);
+
+                $query = $query
+                    ->where(function($query) use($firstName, $lastName) {
+                        $query->where('first_name', 'LIKE',  $firstName . '%')
+                            ->where('last_name', 'LIKE',  $lastName . '%');
+                    });
+
+            }else{
+                $query = $query
+                    ->where(function($query) use($search) {
+                        $query->where('first_name', 'LIKE',  $search . '%')
+                            ->orWhere('last_name', 'LIKE',  $search . '%')
+                            ->orWhere('email', 'LIKE',  '%'. $search . '%');
+                    });
+            }
+            
             $query = $query->where('status', 'active');
 
             if(key_exists('column', $params) && ($params['column'] == 'pcode' || $params['column'] == 'state' || $params['column'] == 'locality' ) ){

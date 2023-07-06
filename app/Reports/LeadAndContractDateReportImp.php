@@ -204,8 +204,10 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         foreach($newleadAndContractCounts as $key => $leadAndContractCount) {            
             $totalLeadToOne = ($leadAndContractCount['totalLeads'] == 0? 1 : $leadAndContractCount['totalLeads']);
             $conversionRate = $leadAndContractCount['totalContracts'] / $totalLeadToOne;
+            
+            $conversionRate = round($conversionRate, 2);
 
-            $newleadAndContractCounts[$key]['conversionRate'] = $conversionRate;
+            $newleadAndContractCounts[$key]['conversionRate'] = $conversionRate * 100;
 
             if(!isset($leadAndContractCount['sumOfTotalContracts'])) {
                 $newleadAndContractCounts[$key]['sumOfTotalContracts'] = 0;

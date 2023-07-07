@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\Interfaces\SalesContactRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\SalesContact;
 
 class SalesContactRepository  implements SalesContactRepositoryInterface
 {
@@ -105,27 +106,9 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
         {
             $search = $params['search'];
             $search = trim($search);
-
-            if(strpos($search, ' ') !== false){
-                $search = explode(' ', $search);
-                $firstName = trim($search[0]);
-                $lastName = trim($search[1]);
-
-                $query = $query
-                    ->where(function($query) use($firstName, $lastName) {
-                        $query->where('first_name', 'LIKE',  $firstName . '%')
-                            ->where('last_name', 'LIKE',  $lastName . '%');
-                    });
-
-            }else{
-                $query = $query
-                    ->where(function($query) use($search) {
-                        $query->where('first_name', 'LIKE',  $search . '%')
-                            ->orWhere('last_name', 'LIKE',  $search . '%')
-                            ->orWhere('email', 'LIKE',  '%'. $search . '%');
-                    });
-            }
             
+            $query = $query->whereRaw("concat(first_name, ' ', last_name) like '%" .$search. "%' OR CONCAT(last_name, ' ', first_name) like '%" .$search. "%'");
+
             $query = $query->where('status', 'active');
 
             if(key_exists('column', $params) && ($params['column'] == 'pcode' || $params['column'] == 'state' || $params['column'] == 'locality' ) ){
@@ -144,9 +127,6 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
 
     public function sortAndPaginateByFranchise(array $postcodeIds, array $params)
     {
-
-
-
         $query =  DB::table('sales_contacts')
             ->select(
                 "sales_contacts.id",
@@ -170,7 +150,6 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
 
         if(key_exists('search', $params) && key_exists('on', $params))
         {
-
             if($params['on'] == 'postcode'){
                 $params['on'] = 'pcode';
             }
@@ -178,8 +157,7 @@ class SalesContactRepository  implements SalesContactRepositoryInterface
             if($params['on'] == 'suburb'){
                 $params['on'] = 'locality';
             }
-
-
+            
             $query = $query
                 ->where($params['on'], 'LIKE', '%' . $params['search'] . '%');
 

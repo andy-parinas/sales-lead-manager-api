@@ -20,16 +20,20 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 'sales_contacts.first_name',
                 'sales_contacts.last_name',
                 'sales_contacts.email',
+                'sales_contacts.street1 as address',
                 'postcodes.pcode',
                 'postcodes.locality as suburb',
                 'sales_contacts.contact_number as phone_number',
                 'contracts.contract_date',
+                'contracts.contract_price',
                 'job_types.sales_staff_id',
                 'appointments.outcome as lead_status',
                 'lead_sources.name as heard_about',
             )
             ->selectRaw('DATE_FORMAT(leads.lead_date, "%d/%m/%Y") as lead_date')
+            ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
             ->leftJoin('job_types', 'leads.id', '=', 'job_types.lead_id')
+            ->leftJoin("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->leftJoin('products', 'job_types.product_id', '=', 'products.id')
             ->leftJoin('sales_contacts', 'leads.sales_contact_id', '=', 'sales_contacts.id')
             ->leftJoin('postcodes', 'sales_contacts.postcode_id', '=', 'postcodes.id')
@@ -68,16 +72,20 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 'sales_contacts.first_name',
                 'sales_contacts.last_name',
                 'sales_contacts.email',
+                'sales_contacts.street1 as address',
                 'postcodes.pcode',
                 'postcodes.locality as suburb',
                 'sales_contacts.contact_number as phone_number',
                 'contracts.contract_date',
+                'contracts.contract_price',
                 'job_types.sales_staff_id',
                 'appointments.outcome as lead_status',
                 'lead_sources.name as heard_about',
             )
             ->selectRaw('DATE_FORMAT(leads.lead_date, "%d/%m/%Y") as lead_date')
+            ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
             ->leftJoin('job_types', 'leads.id', '=', 'job_types.lead_id')
+            ->leftJoin("sales_staff", "job_types.sales_staff_id", '=', "sales_staff.id")
             ->leftJoin('products', 'job_types.product_id', '=', 'products.id')
             ->leftJoin('sales_contacts', 'leads.sales_contact_id', '=', 'sales_contacts.id')
             ->leftJoin('postcodes', 'sales_contacts.postcode_id', '=', 'postcodes.id')

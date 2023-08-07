@@ -183,23 +183,19 @@ class SalesContactController extends ApiController
         $user = Auth::user();
         $postcodeIds = null;
 
-        if($user->user_type != User::HEAD_OFFICE){
-
+        if($user->user_type == User::HEAD_OFFICE){            
+            $salesContacts = $this->salesContactRepository->simpleSearch($this->getRequestParams());            
+        } else {
             $postcodeIds = [];
-
             $franchises = $user->franchises;
-
+            
             foreach ($franchises as $franchise){
-
                 $postcodes = $franchise->postcodes->pluck('id')->toArray();
-
                 $postcodeIds = array_merge($postcodeIds, $postcodes);
-
             }
+
+            $salesContacts = $this->salesContactRepository->simpleSearchByFranchise($this->getRequestParams(), $postcodeIds);
         }
-
-        $salesContacts = $this->salesContactRepository->simpleSearch($this->getRequestParams(), $postcodeIds);
-
 
         return $this->showApiCollection(new SalesContactCollection($salesContacts));
     }

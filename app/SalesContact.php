@@ -3,11 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Nicolaslopezj\Searchable\SearchableTrait;
 
 class SalesContact extends Model
 {
-    use SearchableTrait;
 
     const RESIDENTIAL = 'residential';
     const COMMERCIAL = 'commercial';

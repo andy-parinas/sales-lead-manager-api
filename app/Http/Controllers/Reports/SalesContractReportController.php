@@ -30,22 +30,16 @@ class SalesContractReportController extends ApiController
             $results = [];
 
             if($user->user_type == User::HEAD_OFFICE){
-
                 $results = $this->salesContractReport->generate($request->all());
-
             }else {
-
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
                 $results = $this->salesContractReport->generateByFranchise($franchiseIds, $request->all());
-
             }
 
             return $this->showOne([
                 'results' => $this->formatReport($results)
             ]);
-
         }
-
     }
 
     private function formatReport($results)
@@ -96,5 +90,67 @@ class SalesContractReportController extends ApiController
         return $report;
 
 
+    }
+
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
+
+        if($request->has('start_date') && $request->has('end_date')){
+            
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+                $results = $this->salesContractReport->generate($request->all());
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->salesContractReport->generateByFranchise($franchiseIds, $request->all());
+            }
+            
+            //$results to csv
+            $filename = 'sales_contract_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Design Advisor',
+                'Contract Date',
+                'Lead Number',
+                'Customer',
+                'Suburb',
+                'Product',
+                'Lead Source',
+                'Roof Sheet Profile',
+                'Value',
+            ]);
+            foreach($results as $row) {
+                $roofSheetProfile = isset($row->roof_sheet_profile)? $row->roof_sheet_profile : '';
+                fputcsv($handle, array(
+                    $row->sales_staff_name,
+                    $row->contract_date,
+                    $row->lead_number,
+                    $row->customer,
+                    $row->suburb,
+                    $row->product,
+                    $row->source,
+                    $roofSheetProfile,
+                    number_format($row->total_contract, 2),
+                ));
+                fputcsv($handle, [
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    'Total',
+                    number_format($row->total_contract, 2),
+                ]);
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'sales_contract_report.csv', $headers);
+        }
     }
 }

@@ -177,6 +177,7 @@ Route::resource('trade-staffs.schedules', 'TradeStaff\TradeStaffScheduleControll
 Route::get('reports/sales-staff-lead-summary', 'Reports\SalesStaffLeadSummaryReportController@index');
 Route::get('reports/sales-staff-summary', 'Reports\SalesStaffSummaryReportController@index');
 Route::get('reports/sales-staff-product-summary', 'Reports\SalesStaffProductSummaryReportController@index');
+Route::get('reports/sales-lead-appointment', 'Reports\AppointmentSummaryReportController@index');
 Route::get('reports/product-sales-summary', 'Reports\ProductSalesSummaryReportController@index');
 Route::get('reports/outcome', 'Reports\OutcomeSummaryReportController');
 Route::get('reports/contract-outcome', 'Reports\ContractOutcomeSummaryReportController');
@@ -190,6 +191,24 @@ Route::get('reports/lead-contract', 'Reports\LeadAndContractReportController');
 Route::get('reports/lead-contract-date', 'Reports\LeadAndContractDateReportController@index');
 Route::get('reports/combine-lead-contract-date', 'Reports\LeadAndContractDateReportController@leadAndContract');
 Route::get('reports/design-advisor', 'Reports\LeadAndContractDateReportController@allDesignAdvisory');
+
+/**
+ * CSV Report Routes
+ */
+Route::get('reports/sales-lead-appointment-csv', 'Reports\AppointmentSummaryReportController@csvReport');
+Route::get('reports/outcome-sales-staff-csv', 'Reports\OutcomeSalesStaffReportController@csvReport');
+Route::get('reports/lead-sources-csv', 'Reports\LeadSourceReportController@csvReport');
+Route::get('reports/customer-reviews-csv', 'Reports\CustomerReviewReportController@csvReport');
+Route::get('reports/lead-contract-date-csv', 'Reports\LeadAndContractDateReportController@csvReport');
+Route::get('reports/sales-staff-lead-summary-csv', 'Reports\SalesStaffLeadSummaryReportController@csvReport');
+Route::get('reports/sales-staff-summary-csv', 'Reports\SalesStaffSummaryReportController@csvReport');
+Route::get('reports/combine-lead-contract-date-csv', 'Reports\LeadAndContractDateReportController@leadContractCsvReport');
+Route::get('reports/sales-staff-product-summary-csv', 'Reports\SalesStaffProductSummaryReportController@csvReport');
+Route::get('reports/product-sales-summary-csv', 'Reports\ProductSalesSummaryReportController@csvReport');
+Route::get('reports/sales-contract-csv', 'Reports\SalesContractReportController@csvReport');
+Route::get('reports/sales-contract-variation-csv', 'Reports\SalesContractVariationReportController@csvReport');
+Route::get('reports/roof-sheet-profile-csv', 'Reports\RoofSheetProfileReportController@csvReport');
+Route::get('reports/lead-contract-csv', 'Reports\LeadAndContractReportController@csvReport');
 /**
  * Build Log Routes
  */

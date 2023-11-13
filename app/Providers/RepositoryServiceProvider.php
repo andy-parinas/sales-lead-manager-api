@@ -9,6 +9,7 @@ use App\Reports\Interfaces\SalesContractReport;
 use App\Reports\Interfaces\SalesStaffLeadSummaryReport;
 use App\Reports\Interfaces\SalesStaffProductReport;
 use App\Reports\Interfaces\SalesStaffSummaryReport;
+use App\Reports\Interfaces\AppointmentReport;
 use App\Reports\LeadAndContractReportImp;
 use App\Reports\LeadAndContractDateReportImp;
 use App\Reports\ProductSalesSummaryReportImp;
@@ -16,6 +17,7 @@ use App\Reports\SalesContractReportImp;
 use App\Reports\SalesStaffLeadSummaryReportImp;
 use App\Reports\SalesStaffProductReportImp;
 use App\Reports\SalesStaffSummaryReportImp;
+use App\Reports\AppointmentReportImp;
 use App\Repositories\CustomerReviewReportRepository;
 use App\Repositories\DocumentRepository;
 use App\Repositories\FranchiseRepository;
@@ -78,7 +80,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductSalesSummaryReport::class, ProductSalesSummaryReportImp::class);
         $this->app->bind(LeadAndContractReport::class, LeadAndContractReportImp::class);
         $this->app->bind(LeadAndContractDateReport::class, LeadAndContractDateReportImp::class);
-   
-   
+        $this->app->bind(AppointmentReport::class, AppointmentReportImp::class);   
     }
 }

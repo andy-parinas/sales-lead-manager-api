@@ -31,78 +31,99 @@ class ProductSalesSummaryReportController extends ApiController
 
     public function index(Request $request)
     {
-
         $user = Auth::user();
-
 
         if($request->has('start_date') && $request->has('end_date')) {
 
             $results = [];
-
-
-
+            
             if($user->user_type == User::HEAD_OFFICE){
-
                 $results = $this->productSalesSummaryReport->generate($request->all());
-
             }else {
-
                 $franchiseIds = $user->franchises->pluck('id')->toArray();
-
-
                 $results = $this->productSalesSummaryReport->generateByFranchise($franchiseIds, $request->all());
-
             }
 
             if($results->count() > 0){
                 $total = $this->computeTotal($results);
 
-
                 return $this->showOne([
                     'results' => $results,
                     'total' => $total
                 ]);
-
             }
 
             return $this->showOne([
                 'results' => $results
             ]);
         }
-
-
-
     }
 
-//    private function computeTotal($results)
-//    {
-//        $totalNumberOfSales = 0;
-//        $totalNumberOfLeads = 0;
-//        $totalConversionRate = 0;
-//        $grandTotalContracts = 0;
-//        $grandTotalAveragePrice = 0;
-//
-//
-//        foreach ($results as $result){
-//            $totalNumberOfSales = $totalNumberOfSales + $result->numberOfSales;
-//            $totalNumberOfLeads = $totalNumberOfLeads + $result->numberOfLeads;
-//            $totalConversionRate = $totalConversionRate + $result->conversionRate;
-//            $grandTotalContracts = $grandTotalContracts + $result->totalContracts;
-//            $grandTotalAveragePrice = $grandTotalAveragePrice + $result->averageSalesPrice;
-//        }
-//
-//        $resultLength = count($results);
-//
-//        return [
-//            'totalNumberOfSales' => $totalNumberOfSales,
-//            'totalNumberOfLeads' => $totalNumberOfLeads,
-//            'averageConversionRate' => $totalConversionRate / $resultLength,
-//            'grandTotalContracts' => $grandTotalContracts,
-//            'grandAveragePrice' => $grandTotalAveragePrice / $resultLength,
-//            'averageNumberOfLeads' => $totalNumberOfLeads / $resultLength,
-//            'averageNumberOfSales' => $totalNumberOfSales / $resultLength,
-//            'averageTotalContract' => $grandTotalContracts / $resultLength,
-//        ];
-//    }
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
 
+        if($request->has('start_date') && $request->has('end_date')){
+            
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+                $results = $this->productSalesSummaryReport->generate($request->all());
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->productSalesSummaryReport->generateByFranchise($franchiseIds, $request->all());
+            }
+            
+            //$results to csv
+            $filename = 'franchise_product_sales_summary_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Product',
+                '# Sales',
+                '# Leads',
+                'Total Contracts',
+                'Conversion Rate',
+                'Average Sales Price',
+            ]);
+            foreach($results as $row) {
+                fputcsv($handle, array(
+                    $row->name,
+                    $row->numberOfSales,
+                    $row->numberOfLeads,                    
+                    number_format($row->totalContracts, 2),
+                    $this->percent($row->conversionRate),
+                    number_format($row->averageSalesPrice, 2),
+                ));
+            }
+            
+            if($results->count() > 0){
+                $total = $this->computeTotal($results);
+                fputcsv($handle, [
+                    'Total',
+                    number_format($total['totalNumberOfSales'], 2),
+                    number_format($total['totalNumberOfLeads'], 2),
+                    number_format($total['grandTotalContracts'], 2),
+                    '',
+                    '',
+                ]);
+                fputcsv($handle, [
+                    'Average',
+                    number_format($total['averageNumberOfSales'], 2),
+                    number_format($total['averageNumberOfLeads'], 2),
+                    number_format($total['averageTotalContract'], 2),
+                    $this->percent($total['averageConversionRate']),
+                    number_format($total['grandAveragePrice'], 2),
+                ]);
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'franchise_product_sales_summary_report.csv', $headers);
+        }
+    }
+
+    public function percent($number){
+        return $number * 100 . '%';
+    }
 }

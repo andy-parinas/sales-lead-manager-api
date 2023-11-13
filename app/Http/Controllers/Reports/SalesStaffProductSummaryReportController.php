@@ -58,4 +58,70 @@ class SalesStaffProductSummaryReportController extends ApiController
         }
     }
 
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
+
+        if($request->has('start_date') && $request->has('end_date')){
+            
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+                $results = $this->salesStaffProductReport->generate($request->all());
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->salesStaffProductReport->generateByFranchise($franchiseIds, $request->all());
+            }
+            
+            //$results to csv
+            $filename = 'sales_staff_product_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Design Advisor',
+                'Franchise',
+                'Product Name',
+                '# Sales',
+                '# Leads',
+                'Total Contracts',
+                'Conversion Rate',
+                'Average Sales Price',
+            ]);
+            foreach($results as $row) {
+                fputcsv($handle, array(
+                    $row->salesStaff,
+                    $row->franchiseNumber,
+                    $row->productName,
+                    $row->numberOfSales,
+                    $row->numberOfLeads,
+                    number_format($row->totalContracts, 2),
+                    $row->conversionRate.'%',
+                    number_format($row->averageSalesPrice, 2),
+                ));
+            }
+            
+            if($results->count() > 0){
+                $total = $this->computeTotal($results);
+                fputcsv($handle, [
+                    'Total',
+                    '',
+                    '',
+                    number_format($total['totalNumberOfSales'], 2),
+                    number_format($total['totalNumberOfLeads'], 2),
+                    number_format($total['grandTotalContracts'], 2),
+                    '',
+                    '',
+                ]);
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'sales_staff_product_report.csv', $headers); 
+
+        }
+    }
+
+    public function percent($number){
+        return $number * 100 . '%';
+    }
 }

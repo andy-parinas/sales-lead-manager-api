@@ -50,4 +50,58 @@ class RoofSheetProfileReportController extends ApiController
             ]);
         }
     }
+
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
+
+        if($request->has('start_date') && $request->has('end_date')){
+            
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+                $results = $this->roofSheetProfileReport->generate($request->all());
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->roofSheetProfileReport->generateByFranchise($franchiseIds, $request->all());
+            }
+            
+            //$results to csv
+            $filename = 'roof_sheet_profile_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Roof Sheet Profile',
+                'Design Advisor',
+                'Franchise',
+                '# Sales',
+                'Total Value of Sales',
+            ]);
+            foreach($results as $row) {
+                fputcsv($handle, array(
+                    $row->roof_sheet_profile,
+                    $row->salesStaff,
+                    $row->franchise,
+                    $row->numberOfSales,
+                    $row->valueOfSales,
+                ));
+            }
+
+            if($results->count() > 0){
+                $total = $this->computeTotal($results);
+                fputcsv($handle, [
+                    'Total',
+                    '',
+                    '',
+                    number_format($total['totalNumberOfSales'], 2),
+                    number_format($total['grandTotalContractPrice'], 2),
+                    
+                ]);
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'roof_sheet_profile_report.csv', $headers);
+        }
+    }
 }

@@ -57,4 +57,76 @@ class SalesStaffLeadSummaryReportController extends ApiController
 
     }
 
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
+
+        if($request->has('start_date') && $request->has('end_date')){
+            
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+                $results = $this->salesStaffLeadSummaryReport->generate($request->all());
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->salesStaffLeadSummaryReport->generateByFranchise($franchiseIds, $request->all());
+            }
+            
+            //$results to csv
+            $filename = 'sales_staff_lead_summary_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Design Advisor',
+                'Franchise Number',
+                '# Sales',
+                '# Leads',
+                'Total Contracts',
+                'Conversion Rate',
+                'Average Sales Price',
+            ]);
+            foreach($results as $row) {
+                fputcsv($handle, array(
+                    $row->salesStaff,
+                    $row->franchiseNumber,
+                    $row->numberOfSales,
+                    $row->numberOfLeads,
+                    $row->totalContracts,
+                    $row->conversionRate,
+                    $row->averageSalesPrice,
+                ));
+            }
+            
+            if($results->count() > 0){
+                $total = $this->computeTotal($results);
+                fputcsv($handle, [
+                    'Total',
+                    '',
+                    $total['totalNumberOfSales'],
+                    $total['totalNumberOfLeads'],
+                    $total['grandTotalContracts'],
+                    '',
+                    '',
+                ]);
+                fputcsv($handle, [
+                    'Average',
+                    '',
+                    number_format($total['averageNumberOfSales'], 2),
+                    number_format($total['averageNumberOfLeads'], 2),
+                    number_format($total['averageTotalContract'], 2),
+                    $this->percent($total['averageConversionRate']),
+                    number_format($total['grandAveragePrice'], 2),
+                ]);
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'sales_staff_lead_summary_report.csv', $headers); 
+
+        }
+    }
+
+    public function percent($number){
+        return $number * 100 . '%';
+    }
 }

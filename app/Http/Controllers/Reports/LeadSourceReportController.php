@@ -28,7 +28,7 @@ class LeadSourceReportController extends ApiController
             $results = [];
 
             if($user->user_type == User::HEAD_OFFICE){
-
+                
                 $results = $this->reportRepository->generateLeadSource($request->all());
 
             }else {
@@ -41,6 +41,45 @@ class LeadSourceReportController extends ApiController
             return $this->showOne([
                 'results' => $results
             ]);
+        }
+    }
+
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
+
+        if($request->has('start_date') && $request->has('end_date')){
+            
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){                
+                $results = $this->reportRepository->generateLeadSource($request->all());                
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->reportRepository->generateLeadSourceByFranchise($franchiseIds, $request->all());
+            }
+            
+            //$results to csv
+            $filename = 'lead_source_summary_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Lead Sources',
+                'Status',
+                'Number Of Leads',
+            ]);
+            foreach($results as $row) {
+                fputcsv($handle, array(
+                    $row->name,
+                    $row->outcome,
+                    $row->numberOfLeads,
+                ));
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'lead_source_summary_report.csv', $headers); 
+
         }
     }
 }

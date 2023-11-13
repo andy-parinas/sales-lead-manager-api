@@ -44,5 +44,44 @@ class OutcomeSalesStaffReportController extends ApiController
         }
     }
 
+    public function csvReport(Request $request)
+    {
+        $user = Auth::user();
 
+        if($request->has('start_date') && $request->has('end_date')){
+
+            $results = [];
+
+            if($user->user_type == User::HEAD_OFFICE){
+                $results = $this->reportRepository->generateOutcomeSalesStaff($request->all());
+            }else {
+                $franchiseIds = $user->franchises->pluck('id')->toArray();
+                $results = $this->reportRepository->generateOutcomeSalesStaffByFranchise($franchiseIds, $request->all());
+            }
+
+            //$results to csv
+            $filename = 'outcome_summary_report.csv';
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, [
+                'Franchise',
+                'Sales Staff',
+                'Outcome',
+                'Number Of Leads',
+            ]);
+            foreach($results as $row) {
+                fputcsv($handle, array(
+                    $row->franchise_number,
+                    $row->salesStaff,
+                    $row->outcome,
+                    $row->numberOfLeads,
+                ));
+            }
+            fclose($handle);
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            return response()->download($filename, 'outcome_summary_report.csv', $headers); 
+
+        }
+    }
 }

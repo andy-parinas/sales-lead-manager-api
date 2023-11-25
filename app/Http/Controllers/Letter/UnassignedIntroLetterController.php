@@ -71,4 +71,77 @@ class UnassignedIntroLetterController extends Controller
         
         return response(['data' => $lead], Response::HTTP_OK);
     }
+
+    /**
+     * Send Customed Intro Letter
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function customSend(Request $request, $leadId)
+    {
+        $lead = Lead::with(['franchise', 'salesContact'])->findOrFail($leadId);
+
+        $user = Auth::user();
+        $today = Carbon::today();
+        
+        //VALIDATE FILE
+        $data = $this->validate($request, [
+                'fileForUpload' => 'required|file|mimes:pdf,doc,docx,odt,txt|max:5120',
+            ]
+        );
+        
+        if($request->hasFile('fileForUpload')){
+            $file = $request->file('fileForUpload');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs('public/',$filename);
+            $file = storage_path('app/public/'.$filename);            
+        }
+        
+        $customContent = isset($request->sentContent) ? $request->sentContent : '' ;   
+        $street1 = ($lead->salesContact->street1 !==''? $lead->salesContact->street1.', ' : '');
+        $street2 = ($lead->salesContact->street2 !==''? $lead->salesContact->street2.', ' : '');
+        $locality = ($lead->salesContact->postcode->locality !==''? $lead->salesContact->postcode->locality.', ' : '');
+        $state = ($lead->salesContact->postcode->state !==''? $lead->salesContact->postcode->state.', ' : '');
+        $pcode = ($lead->salesContact->postcode->pcode !==''? $lead->salesContact->postcode->pcode : '');
+
+        $address = $locality.''.$state.''.$pcode;
+        $street = $street1.''.$street2;
+
+        // $to = 'wilsonb@crystaltec.com.au';
+        $to = $lead->salesContact->email;        
+        $from = 'support@spanline.com.au';
+
+        $subject = "Spanline Home Additions Design Consultation";
+        
+        $message = view('emails.intro_unassign')->with([
+            'customContent' => nl2br($customContent),
+            'dateToday' => $today->toFormattedDateString(),
+            'title' => $lead->salesContact->title,
+            'firstName' => $lead->salesContact->first_name,
+            'lastName' => $lead->salesContact->last_name,
+            'street' => $street,
+            'address' => $address,
+            'franchiseName' => $lead->franchise->name
+        ])->render();
+        
+        $this->emailService->sendEmail($to, $from, $subject, $message, $file, $filename);
+        // $this->emailService->sendEmail($to, $from, $subject, $message);
+        
+        Log::info("Unassigned Intro Letter Sent {$to}");
+
+        $lead->update([
+            'unassigned_intro_sent' => date("Y-m-d")
+        ]);
+
+        if ($lead->salesContact->email2 !== null){
+            $to2 = $lead->salesContact->email2;
+            $this->emailService->sendEmail($to2, $from, $subject, $message, $file, $filename);
+            Log::info("Unassigned Intro Letter Sent {$to2}");
+        }
+
+        $lead->refresh();
+        
+        return response(['data' => $lead], Response::HTTP_OK);
+    }
 }

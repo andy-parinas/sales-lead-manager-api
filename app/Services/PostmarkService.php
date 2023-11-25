@@ -10,7 +10,7 @@ use Postmark\PostmarkClient;
 class PostmarkService implements Interfaces\EmailServiceInterface
 {
 
-    public function sendEmail($to, $from, $subject, $message, $attachmentFile = null)
+    public function sendEmail($to, $from, $subject, $message, $attachmentFile = null, $filename = null)
     {
         $token = config('services.postmark.token');
 
@@ -19,9 +19,9 @@ class PostmarkService implements Interfaces\EmailServiceInterface
         if($attachmentFile){
 
             $attachment = [PostmarkAttachment::fromFile($attachmentFile,
-                'warranty_care_maintenance_letter.pdf',
+                $filename,
                 'application/pdf',
-                'cid:warranty_care_maintenance_letter.pdf' )];
+                'cid:',$filename )];
 
         }
 

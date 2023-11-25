@@ -6,5 +6,5 @@ namespace App\Services\Interfaces;
 
 interface EmailServiceInterface
 {
-    public function sendEmail($to, $from, $subject, $message, $attachmentFile = null);
+    public function sendEmail($to, $from, $subject, $message, $attachmentFile = null, $filename = null);
 }

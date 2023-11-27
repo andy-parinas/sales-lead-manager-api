@@ -198,8 +198,8 @@ class LeadAndContractDateReportController extends ApiController
             fputcsv($handle, [
                 'Design Advisor',
                 'Franchise',
-                '# Sales',
                 '# Leads',
+                '# Contracts',
                 'Total Contracts',
                 'Conversion Rate',
                 'Average Sales Price',

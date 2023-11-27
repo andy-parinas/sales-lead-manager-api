@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Letter;
 
 use App\Http\Controllers\Controller;
 use App\Lead;
+use App\User;
 use App\SalesContact;
 use App\Services\Interfaces\EmailServiceInterface;
 use Illuminate\Http\Request;
@@ -109,8 +110,24 @@ class UnassignedIntroLetterController extends Controller
         $street = $street1.''.$street2;
 
         // $to = 'wilsonb@crystaltec.com.au';
-        $to = $lead->salesContact->email;        
-        $from = 'support@spanline.com.au';
+        $to = $lead->salesContact->email;
+        $customFrom = 'support@spanline.com.au';
+
+        $newCastleEmail = User::where('email', 'like', '%Newcastle%')->get();
+        $newCastleEmails = $newCastleEmail->pluck('email')->toArray();
+        $checkNewCastleEmail = in_array(auth()->user()->email, $newCastleEmails);
+        if($checkNewCastleEmail){
+            $customFrom = 'newcastle@spanline.com.au';
+        }
+
+        $mackayemail = User::where('email', 'like', '%Mackay%')->get();
+        $mackayemails = $mackayemail->pluck('email')->toArray();
+        $checkmackayemail = in_array(auth()->user()->email, $mackayemails);
+        if($checkmackayemail){
+            $customFrom = 'mackay@spanline.com.au';
+        }
+        
+        $from = $customFrom;
 
         $subject = "Spanline Home Additions Design Consultation";
         

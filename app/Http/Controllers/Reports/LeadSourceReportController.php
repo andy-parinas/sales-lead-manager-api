@@ -60,8 +60,10 @@ class LeadSourceReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'lead_source_summary_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'lead_source_summary_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Lead Sources',
                 'Status',
@@ -78,7 +80,7 @@ class LeadSourceReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'lead_source_summary_report.csv', $headers); 
+            return response()->download($path.$fileName, 'lead_source_summary_report.csv', $headers); 
 
         }
     }

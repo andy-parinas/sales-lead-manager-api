@@ -67,8 +67,10 @@ class RoofSheetProfileReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'roof_sheet_profile_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'roof_sheet_profile_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Roof Sheet Profile',
                 'Design Advisor',
@@ -101,7 +103,7 @@ class RoofSheetProfileReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'roof_sheet_profile_report.csv', $headers);
+            return response()->download($path.$fileName, 'roof_sheet_profile_report.csv', $headers);
         }
     }
 }

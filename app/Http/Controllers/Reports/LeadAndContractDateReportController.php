@@ -123,8 +123,10 @@ class LeadAndContractDateReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'customer_contact_details_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'customer_contact_details_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Lead Date',
                 'Contract Date',
@@ -163,7 +165,7 @@ class LeadAndContractDateReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'customer_contact_details_report.csv', $headers); 
+            return response()->download($path.$fileName, 'customer_contact_details_report.csv', $headers); 
 
         }
     }
@@ -193,8 +195,10 @@ class LeadAndContractDateReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'lead_and_contract_date_summary_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'lead_and_contract_date_summary_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Design Advisor',
                 'Franchise',
@@ -241,7 +245,7 @@ class LeadAndContractDateReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'lead_and_contract_date_summary_report.csv', $headers); 
+            return response()->download($path.$fileName, 'lead_and_contract_date_summary_report.csv', $headers); 
 
         }
     }

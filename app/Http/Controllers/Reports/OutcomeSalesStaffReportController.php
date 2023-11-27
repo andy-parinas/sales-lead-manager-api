@@ -60,8 +60,10 @@ class OutcomeSalesStaffReportController extends ApiController
             }
 
             //$results to csv
-            $filename = 'outcome_summary_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'outcome_summary_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Franchise',
                 'Sales Staff',
@@ -80,7 +82,7 @@ class OutcomeSalesStaffReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'outcome_summary_report.csv', $headers); 
+            return response()->download($path.$fileName, 'outcome_summary_report.csv', $headers); 
 
         }
     }

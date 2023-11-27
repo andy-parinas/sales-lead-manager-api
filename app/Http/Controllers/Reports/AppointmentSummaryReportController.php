@@ -56,8 +56,10 @@ class AppointmentSummaryReportController extends ApiController
             }
             
             //Reports to CSV
-            $filename = 'sales_lead_appointment_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'sales_lead_appointment_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Franchise',
                 'Design Advisor',
@@ -86,7 +88,7 @@ class AppointmentSummaryReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'sales_lead_appointment_report.csv', $headers);
+            return response()->download($path.$fileName, 'sales_lead_appointment_report.csv', $headers);
         }
     }
 }

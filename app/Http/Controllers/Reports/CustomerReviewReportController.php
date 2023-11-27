@@ -62,8 +62,10 @@ class CustomerReviewReportController extends ApiController
             }
 
             //$results to csv
-            $filename = 'customer_satisfaction_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'customer_satisfaction_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Project Completion',
                 'Last Name & Suburb',
@@ -95,7 +97,7 @@ class CustomerReviewReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'customer_satisfaction_report.csv', $headers); 
+            return response()->download($path.$fileName, 'customer_satisfaction_report.csv', $headers); 
         }
     }
 }

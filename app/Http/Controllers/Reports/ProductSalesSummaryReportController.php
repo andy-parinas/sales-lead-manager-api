@@ -75,8 +75,10 @@ class ProductSalesSummaryReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'franchise_product_sales_summary_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'franchise_product_sales_summary_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Product',
                 '# Sales',
@@ -119,7 +121,7 @@ class ProductSalesSummaryReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'franchise_product_sales_summary_report.csv', $headers);
+            return response()->download($path.$fileName, 'franchise_product_sales_summary_report.csv', $headers);
         }
     }
 

@@ -97,8 +97,10 @@ class SalesContractVariationReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'sales_contract_variation_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'sales_contract_variation_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Design Advisor',
                 'Variation Date',
@@ -138,7 +140,7 @@ class SalesContractVariationReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'sales_contract_variation_report.csv', $headers);
+            return response()->download($path.$fileName, 'sales_contract_variation_report.csv', $headers);
         }
     }
 }

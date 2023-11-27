@@ -108,8 +108,10 @@ class SalesContractReportController extends ApiController
             }
             
             //$results to csv
-            $filename = 'sales_contract_report.csv';
-            $handle = fopen($filename, 'w+');
+            $path = storage_path('app/files/');
+            $fileName = 'sales_contract_report.csv';
+
+            $handle = fopen($path.$fileName, 'w+');
             fputcsv($handle, [
                 'Design Advisor',
                 'Contract Date',
@@ -150,7 +152,7 @@ class SalesContractReportController extends ApiController
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return response()->download($filename, 'sales_contract_report.csv', $headers);
+            return response()->download($path.$fileName, 'sales_contract_report.csv', $headers);
         }
     }
 }

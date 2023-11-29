@@ -101,17 +101,20 @@ class AssignedIntroLetterController extends Controller
         $lead = Lead::with(['franchise', 'salesContact', 'jobType' => function($query){
             $query->with(['salesStaff']);
         }])->findOrFail($leadId);
-        
+
         $user = Auth::user();
         $today = Carbon::today();
-        
-        //VALIDATE FILE
-        $data = $this->validate($request, [
-                'fileForUpload' => 'required|file|mimes:pdf,doc,docx,odt,txt|max:5120',
-            ]
-        );        
 
+        $file = null;
+        $filename = null;
+       
         if($request->hasFile('fileForUpload')){
+            //VALIDATE FILE
+            $data = $this->validate($request, [
+                    'fileForUpload' => 'required|file|mimes:pdf,doc,docx,odt,txt|max:5120',
+                ]
+            );
+
             $file = $request->file('fileForUpload');
             $filename = $file->getClientOriginalName();            
             $path = $file->storeAs('public/',$filename);

@@ -139,7 +139,7 @@ class AssignedIntroLetterController extends Controller
         $street = $street1.''.$street2;
         
         // $to = 'wilsonb@crystaltec.com.au';
-        $to = $salesContact->email;
+        $to = $lead->salesContact->email;
         $customFrom = 'support@spanline.com.au';
 
         $newCastleEmail = User::where('email', 'like', '%Newcastle%')->get();

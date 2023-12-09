@@ -30,32 +30,7 @@
                 <div class="row">
                     <div class="col-md">
                         <p>Dear {{ $title }}. {{ $lastName }}</p>
-                        <p>
-                            We are delighted to advise you that your Spanline Home Addition project has
-                            now been submitted for statutory approval and we enclose a copy of the plans for
-                            your information.
-                        </p>
-                        <p>
-                            While we do not foresee any problems, occasionally the council application
-                            requires additional processes, therefore delays do occur. Should this happen,
-                            we will be in contact with you as soon as possible.
-                        </p>
-                        <p>
-                            Overleaf we have provided you with some important information relating to
-                            your project including details of the Product and Materials specification.
-                            Please take the time to read this information, as it will confirm a number of details
-                            about your project. If you have any queries at all please contact our Customer
-                            Service Department.
-                        </p>
-                        <p>
-                            If you are having concreting or any other structural work completed prior to
-                            your Spanline project starting, please advise us once the work is complete, as
-                            your project may need to be re-measured.
-                        </p>
-                        <p>
-                            We look forward to contacting you soon to advise that your project has been
-                            approved and providing you with material delivery and works schedule details.
-                        </p>
+                        {!! $customContent !!}
                     </div>
                 </div>
                 <div class="row" style="height:30px"></div>

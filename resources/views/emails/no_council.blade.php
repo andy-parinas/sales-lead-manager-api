@@ -30,25 +30,7 @@
                 <div class="row">
                     <div class="col-md">
                         <p>Dear {{ $title }}. {{ $lastName }}</p>
-                        <p>
-                            We are pleased to inform you that your Spanline Home Additions project has
-                            been entered into our check measure program.
-                        </p>
-                        <p>
-                            Overleaf we have provided you with some important information relating to
-                            your project including details of Product and Materials specifications. Please
-                            take the time to read this information, as it will confirm a number of important
-                            details about our project.
-                        </p>
-                        <p>
-                            If you have any queries, please do not hesitate to contact our Customer
-                            Service Department. If you are satisfied with all the details there is no need to
-                            contact us at this point.
-                        </p>
-                        <p>
-                            Spanline Home Additions will be contacting you soon with details regarding
-                            the commencement date of your project.
-                        </p>
+                        {!! $customContent !!}
                     </div>
                 </div>
                 <div class="row" style="height:30px"></div>

@@ -231,12 +231,17 @@ Route::post('leads/{lead}/letters/custom-unassigned-intro', 'Letter\UnassignedIn
 Route::post('leads/{lead}/letters/assigned-intro/{sales_contact}', 'Letter\AssignedIntroLetterController@send');
 Route::post('leads/{lead}/letters/custom-assigned-intro', 'Letter\AssignedIntroLetterController@customSend');
 Route::post('contracts/{lead}/letters/welcome/', 'Letter\WelcomeLetterController@send');
+Route::post('contracts/{lead}/letters/custom-welcome/', 'Letter\WelcomeLetterController@customSend');
 Route::post('authorities/{lead}/letters/council-intro', 'Letter\CouncilIntroLetterController@send');
+Route::post('authorities/{lead}/letters/custom-council-intro', 'Letter\CouncilIntroLetterController@customSend');
 Route::post('authorities/{lead}/letters/no-council', 'Letter\NoCouncilLetterController@send');
+Route::post('authorities/{lead}/letters/custom-no-council', 'Letter\NoCouncilLetterController@customSend');
 Route::post('authorities/{lead}/letters/out-of-council', 'Letter\OutOfCouncilLetterController@send');
+Route::post('authorities/{lead}/letters/custom-out-of-council', 'Letter\OutOfCouncilLetterController@customSend');
 Route::post('job-types/{lead}/email/{sales_staff}', 'JobType\JobTypeEmailController@send');
 Route::post('job-types/{lead}/sms/{sales_staff}', 'JobType\JobTypeSmsController@send');
 Route::post('customer-reviews/{customer_review}/letters/maintenance/{sales_contact}', 'Letter\MaintenanceLetterController@send');
+Route::post('customer-reviews/{lead}/letters/custom-maintenace-letter', 'Letter\MaintenanceLetterController@customSend');
 
 
 Route::post('sanctum/token', function (Request $request) {

@@ -30,19 +30,7 @@
                 <div class="row">
                     <div class="col-md">
                         <p>Dear {{ $title }}. {{ $lastName }}</p>
-                        <p>
-                            We are pleased to inform you that your Spanline Home Additions Project has
-                            been approved. Now that approval has been received we have commenced
-                            preparing your project for construction.
-                        </p>
-                        <p>
-                            We have taken the liberty of outlining the expected works schedule overleaf
-                            and where necessary noted any special considerations. Please take a
-                            moment to run through the expected works schedule and if there are any
-                            points you would like to raise on this schedule, please do not hesitate to call.
-                            If you are satisfied that everything is in order you do not need to phone, as we
-                            will contact you to advise of construction commencement details.
-                        </p>
+                        {!! $customContent !!}
                     </div>
                 </div>
                 <div class="row" style="height:30px"></div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Letter;
 
 use App\Http\Controllers\Controller;
 use App\Lead;
+use App\User;
 use App\SalesContact;
 use App\Services\Interfaces\EmailServiceInterface;
 use Illuminate\Http\Request;
@@ -111,8 +112,8 @@ class NoCouncilLetterController extends Controller
         $address = $locality.''.$state.''.$pcode;
         $street = $street1.''.$street2;
 
-        // $to = 'wilsonb@crystaltec.com.au';
-        $to = $lead->salesContact->email;
+        $to = 'wilsonb@crystaltec.com.au';
+        // $to = $lead->salesContact->email;
         $customFrom = 'support@spanline.com.au';
 
         $newCastleEmail = User::where('email', 'like', '%Newcastle%')->get();

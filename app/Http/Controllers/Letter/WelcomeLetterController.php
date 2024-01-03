@@ -98,10 +98,6 @@ class WelcomeLetterController extends Controller
             $file = storage_path('app/public/'.$filename);            
         }
 
-        if($lead->salesContact->email == "noemail@email.com"){
-            abort(Response::HTTP_BAD_REQUEST, "Recipient Email Is Invalid");
-        }
-
         // $to = 'wilsonb@crystaltec.com.au';
         $to = $lead->salesContact->email;
         $customFrom = 'support@spanline.com.au';

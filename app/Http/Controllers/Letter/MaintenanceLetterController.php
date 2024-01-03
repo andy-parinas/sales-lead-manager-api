@@ -74,6 +74,9 @@ class MaintenanceLetterController extends Controller
     public function customSend(Request $request, $leadId)
     {
         $lead = Lead::with(['salesContact', 'customerReview'])->findOrFail($leadId);
+        // dd($request->all());
+        // $salesContact = SalesContact::findOrFail($salesContactId);
+        // $customerReview = CustomerReview::findOrFail($customerReviewId);
         
         $user = Auth::user();
         $today = Carbon::today();
@@ -96,10 +99,6 @@ class MaintenanceLetterController extends Controller
 
         $customContent = isset($request->sentContent) ? $request->sentContent : '' ;
 
-        if($lead->salesContact->email == "noemail@email.com"){
-            abort(Response::HTTP_BAD_REQUEST, "Recipient Email Is Invalid");
-        }
-        
         // $to = 'wilsonb@crystaltec.com.au';
         $to = $lead->salesContact->email;
         $customFrom = 'support@spanline.com.au';

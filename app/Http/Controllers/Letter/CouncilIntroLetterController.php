@@ -112,12 +112,6 @@ class CouncilIntroLetterController extends Controller
 
         $address = $locality.''.$state.''.$pcode;
         $street = $street1.''.$street2;
-        
-        $lead->salesContact->email == "noemail@email.com";
-        
-        if($lead->salesContact->email == "noemail@email.com"){
-            abort(Response::HTTP_BAD_REQUEST, "Recipient Email Is Invalid");
-        }
 
         // $to = 'wilsonb@crystaltec.com.au';
         $to = $lead->salesContact->email;

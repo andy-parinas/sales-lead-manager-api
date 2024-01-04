@@ -93,9 +93,9 @@ class WelcomeLetterController extends Controller
             );
 
             $file = $request->file('fileForUpload');
-            $filename = $file->getClientOriginalName();            
+            $filename = $file->getClientOriginalName();
             $path = $file->storeAs('public/',$filename);
-            $file = storage_path('app/public/'.$filename);            
+            $file = storage_path('app/public/'.$filename);
         }
 
         if($lead->salesContact->email == "noemail@email.com"){

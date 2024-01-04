@@ -81,6 +81,7 @@ class CustomerReviewReportController extends ApiController
             ]);
             foreach($results as $row) {
                 fputcsv($handle, array(
+                    $row->date_project_completed,
                     $row->last_name_suburb,
                     $row->lead_number,
                     $row->franchise_number,

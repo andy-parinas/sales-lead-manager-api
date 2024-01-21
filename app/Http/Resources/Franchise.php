@@ -17,7 +17,7 @@ class Franchise extends JsonResource
         return [
             'id' => $this->id,
             'franchiseNumber' => $this->franchise_number,
-            'name' => $this->name,
+            'name' => ucfirst(strtolower($this->name)),
             'type' => $this->type,
             'description' => $this->description,
 //            'type' => $this->isParent() ? 'Main Franchise' : 'Sub-Franchise',

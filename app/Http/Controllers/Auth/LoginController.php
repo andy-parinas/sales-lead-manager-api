@@ -74,7 +74,8 @@ class LoginController extends ApiController
                 return response()->json(null, Response::HTTP_OK);
             } else {
                 $franchises = $user->franchises;
-                return response()->json(['data' => Auth::user(), 'franchises' => FranchiseResource::collection($user->franchises) ], Response::HTTP_OK);
+                $franchises = $franchises->unique('franchise_number');
+                return response()->json(['data' => Auth::user(), 'franchises' => FranchiseResource::collection($franchises) ], Response::HTTP_OK);
             }
         }
 
@@ -128,6 +129,7 @@ class LoginController extends ApiController
         if($oneTimePin){
             $oneTimePin->delete();
             $franchises = $user->franchises;
+            $franchises = $franchises->unique('franchise_number');
             return response()->json(['data' => Auth::user(), 'franchises' => FranchiseResource::collection($user->franchises) ], Response::HTTP_OK);
         }else{
             return $this->errorResponse("Invalid OTP", Response::HTTP_UNAUTHORIZED);

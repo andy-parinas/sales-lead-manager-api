@@ -56,7 +56,7 @@ class CustomFromEmailRepository implements CustomFromEmailInterface
             'GlennEganSU-2340' => 'tamworth@spanline.com.au',
             'SamEganSU-2340' =>	'tamworth@spanline.com.au',
         ];
-        $username = 'GlennEganSU-2340';
+        
         if(array_key_exists($username, $fromEmail)){
             return $fromEmail[$username];
         }else{

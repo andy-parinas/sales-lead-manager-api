@@ -7,6 +7,7 @@ use App\Lead;
 use App\User;
 use App\SalesContact;
 use App\Services\Interfaces\EmailServiceInterface;
+use App\Repositories\Interfaces\CustomFromEmailInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,15 @@ use Symfony\Component\HttpFoundation\Response;
 class NoCouncilLetterController extends Controller
 {
     protected $emailService;
+    protected $customFromEmailRepository;
 
-    public function __construct(EmailServiceInterface $emailService){
+    public function __construct(
+        EmailServiceInterface $emailService,
+        CustomFromEmailInterface $customFromEmailRepository
+    ){
         $this->middleware("auth:sanctum");
         $this->emailService = $emailService;
+        $this->customFromEmailRepository = $customFromEmailRepository;
     }
     
     public function send(Request $request, $leadId)
@@ -118,24 +124,8 @@ class NoCouncilLetterController extends Controller
 
         // $to = 'wilsonb@crystaltec.com.au';
         $to = $lead->salesContact->email;
-        $customFrom = 'support@spanline.com.au';
-
-        $newCastleEmail = User::where('email', 'like', '%Newcastle%')->get();
-        $newCastleEmails = $newCastleEmail->pluck('email')->toArray();
-        $checkNewCastleEmail = in_array(auth()->user()->email, $newCastleEmails);
-        if($checkNewCastleEmail){
-            $customFrom = 'newcastle@spanline.com.au';
-        }
-
-        $mackayemail = User::where('email', 'like', '%Mackay%')->get();
-        $mackayemails = $mackayemail->pluck('email')->toArray();
-        $checkmackayemail = in_array(auth()->user()->email, $mackayemails);
-        if($checkmackayemail){
-            $customFrom = 'mackay@spanline.com.au';
-        }
+        $from = $this->customFromEmailRepository->emailFrom(Auth::user()->username);
         
-        $from = $customFrom;
-
         $subject = "Spanline Home Additions – Project Update";
 
         $message = view('emails.no_council')->with([

@@ -32,6 +32,7 @@ use App\Repositories\Interfaces\SalesContactRepositoryInterface;
 use App\Repositories\Interfaces\SalesStafRepositoryInterface;
 use App\Repositories\Interfaces\TradeStaffRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\CustomFromEmailInterface;
 use App\Repositories\LeadRepository;
 use App\Repositories\LeadTransferRepository;
 use App\Repositories\PostcodeRepository;
@@ -40,6 +41,7 @@ use App\Repositories\SalesContactRepository;
 use App\Repositories\SalesStaffRepository;
 use App\Repositories\TradeStaffRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\CustomFromEmailRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -80,6 +82,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductSalesSummaryReport::class, ProductSalesSummaryReportImp::class);
         $this->app->bind(LeadAndContractReport::class, LeadAndContractReportImp::class);
         $this->app->bind(LeadAndContractDateReport::class, LeadAndContractDateReportImp::class);
-        $this->app->bind(AppointmentReport::class, AppointmentReportImp::class);   
+        $this->app->bind(AppointmentReport::class, AppointmentReportImp::class);
+        $this->app->bind(CustomFromEmailInterface::class, CustomFromEmailRepository::class);
     }
 }

@@ -28,6 +28,7 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 'contracts.contract_price',
                 'job_types.sales_staff_id',
                 'appointments.outcome as lead_status',
+                'franchises.name as franchise_name',
                 'lead_sources.name as heard_about',
             )
             ->selectRaw('DATE_FORMAT(leads.lead_date, "%d/%m/%Y") as lead_date')
@@ -39,7 +40,8 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
             ->leftJoin('postcodes', 'sales_contacts.postcode_id', '=', 'postcodes.id')
             ->leftJoin('contracts', 'leads.id', '=', 'contracts.lead_id')
             ->leftJoin('appointments', 'leads.id', '=', 'appointments.lead_id')
-            ->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id');              
+            ->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+            ->leftJoin('franchises', 'leads.franchise_id', '=', 'franchises.id');
 
         if(key_exists("search_type", $queryParams) && $queryParams['search_type'] == "contract_date"){
             if(isset($queryParams['start_date']) && $queryParams['start_date'] !== null && isset($queryParams['end_date']) && $queryParams['end_date'] !== null){
@@ -80,6 +82,7 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 'contracts.contract_price',
                 'job_types.sales_staff_id',
                 'appointments.outcome as lead_status',
+                'franchises.name as franchise_name',
                 'lead_sources.name as heard_about',
             )
             ->selectRaw('DATE_FORMAT(leads.lead_date, "%d/%m/%Y") as lead_date')

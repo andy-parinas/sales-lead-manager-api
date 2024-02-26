@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Lead;
 use App\SalesStaff;
 use App\Services\Interfaces\EmailServiceInterface;
+use App\Repositories\Interfaces\CustomFromEmailInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +17,16 @@ class JobTypeEmailController extends Controller
 {
 
     protected $emailService;
+    protected $customFromEmailRepository;
 
-    public function __construct(EmailServiceInterface $emailService)
+    public function __construct(
+        EmailServiceInterface $emailService,
+        CustomFromEmailInterface $customFromEmailRepository
+    )
     {
         $this->middleware('auth:sanctum');
         $this->emailService = $emailService;
+        $this->customFromEmailRepository = $customFromEmailRepository;
     }
 
 
@@ -48,7 +54,8 @@ class JobTypeEmailController extends Controller
         $address = $street1.''.$street2.''.$locality.''.$state.''.$pcode;
         
         $to = $salesStaff->email;
-        $from = 'support@spanline.com.au';
+        // $from = 'support@spanline.com.au';
+        $from = $this->customFromEmailRepository->emailFrom(Auth::user()->username);
 
         $subject = "New Sales Lead Assigned: {$lead->lead_number}";
 

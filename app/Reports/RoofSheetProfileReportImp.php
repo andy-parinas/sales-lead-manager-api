@@ -77,7 +77,7 @@ class RoofSheetProfileReportImp implements Interfaces\RoofSheetProfileReport
         });
 
         $mainQuery->when($queryParams['start_date'] !== null && $queryParams['end_date'] !== null, function($mainQuery) use($queryParams){
-            $mainQuery->whereBetween('leads.lead_date', [$queryParams['start_date'], $queryParams['end_date']]);
+            $mainQuery->whereBetween('contracts.contract_date', [$queryParams['start_date'], $queryParams['end_date']]);
         });
         
         $mainQuery->when(key_exists("franchise_id", $queryParams) && $queryParams['franchise_id'] !== "", function($mainQuery) use($queryParams){

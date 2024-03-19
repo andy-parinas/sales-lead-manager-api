@@ -27,7 +27,7 @@ class ProductSalesSummaryReportImp implements Interfaces\ProductSalesSummaryRepo
 
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
-            $mainQuery = $mainQuery->whereBetween('leads.lead_date',[$queryParams['start_date'], $queryParams['end_date']]);
+            $mainQuery = $mainQuery->whereBetween('contracts.contract_date',[$queryParams['start_date'], $queryParams['end_date']]);
         }
 
 
@@ -68,7 +68,7 @@ class ProductSalesSummaryReportImp implements Interfaces\ProductSalesSummaryRepo
 
 
         if($queryParams['start_date'] !== null && $queryParams['end_date'] !== null){
-            $mainQuery = $mainQuery->whereBetween('leads.lead_date',[$queryParams['start_date'], $queryParams['end_date']]);
+            $mainQuery = $mainQuery->whereBetween('contracts.contract_date',[$queryParams['start_date'], $queryParams['end_date']]);
         }
 
 

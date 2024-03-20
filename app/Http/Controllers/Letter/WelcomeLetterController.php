@@ -132,9 +132,9 @@ class WelcomeLetterController extends Controller
 
         $this->emailService->sendEmail($to, $from, $subject, $message, $file, $filename);
 
-        // $contract->update([
-        //     'welcome_letter_sent' => date("Y-m-d")
-        // ]);
+        $contract->update([
+            'welcome_letter_sent' => date("Y-m-d")
+        ]);
 
         $contract->refresh();
 

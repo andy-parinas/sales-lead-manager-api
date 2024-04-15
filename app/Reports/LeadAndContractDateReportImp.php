@@ -135,13 +135,15 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         
         $leadCountsArray = [];
         foreach($leadCountQuery as $lead) {
-            $leadCountsArray[$lead->franchiseNumber."_".$lead->design_advisor."_".$lead->sales_staff_id] = [
-                'franchiseNumber' => isset($lead->franchiseNumber) ? $lead->franchiseNumber : '',
-                'salesStaff' => isset($lead->design_advisor) ? $lead->design_advisor : '',
-                'totalLeads' => $lead->total_leads,
-            ];
+            if($lead->total_leads > 0) {
+                $leadCountsArray[$lead->franchiseNumber."_".$lead->design_advisor."_".$lead->sales_staff_id] = [
+                    'franchiseNumber' => isset($lead->franchiseNumber) ? $lead->franchiseNumber : '',
+                    'salesStaff' => isset($lead->design_advisor) ? $lead->design_advisor : '',
+                    'totalLeads' => isset($lead->total_leads) ? $lead->total_leads : 0,
+                ];
+            }
         }
-
+        
         //START STEP 2 CONTRACT QUERY
         $contractCountQuery = DB::table('contracts')
         ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
@@ -160,18 +162,18 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         
         $contractCountsArray = [];
         foreach($contractCountQuery as $contract) {
-            
             $contractCountsArray[$contract->franchiseNumber."_".$contract->design_advisor."_".$contract->sales_staff_id] = [
                 'franchiseNumber' => isset($contract->franchiseNumber) ? $contract->franchiseNumber : '',
                 'salesStaff' => isset($contract->design_advisor) ? $contract->design_advisor : '',
                 'totalContracts' => $contract->numberOfContracts,
                 'averageSalesPrice' => $contract->averageSalesPrice,                
-            ];
+            ];          
         }
-
+        
         $leadAndContractCounts = $this->array_merge_recursive_ex($leadCountsArray, $contractCountsArray);
-
+        
         foreach($leadAndContractCounts as $key => $leadAndContractCount) {
+
             if(!isset($leadAndContractCount['totalContracts'])) {
                 $leadAndContractCounts[$key]['totalContracts'] = 0;
             }
@@ -188,7 +190,7 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 $leadAndContractCounts[$key]['conversionRate'] = 0;
             }
         }
-
+        
         //START STEP 3 SUM TOTAL CONTRACT QUERY
         $sumContractQuery = DB::table('contracts')
         ->selectRaw("concat(sales_staff.first_name, ' ', sales_staff.last_name) as design_advisor")
@@ -202,14 +204,14 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         ->join("franchises", "leads.franchise_id", "=", "franchises.id");
 
         $sumOfContracts = $this->leadsParamFilters($sumContractQuery, $franchiseIds, $queryParams, 'contract');
-
+        
         $sumContractArray = [];
         foreach($sumOfContracts as $sumOfContract) {
             $sumContractArray[$sumOfContract->franchiseNumber."_".$sumOfContract->design_advisor."_".$sumOfContract->sales_staff_id] = [
                 'sumOfTotalContracts' => $sumOfContract->totalSumOfContracts,
             ];
         }
-        
+        // dd($sumContractArray);
         $newleadAndContractCounts = $this->array_merge_recursive_ex($leadAndContractCounts, $sumContractArray);
         
         foreach($newleadAndContractCounts as $key => $leadAndContractCount) {            
@@ -224,8 +226,15 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
                 $newleadAndContractCounts[$key]['sumOfTotalContracts'] = 0;
             }
         }
+        
+        $newleadAndContractCountsValidated = [];
+        foreach($newleadAndContractCounts as $key => $leadAndContractCount) {
+            if($leadAndContractCount['totalContracts'] > 0 || $leadAndContractCount['totalLeads'] > 0) {
+                $newleadAndContractCountsValidated[$key] = $leadAndContractCount;
+            }
+        }
 
-        $newleadAndContractCounts = array_values($newleadAndContractCounts);
+        $newleadAndContractCounts = array_values($newleadAndContractCountsValidated);
 
         return $newleadAndContractCounts;
     }    
@@ -339,6 +348,15 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
             }
         }
 
+        $newleadAndContractCountsValidated = [];
+        foreach($newleadAndContractCounts as $key => $leadAndContractCount) {
+            if($leadAndContractCount['totalContracts'] > 0 || $leadAndContractCount['totalLeads'] > 0) {
+                $newleadAndContractCountsValidated[$key] = $leadAndContractCount;
+            }
+        }
+
+        $newleadAndContractCounts = array_values($newleadAndContractCountsValidated);
+
         $newleadAndContractCounts = array_values($newleadAndContractCounts);
 
         return $newleadAndContractCounts;
@@ -423,7 +441,7 @@ class LeadAndContractDateReportImp implements Interfaces\LeadAndContractDateRepo
         $mainQuery->when(key_exists("franchise_type", $queryParams) && $queryParams['franchise_type'] !== "", function($mainQuery) use($queryParams){
             $mainQuery->where('franchises.type', $queryParams['franchise_type'] );
         });
-
+        
         $mainQuery->when(key_exists("sales_staff_id", $queryParams) && $queryParams['sales_staff_id'] !== "", function($mainQuery) use($queryParams){
             $mainQuery->where('sales_staff.id', $queryParams['sales_staff_id'] );
         });

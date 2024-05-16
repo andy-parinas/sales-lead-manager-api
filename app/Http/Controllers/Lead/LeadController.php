@@ -40,7 +40,14 @@ class LeadController extends ApiController
             return $this->showPaginated($leads);
         }
 
-        $franchiseIds = $user->franchises->pluck('id')->toArray();
+        // $franchiseIds = $user->franchises->pluck('id')->toArray();
+        
+        $franchiseId = $user->franchises->toArray();
+
+        $franchiseIds['id'] = $franchiseId[0]['id'];
+        $franchiseIds['parent_id'] = $franchiseId[0]['parent_id'];
+
+        // dd($franchiseIds);
 
         $leads = $this->leadRepository->findLeadsByUsersFranchise($franchiseIds, $this->getRequestParams());
         

@@ -40,23 +40,21 @@ class LeadController extends ApiController
             return $this->showPaginated($leads);
         }
 
-        // $franchiseIds = $user->franchises->pluck('id')->toArray();
-        
-        $franchiseId = $user->franchises->toArray();
+        $franchiseIds = $user->franchises->pluck('id')->toArray();
+        if(count($franchiseIds) == 1){            
+            $franchiseId = $user->franchises->toArray();
 
-        $franchiseIds['id'] = $franchiseId[0]['id'];
-        $franchiseIds['parent_id'] = $franchiseId[0]['parent_id'];
-
-        // dd($franchiseIds);
-
-        $leads = $this->leadRepository->findLeadsByUsersFranchise($franchiseIds, $this->getRequestParams());
+            $franchIds['id'] = $franchiseId[0]['id'];
+            $franchIds['parent_id'] = $franchiseId[0]['parent_id'];
+            
+            $leads = $this->leadRepository->findLeadsByUsersFranchise($franchIds, $this->getRequestParams());
+        } else {
+            $leads = $this->leadRepository->findLeadsByUsersFranchise($franchiseIds, $this->getRequestParams());
+        }
         
         return $this->showPaginated($leads);
     }
-
-
-
-
+    
     /**
      * Display the specified resource.
      *
